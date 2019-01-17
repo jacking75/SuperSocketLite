@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
+    <ProjectReference Include="..\SocketBase\SuperSocket.SocketBase.csproj" />
   </ItemGroup>
 
 </Project>

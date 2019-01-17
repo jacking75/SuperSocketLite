@@ -760,9 +760,12 @@ namespace SuperSocket.SocketBase
                 return true;
             }
 
+            //TODO NLog로 변경하기
             //Log4NetLogFactory is default log factory
             if (LogFactory == null)
-                LogFactory = new Log4NetLogFactory();
+            {
+                //LogFactory = new Log4NetLogFactory();
+            }
 
             return true;
         }
