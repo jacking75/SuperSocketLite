@@ -178,7 +178,7 @@ namespace SuperSocket.SocketEngine
                     return null;
                 }
 
-                appServer = GetRemoteServer(remoteUri);
+                //appServer = GetRemoteServer(remoteUri);
 
                 if (appServer == null)
                     return null;
@@ -237,7 +237,7 @@ namespace SuperSocket.SocketEngine
             }
             else
             {
-                appServer = GetRemoteServer(remoteUri);
+                //appServer = GetRemoteServer(remoteUri);
 
                 if (appServer == null)
                     return null;
@@ -249,19 +249,19 @@ namespace SuperSocket.SocketEngine
             return appServer;
         }
 
-        IRemoteWorkItem GetRemoteServer(string remoteUri)
-        {
-            try
-            {
-                return (IRemoteWorkItem)Activator.GetObject(typeof(IRemoteWorkItem), remoteUri);
-            }
-            catch(Exception e)
-            {
-                ShutdownProcess();
-                OnExceptionThrown(new Exception("Failed to get server instance of a remote process!", e));
-                return null;
-            }
-        }
+        //IRemoteWorkItem GetRemoteServer(string remoteUri)
+        //{
+        //    try
+        //    {
+        //        return (IRemoteWorkItem)Activator.GetObject(typeof(IRemoteWorkItem), remoteUri);
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        ShutdownProcess();
+        //        OnExceptionThrown(new Exception("Failed to get server instance of a remote process!", e));
+        //        return null;
+        //    }
+        //}
 
         void m_WorkingProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {

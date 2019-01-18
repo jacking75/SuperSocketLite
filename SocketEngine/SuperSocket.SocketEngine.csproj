@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
     <ProjectReference Include="..\SocketBase\SuperSocket.SocketBase.csproj" />
   </ItemGroup>

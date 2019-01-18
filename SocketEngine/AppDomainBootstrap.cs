@@ -13,44 +13,45 @@ using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
 {
+    //TODO 삭제 예정
     class AppDomainWorkItemFactoryInfoLoader : WorkItemFactoryInfoLoader
     {
         public AppDomainWorkItemFactoryInfoLoader(IConfigurationSource config, ILogFactory passedInLogFactory)
             : base(config, passedInLogFactory)
         {
-            InitliazeValidationAppDomain();
+            //InitliazeValidationAppDomain();
         }
 
         public AppDomainWorkItemFactoryInfoLoader(IConfigurationSource config)
             : base(config)
         {
-            InitliazeValidationAppDomain();
+            //InitliazeValidationAppDomain();
         }
 
         private AppDomain m_ValidationAppDomain;
 
-        private TypeValidator m_Validator;
+        //private TypeValidator m_Validator;
 
-        private void InitliazeValidationAppDomain()
-        {
-            m_ValidationAppDomain = AppDomain.CreateDomain("ValidationDomain", AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.BaseDirectory, string.Empty, false);
+        //private void InitliazeValidationAppDomain()
+        //{
+        //    m_ValidationAppDomain = AppDomain.CreateDomain("ValidationDomain", AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.BaseDirectory, string.Empty, false);
 
-            var validatorType = typeof(TypeValidator);
-            m_Validator = (TypeValidator)m_ValidationAppDomain.CreateInstanceAndUnwrap(validatorType.Assembly.FullName, validatorType.FullName);
-        }
+        //    var validatorType = typeof(TypeValidator);
+        //    m_Validator = (TypeValidator)m_ValidationAppDomain.CreateInstanceAndUnwrap(validatorType.Assembly.FullName, validatorType.FullName);
+        //}
 
-        protected override string ValidateProviderType(string typeName)
-        {
-            if (!m_Validator.ValidateTypeName(typeName))
-                throw new Exception(string.Format("Failed to load type {0}!", typeName));
+        //protected override string ValidateProviderType(string typeName)
+        //{
+        //    if (!m_Validator.ValidateTypeName(typeName))
+        //        throw new Exception(string.Format("Failed to load type {0}!", typeName));
 
-            return typeName;
-        }
+        //    return typeName;
+        //}
 
-        protected override ServerTypeMetadata GetServerTypeMetadata(string typeName)
-        {
-            return m_Validator.GetServerTypeMetadata(typeName);
-        }
+        //protected override ServerTypeMetadata GetServerTypeMetadata(string typeName)
+        //{
+        //    return m_Validator.GetServerTypeMetadata(typeName);
+        //}
 
         public override void Dispose()
         {

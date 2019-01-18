@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Threading;
@@ -116,7 +114,7 @@ namespace SuperSocket.SocketEngine
         /// </summary>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IEnumerable<IWorkItem> appServers)
-            : this(new RootConfig(), appServers, new Log4NetLogFactory())
+            : this(new RootConfig(), appServers, new ConsoleLogFactory()) //TODO NLog로 바꾸기
         {
 
         }
@@ -127,7 +125,7 @@ namespace SuperSocket.SocketEngine
         /// <param name="rootConfig">The root config.</param>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IRootConfig rootConfig, IEnumerable<IWorkItem> appServers)
-            : this(rootConfig, appServers, new Log4NetLogFactory())
+            : this(rootConfig, appServers, new ConsoleLogFactory())  //TODO NLog로 바꾸기
         {
 
         }
@@ -446,17 +444,17 @@ namespace SuperSocket.SocketEngine
             if (m_GlobalLog.IsDebugEnabled)
                 m_GlobalLog.Debug("The Bootstrap has been initialized!");
 
-            try
-            {
-                RegisterRemotingService();
-            }
-            catch (Exception e)
-            {
-                if (m_GlobalLog.IsErrorEnabled)
-                    m_GlobalLog.Error("Failed to register remoting access service!", e);
+            //try
+            //{
+            //    RegisterRemotingService();
+            //}
+            //catch (Exception e)
+            //{
+            //    if (m_GlobalLog.IsErrorEnabled)
+            //        m_GlobalLog.Error("Failed to register remoting access service!", e);
 
-                return false;
-            }
+            //    return false;
+            //}
 
             m_Initialized = true;
 
@@ -598,27 +596,27 @@ namespace SuperSocket.SocketEngine
         /// <summary>
         /// Registers the bootstrap remoting access service.
         /// </summary>
-        protected virtual void RegisterRemotingService()
-        {
-            var bootstrapIpcPort = string.Format("SuperSocket.Bootstrap[{0}]", Math.Abs(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar).GetHashCode()));
+        //protected virtual void RegisterRemotingService()
+        //{
+        //    var bootstrapIpcPort = string.Format("SuperSocket.Bootstrap[{0}]", Math.Abs(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar).GetHashCode()));
 
-            var serverChannelName = "Bootstrap";
+        //    var serverChannelName = "Bootstrap";
 
-            var serverChannel = ChannelServices.RegisteredChannels.FirstOrDefault(c => c.ChannelName == serverChannelName);
+        //    var serverChannel = ChannelServices.RegisteredChannels.FirstOrDefault(c => c.ChannelName == serverChannelName);
 
-            if (serverChannel != null)
-                ChannelServices.UnregisterChannel(serverChannel);
+        //    if (serverChannel != null)
+        //        ChannelServices.UnregisterChannel(serverChannel);
 
-            serverChannel = new IpcServerChannel(serverChannelName, bootstrapIpcPort, new BinaryServerFormatterSinkProvider { TypeFilterLevel = TypeFilterLevel.Full });
-            ChannelServices.RegisterChannel(serverChannel, false);
+        //    serverChannel = new IpcServerChannel(serverChannelName, bootstrapIpcPort, new BinaryServerFormatterSinkProvider { TypeFilterLevel = TypeFilterLevel.Full });
+        //    ChannelServices.RegisterChannel(serverChannel, false);
 
-            AppDomain.CurrentDomain.SetData("BootstrapIpcPort", bootstrapIpcPort);
+        //    AppDomain.CurrentDomain.SetData("BootstrapIpcPort", bootstrapIpcPort);
 
-            var bootstrapProxyType = typeof(RemoteBootstrapProxy);
+        //    var bootstrapProxyType = typeof(RemoteBootstrapProxy);
 
-            if (!RemotingConfiguration.GetRegisteredWellKnownServiceTypes().Any(s => s.ObjectType == bootstrapProxyType))
-                RemotingConfiguration.RegisterWellKnownServiceType(bootstrapProxyType, "Bootstrap.rem", WellKnownObjectMode.Singleton);
-        }
+        //    if (!RemotingConfiguration.GetRegisteredWellKnownServiceTypes().Any(s => s.ObjectType == bootstrapProxyType))
+        //        RemotingConfiguration.RegisterWellKnownServiceType(bootstrapProxyType, "Bootstrap.rem", WellKnownObjectMode.Singleton);
+        //}
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
@@ -730,48 +728,48 @@ namespace SuperSocket.SocketEngine
             return server;
         }
 
-        bool IDynamicBootstrap.Add(IServerConfig config)
-        {
-            var newWorkItem = AddNewServer(config);
-            return newWorkItem != null;
-        }
+        //bool IDynamicBootstrap.Add(IServerConfig config)
+        //{
+        //    var newWorkItem = AddNewServer(config);
+        //    return newWorkItem != null;
+        //}
 
-        bool IDynamicBootstrap.AddAndStart(IServerConfig config)
-        {
-            var newWorkItem = AddNewServer(config);
+        //bool IDynamicBootstrap.AddAndStart(IServerConfig config)
+        //{
+        //    var newWorkItem = AddNewServer(config);
 
-            if (newWorkItem == null)
-                return false;
+        //    if (newWorkItem == null)
+        //        return false;
 
-            return newWorkItem.Start();
-        }
+        //    return newWorkItem.Start();
+        //}
 
-        void IDynamicBootstrap.Remove(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException("name");
+        //void IDynamicBootstrap.Remove(string name)
+        //{
+        //    if (string.IsNullOrEmpty(name))
+        //        throw new ArgumentNullException("name");
 
-            var server = m_AppServers.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        //    var server = m_AppServers.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if (server == null)
-                throw new Exception("The server is not found.");
+        //    if (server == null)
+        //        throw new Exception("The server is not found.");
 
-            if (server.State != ServerState.NotStarted)
-                throw new Exception("The server is running now, you cannot remove it. Please stop it at first.");
+        //    if (server.State != ServerState.NotStarted)
+        //        throw new Exception("The server is running now, you cannot remove it. Please stop it at first.");
 
-            m_AppServers.Remove(server);
+        //    m_AppServers.Remove(server);
 
-            ResetPerfMoniter();
+        //    ResetPerfMoniter();
 
-            var section = m_Config as SocketServiceConfig;
+        //    var section = m_Config as SocketServiceConfig;
 
-            if (section != null) //file configuration
-            {
-                section.Servers.Remove(name);
-                ConfigurationWatcher.Pause();
-                section.GetCurrentConfiguration().Save(ConfigurationSaveMode.Minimal);
-                ConfigurationWatcher.Resume();
-            }
-        }
+        //    if (section != null) //file configuration
+        //    {
+        //        section.Servers.Remove(name);
+        //        ConfigurationWatcher.Pause();
+        //        section.GetCurrentConfiguration().Save(ConfigurationSaveMode.Minimal);
+        //        ConfigurationWatcher.Resume();
+        //    }
+        //}
     }
 }

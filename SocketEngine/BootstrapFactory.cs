@@ -22,21 +22,31 @@ namespace SuperSocket.SocketEngine
         public static IBootstrap CreateBootstrap(IConfigurationSource config)
         {
             if (config == null)
+            {
                 throw new ArgumentNullException("config");
+            }
 
             IBootstrap bootstrap;
 
             if (config.Isolation == IsolationMode.AppDomain)
+            {
                 bootstrap = new AppDomainBootstrap(config);
-            else if (config.Isolation == IsolationMode.Process)
-                bootstrap = new ProcessBootstrap(config);
+            }
+            //else if (config.Isolation == IsolationMode.Process)
+            //{
+            //    bootstrap = new ProcessBootstrap(config);
+            //}
             else
+            {
                 bootstrap = new DefaultBootstrap(config);
+            }
 
             var section = config as ConfigurationSection;
 
             if (section != null)
+            {
                 ConfigurationWatcher.Watch(section, bootstrap);
+            }
 
             return bootstrap;
         }

@@ -68,43 +68,43 @@ namespace SuperSocket.SocketEngine
             return list.ToArray();
         }
 
-        protected AppDomain CreateHostAppDomain()
-        {
-            var currentDomain = AppDomain.CurrentDomain;
+        //protected AppDomain CreateHostAppDomain()
+        //{
+        //    var currentDomain = AppDomain.CurrentDomain;
 
-            var workingDir = Path.Combine(Path.Combine(currentDomain.BaseDirectory, WorkingDir), Name);
+        //    var workingDir = Path.Combine(Path.Combine(currentDomain.BaseDirectory, WorkingDir), Name);
 
-            if (!Directory.Exists(workingDir))
-                Directory.CreateDirectory(workingDir);
+        //    if (!Directory.Exists(workingDir))
+        //        Directory.CreateDirectory(workingDir);
 
-            var startupConfigFile = Bootstrap.StartupConfigFile;
+        //    var startupConfigFile = Bootstrap.StartupConfigFile;
 
-            if (!string.IsNullOrEmpty(startupConfigFile))
-            {
-                if (!Path.IsPathRooted(startupConfigFile))
-                    startupConfigFile = Path.Combine(currentDomain.BaseDirectory, startupConfigFile);
-            }
+        //    if (!string.IsNullOrEmpty(startupConfigFile))
+        //    {
+        //        if (!Path.IsPathRooted(startupConfigFile))
+        //            startupConfigFile = Path.Combine(currentDomain.BaseDirectory, startupConfigFile);
+        //    }
 
-            var hostAppDomain = AppDomain.CreateDomain(Name, currentDomain.Evidence, new AppDomainSetup
-            {
-                ApplicationName = Name,
-                ApplicationBase = workingDir,
-                ConfigurationFile = startupConfigFile
-            });
+        //    var hostAppDomain = AppDomain.CreateDomain(Name, currentDomain.Evidence, new AppDomainSetup
+        //    {
+        //        ApplicationName = Name,
+        //        ApplicationBase = workingDir,
+        //        ConfigurationFile = startupConfigFile
+        //    });
 
-            var assemblyImportType = typeof(AssemblyImport);
+        //    var assemblyImportType = typeof(AssemblyImport);
 
-            hostAppDomain.CreateInstanceFrom(assemblyImportType.Assembly.CodeBase,
-                    assemblyImportType.FullName,
-                    true,
-                    BindingFlags.CreateInstance,
-                    null,
-                    new object[] { currentDomain.BaseDirectory },
-                    null,
-                    new object[0]);
+        //    hostAppDomain.CreateInstanceFrom(assemblyImportType.Assembly.CodeBase,
+        //            assemblyImportType.FullName,
+        //            true,
+        //            BindingFlags.CreateInstance,
+        //            null,
+        //            new object[] { currentDomain.BaseDirectory },
+        //            null,
+        //            new object[0]);
 
-            return hostAppDomain;
-        }
+        //    return hostAppDomain;
+        //}
 
         public virtual bool Setup(IBootstrap bootstrap, IServerConfig config, ProviderFactoryInfo[] factories)
         {

@@ -34,52 +34,53 @@ namespace SuperSocket.SocketEngine
         /// </returns>
         protected override IWorkItemBase Start()
         {
-            IWorkItem appServer;
+            return null;
+            //IWorkItem appServer;
 
-            try
-            {
-                m_HostDomain = CreateHostAppDomain();
+            //try
+            //{
+            //    m_HostDomain = CreateHostAppDomain();
 
-                m_HostDomain.SetData(typeof(IsolationMode).Name, IsolationMode.AppDomain);
+            //    m_HostDomain.SetData(typeof(IsolationMode).Name, IsolationMode.AppDomain);
 
-                var marshalServerType = typeof(MarshalAppServer);
+            //    var marshalServerType = typeof(MarshalAppServer);
 
-                appServer = (IWorkItem)m_HostDomain.CreateInstanceAndUnwrap(marshalServerType.Assembly.FullName,
-                        marshalServerType.FullName,
-                        true,
-                        BindingFlags.CreateInstance,
-                        null,
-                        new object[] { ServerTypeName },
-                        null,
-                        new object[0]);
+            //    appServer = (IWorkItem)m_HostDomain.CreateInstanceAndUnwrap(marshalServerType.Assembly.FullName,
+            //            marshalServerType.FullName,
+            //            true,
+            //            BindingFlags.CreateInstance,
+            //            null,
+            //            new object[] { ServerTypeName },
+            //            null,
+            //            new object[0]);
 
-                if (!appServer.Setup(Bootstrap, Config, Factories))
-                {
-                    OnExceptionThrown(new Exception("Failed to setup MarshalAppServer"));
-                    return null;
-                }
+            //    if (!appServer.Setup(Bootstrap, Config, Factories))
+            //    {
+            //        OnExceptionThrown(new Exception("Failed to setup MarshalAppServer"));
+            //        return null;
+            //    }
 
-                if (!appServer.Start())
-                {
-                    OnExceptionThrown(new Exception("Failed to start MarshalAppServer"));
-                    return null;
-                }
+            //    if (!appServer.Start())
+            //    {
+            //        OnExceptionThrown(new Exception("Failed to start MarshalAppServer"));
+            //        return null;
+            //    }
 
-                m_HostDomain.DomainUnload += new EventHandler(m_HostDomain_DomainUnload);
+            //    m_HostDomain.DomainUnload += new EventHandler(m_HostDomain_DomainUnload);
 
-                return appServer;
-            }
-            catch (Exception e)
-            {
-                if (m_HostDomain != null)
-                {
-                    AppDomain.Unload(m_HostDomain);
-                    m_HostDomain = null;
-                }
+            //    return appServer;
+            //}
+            //catch (Exception e)
+            //{
+            //    if (m_HostDomain != null)
+            //    {
+            //        AppDomain.Unload(m_HostDomain);
+            //        m_HostDomain = null;
+            //    }
 
-                OnExceptionThrown(e);
-                return null;
-            }
+            //    OnExceptionThrown(e);
+            //    return null;
+            //}
         }
 
         void m_HostDomain_DomainUnload(object sender, EventArgs e)

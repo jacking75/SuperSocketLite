@@ -25,10 +25,10 @@ namespace SuperSocket.SocketEngine
         /// <param name="culture">The culture.</param>
         /// <param name="activationAttributes">The activation attributes.</param>
         /// <returns></returns>
-        public static object CreateInstanceAndUnwrap(this AppDomain appDomain, string assemblyFile, string typeName, bool ignoreCase, BindingFlags bindingAttr, Binder binder, object[] args, CultureInfo culture, object[] activationAttributes)
-        {
-            return appDomain.CreateInstanceAndUnwrap(assemblyFile, typeName, ignoreCase, bindingAttr, binder, args, culture, activationAttributes, AppDomain.CurrentDomain.Evidence);
-        }
+        //public static object CreateInstanceAndUnwrap(this AppDomain appDomain, string assemblyFile, string typeName, bool ignoreCase, BindingFlags bindingAttr, Binder binder, object[] args, CultureInfo culture, object[] activationAttributes)
+        //{
+        //    return appDomain.CreateInstanceAndUnwrap(assemblyFile, typeName, ignoreCase, bindingAttr, binder, args, culture, activationAttributes, AppDomain.CurrentDomain.Evidence);
+        //}
 
         /// <summary>
         /// Creates the instance from.
@@ -43,9 +43,9 @@ namespace SuperSocket.SocketEngine
         /// <param name="culture">The culture.</param>
         /// <param name="activationAttributes">The activation attributes.</param>
         /// <returns></returns>
-        public static object CreateInstanceFrom(this AppDomain appDomain, string assemblyFile, string typeName, bool ignoreCase, BindingFlags bindingAttr, Binder binder, object[] args, CultureInfo culture, object[] activationAttributes)
-        {
-            return appDomain.CreateInstanceFrom(assemblyFile, typeName, ignoreCase, bindingAttr, binder, args, culture, activationAttributes, AppDomain.CurrentDomain.Evidence);
-        }
+        //public static object CreateInstanceFrom(this AppDomain appDomain, string assemblyFile, string typeName, bool ignoreCase, BindingFlags bindingAttr, Binder binder, object[] args, CultureInfo culture, object[] activationAttributes)
+        //{
+        //    return appDomain.CreateInstanceFrom(assemblyFile, typeName, ignoreCase, bindingAttr, binder, args, culture, activationAttributes, AppDomain.CurrentDomain.Evidence);
+        //}
     }
 }
