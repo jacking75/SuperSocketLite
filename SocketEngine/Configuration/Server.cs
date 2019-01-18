@@ -475,5 +475,21 @@ namespace SuperSocket.SocketEngine.Configuration
             this["serverTypeName"] = value;
             return true;
         }
+		
+		
+		/// <summary>
+        /// Gets/sets the default culture for this server.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        [ConfigurationProperty("defaultCulture", IsRequired = false)]
+        public string DefaultCulture
+        {
+            get
+            {
+                return (string)this["defaultCulture"];
+            }
+        }
     }
 }

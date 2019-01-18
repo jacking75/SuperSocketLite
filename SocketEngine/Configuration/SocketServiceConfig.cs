@@ -300,5 +300,21 @@ namespace SuperSocket.SocketEngine.Configuration
                 return this.CommandLoaders;
             }
         }
+		
+		
+		/// <summary>
+        /// Gets/sets the default culture for all server instances.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        [ConfigurationProperty("defaultCulture", IsRequired = false)]
+        public string DefaultCulture
+        {
+            get
+            {
+                return (string)this["defaultCulture"];
+            }
+        }
     }
 }

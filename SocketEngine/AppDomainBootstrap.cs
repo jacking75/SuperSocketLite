@@ -34,8 +34,11 @@ namespace SuperSocket.SocketEngine
 
         //private void InitliazeValidationAppDomain()
         //{
+        //   // AppDomain.CreateDomain 사용 가능
+        //    //https://docs.microsoft.com/ko-kr/dotnet/api/system.appdomain.createdomain?view=netcore-2.2         
         //    m_ValidationAppDomain = AppDomain.CreateDomain("ValidationDomain", AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.BaseDirectory, string.Empty, false);
 
+        // CreateInstanceAndUnwr는 닷넷코어 지원하지 않음
         //    var validatorType = typeof(TypeValidator);
         //    m_Validator = (TypeValidator)m_ValidationAppDomain.CreateInstanceAndUnwrap(validatorType.Assembly.FullName, validatorType.FullName);
         //}
