@@ -52,7 +52,8 @@ namespace BinaryPacketServer
 
         public void CreateServer()
         {
-            bool bResult = Setup(new RootConfig(), m_Config, logFactory: new Log4NetLogFactory());
+            //TODO NLog로 변경하기
+            bool bResult = Setup(new RootConfig(), m_Config, logFactory: new ConsoleLogFactory());
 
             if (bResult == false)
             {
