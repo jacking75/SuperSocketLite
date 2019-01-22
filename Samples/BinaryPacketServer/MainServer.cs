@@ -42,7 +42,7 @@ namespace BinaryPacketServer
         {
             m_Config = new ServerConfig
             {
-                Port = 18732,
+                Port = 11021,
                 Ip = "Any",
                 MaxConnectionNumber = 100,
                 Mode = SocketMode.Tcp,
@@ -52,18 +52,25 @@ namespace BinaryPacketServer
 
         public void CreateServer()
         {
-            //TODO NLog로 변경하기
-            bool bResult = Setup(new RootConfig(), m_Config, logFactory: new ConsoleLogFactory());
-
-            if (bResult == false)
+            try
             {
-                DevLog.Write(string.Format("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ"), LOG_LEVEL.ERROR);
-                return;
+                //TODO NLog로 변경하기
+                bool bResult = Setup(new RootConfig(), m_Config, logFactory: new ConsoleLogFactory());
+
+                if (bResult == false)
+                {
+                    DevLog.Write(string.Format("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ"), LOG_LEVEL.ERROR);
+                    return;
+                }
+
+                RegistHandler();
+
+                DevLog.Write(string.Format("서버 생성 성공"), LOG_LEVEL.INFO);
             }
-
-            RegistHandler();
-
-            DevLog.Write(string.Format("서버 생성 성공"), LOG_LEVEL.INFO);
+            catch(Exception ex)
+            {
+                DevLog.Write(string.Format($"서버 생성 실패: {ex.ToString()}"), LOG_LEVEL.ERROR);
+            }
         }
 
         public bool IsRunning(ServerState eCurState)

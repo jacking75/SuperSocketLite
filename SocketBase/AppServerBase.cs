@@ -1448,11 +1448,20 @@ namespace SuperSocket.SocketBase
         /// <param name="session">The session.</param>
         protected virtual void OnNewSessionConnected(TAppSession session)
         {
+            //TODO 동작 확인 필요
             var handler = m_NewSessionConnected;
             if (handler == null)
+            {
                 return;
+            }
 
-            handler.BeginInvoke(session, OnNewSessionConnectedCallback, handler);
+            Task.Run(() => handler(session));
+            
+            //var handler = m_NewSessionConnected;
+            //if (handler == null)
+            //    return;
+
+            //handler.BeginInvoke(session, OnNewSessionConnectedCallback, handler);
         }
 
         private void OnNewSessionConnectedCallback(IAsyncResult result)
@@ -1511,14 +1520,24 @@ namespace SuperSocket.SocketBase
         /// <param name="reason">The reason.</param>
         protected virtual void OnSessionClosed(TAppSession session, CloseReason reason)
         {
+            //TODO 동작 확인 필요
             var handler = m_SessionClosed;
 
             if (handler != null)
             {
-                handler.BeginInvoke(session, reason, OnSessionClosedCallback, handler);
+                Task.Run(() => handler(session, reason)); 
             }
 
             session.OnSessionClosed(reason);
+
+            //var handler = m_SessionClosed;
+
+            //if (handler != null)
+            //{
+            //    handler.BeginInvoke(session, reason, OnSessionClosedCallback, handler);
+            //}
+
+            //session.OnSessionClosed(reason);
         }
 
         private void OnSessionClosedCallback(IAsyncResult result)
