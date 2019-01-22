@@ -4,12 +4,17 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\bin</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
+    <ProjectReference Include="..\Facility\SuperSocket.Facility.csproj" />
     <ProjectReference Include="..\SocketBase\SuperSocket.SocketBase.csproj" />
   </ItemGroup>
 
