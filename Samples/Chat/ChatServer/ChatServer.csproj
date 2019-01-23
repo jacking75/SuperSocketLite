@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+    <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\SuperSocket.Common.csproj" />
+    <ProjectReference Include="..\..\..\Facility\SuperSocket.Facility.csproj" />
+    <ProjectReference Include="..\..\..\SocketBase\SuperSocket.SocketBase.csproj" />
+    <ProjectReference Include="..\..\..\SocketEngine\SuperSocket.SocketEngine.csproj" />
+    <ProjectReference Include="..\CommonServerLib\CommonServerLib.csproj" />
+    <ProjectReference Include="..\CSBaseLib\CSBaseLib.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChatServer": {
+      "commandName": "Project",
+      "commandLineArgs": "--uniqueID 1 --roomMaxCountPerThread 16 --roomThreadCount 4 --roomMaxUserCount 4 --roomStartNumber 1 --dbWorkerThreadCount 4 --redisAddress 192.168.0.10 --maxUserCount 100"
+    }
+  }
+}
