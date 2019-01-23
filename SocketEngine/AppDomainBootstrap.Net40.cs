@@ -8,6 +8,7 @@ using SuperSocket.SocketBase.Config;
 
 namespace SuperSocket.SocketEngine
 {
+    /*
     partial class AppDomainBootstrap : IDynamicBootstrap
     {
         bool IDynamicBootstrap.Add(IServerConfig config)
@@ -28,4 +29,5 @@ namespace SuperSocket.SocketEngine
             dynamicBootstrap.Remove(name);
         }
     }
+    */
 }

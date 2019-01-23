@@ -94,6 +94,7 @@ namespace SuperSocket.SocketEngine
         }
     }
 
+    /*
     /// <summary>
     /// AppDomainBootstrap
     /// </summary>
@@ -252,4 +253,5 @@ namespace SuperSocket.SocketEngine
                 disposableBootstrap.Dispose();
         }
     }
+    */
 }

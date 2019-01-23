@@ -41,8 +41,9 @@ namespace SuperSocket.SocketEngine
                 m_ListenSocket.Bind(this.Info.EndPoint);
                 m_ListenSocket.Listen(m_ListenBackLog);
 
-                m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-                m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+                //TODO 이 옵션은 설정 파일에서 할 수 있도록 해야 한다
+                //m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                //m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 
                 SocketAsyncEventArgs acceptEventArg = new SocketAsyncEventArgs();
                 m_AcceptSAE = acceptEventArg;

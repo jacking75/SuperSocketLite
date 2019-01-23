@@ -112,6 +112,9 @@ namespace SuperSocket.SocketBase
         string BaseDirectory { get; }
     }
 
+    //TODO 삭제하기. AppDomainBootstrap,     ProcessBootstrap, IDynamicBootstrap
+
+    /*
     /// <summary>
     /// The bootstrap interface to support add new server instance in runtime
     /// </summary>
@@ -138,4 +141,5 @@ namespace SuperSocket.SocketBase
         /// <param name="name">The name of the server instance to be removed.</param>
         void Remove(string name);
     }
+    */
 }

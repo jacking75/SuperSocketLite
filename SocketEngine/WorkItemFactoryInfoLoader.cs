@@ -36,11 +36,11 @@ namespace SuperSocket.SocketEngine
             }
 
             //TODO NLog로 변경
-            //if (string.IsNullOrEmpty(m_Config.LogFactory))
-            //{
-            //    m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(Log4NetLogFactory));
-            //    return m_DefaultLogFactory;
-            //}
+            if (string.IsNullOrEmpty(m_Config.LogFactory))
+            {
+                m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(ConsoleLogFactory));
+                return m_DefaultLogFactory;
+            }
 
             ProviderFactoryInfo factory = null;
 

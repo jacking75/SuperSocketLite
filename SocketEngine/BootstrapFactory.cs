@@ -28,18 +28,20 @@ namespace SuperSocket.SocketEngine
 
             IBootstrap bootstrap;
 
-            if (config.Isolation == IsolationMode.AppDomain)
-            {
-                bootstrap = new AppDomainBootstrap(config);
-            }
+            //SuperSocketLite에서는 AppDomain을 사용하지 않는다.
+            //if (config.Isolation == IsolationMode.AppDomain)
+            //{
+            //    bootstrap = new AppDomainBootstrap(config);
+            //}
             //else if (config.Isolation == IsolationMode.Process)
             //{
             //    bootstrap = new ProcessBootstrap(config);
             //}
-            else
-            {
-                bootstrap = new DefaultBootstrap(config);
-            }
+            //else
+            //{
+            //    bootstrap = new DefaultBootstrap(config);
+            //}
+            bootstrap = new DefaultBootstrap(config);
 
             var section = config as ConfigurationSection;
 
