@@ -13,7 +13,8 @@ using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
 {
-    //TODO 삭제 예정
+    // 삭제 하기
+    /*
     class AppDomainWorkItemFactoryInfoLoader : WorkItemFactoryInfoLoader
     {
         public AppDomainWorkItemFactoryInfoLoader(IConfigurationSource config, ILogFactory passedInLogFactory)
@@ -67,7 +68,8 @@ namespace SuperSocket.SocketEngine
             base.Dispose();
         }
     }
-
+    */
+    /*
     class DefaultBootstrapAppDomainWrap : DefaultBootstrap
     {
         private IBootstrap m_Bootstrap;
@@ -93,6 +95,7 @@ namespace SuperSocket.SocketEngine
             return new AppDomainWorkItemFactoryInfoLoader(config, logFactory);
         }
     }
+    */
 
     /*
     /// <summary>

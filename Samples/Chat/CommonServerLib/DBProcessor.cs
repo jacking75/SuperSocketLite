@@ -12,6 +12,7 @@ namespace CommonServerLib
 {
     public class DBProcessor
     {
+        public static Action<string, LOG_LEVEL> LogFunc;
         bool IsThreadRunning = false;
         List<System.Threading.Thread> ThreadList = new List<System.Threading.Thread>();
 
@@ -99,7 +100,7 @@ namespace CommonServerLib
                 }
                 catch (Exception ex)
                 {
-                    IsThreadRunning.IfTrue(() => DevLog.Write(ex.ToString(), LOG_LEVEL.ERROR));
+                    IsThreadRunning.IfTrue(() => LogFunc(ex.ToString(), LOG_LEVEL.ERROR));
                 }
             }
         }

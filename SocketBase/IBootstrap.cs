@@ -112,7 +112,7 @@ namespace SuperSocket.SocketBase
         string BaseDirectory { get; }
     }
 
-    //TODO 삭제하기. AppDomainBootstrap,     ProcessBootstrap, IDynamicBootstrap
+    //삭제하기. AppDomainBootstrap,     ProcessBootstrap, IDynamicBootstrap
 
     /*
     /// <summary>

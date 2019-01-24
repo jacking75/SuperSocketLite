@@ -114,7 +114,7 @@ namespace SuperSocket.SocketEngine
         /// </summary>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IEnumerable<IWorkItem> appServers)
-            : this(new RootConfig(), appServers, new ConsoleLogFactory()) //TODO NLog로 바꾸기
+            : this(new RootConfig(), appServers, new NLogLogFactory()) 
         {
 
         }
@@ -125,7 +125,7 @@ namespace SuperSocket.SocketEngine
         /// <param name="rootConfig">The root config.</param>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IRootConfig rootConfig, IEnumerable<IWorkItem> appServers)
-            : this(rootConfig, appServers, new ConsoleLogFactory())  //TODO NLog로 바꾸기
+            : this(rootConfig, appServers, new NLogLogFactory())  
         {
 
         }

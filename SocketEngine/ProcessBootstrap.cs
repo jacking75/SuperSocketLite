@@ -10,6 +10,8 @@ using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
 {
+    // 삭제 하기
+    /*
     class DefaultBootstrapProcessWrap : DefaultBootstrapAppDomainWrap
     {
         public DefaultBootstrapProcessWrap(IBootstrap bootstrap, IConfigurationSource config, string startupConfigFile)
@@ -23,6 +25,7 @@ namespace SuperSocket.SocketEngine
             return new ProcessAppServer(serviceTypeName, serverStatusMetadata);
         }
     }
+    */
 
     //class ProcessBootstrap : AppDomainBootstrap
     //{

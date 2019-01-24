@@ -10,11 +10,11 @@ namespace CommonServerLib
 {
     public enum LOG_LEVEL
     {
-        TRACE,
         DEBUG,
         INFO,
         WARN,
-        ERROR
+        ERROR, 
+        FATAL
     }
 
     public class DevLog
@@ -33,7 +33,7 @@ namespace CommonServerLib
             출력가능_로그레벨 = logLevel;
         }
 
-        static public void Write(string msg, LOG_LEVEL logLevel = LOG_LEVEL.TRACE,
+        static public void Write(string msg, LOG_LEVEL logLevel = LOG_LEVEL.DEBUG,
                                 [CallerFilePath] string fileName = "",
                                 [CallerMemberName] string methodName = "",
                                 [CallerLineNumber] int lineNumber = 0)

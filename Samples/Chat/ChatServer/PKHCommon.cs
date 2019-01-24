@@ -68,7 +68,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("로그인 요청 받음", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("로그인 요청 받음", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -93,20 +93,20 @@ namespace ChatServer
                 
                 var dbQueue = MakeDBQueue(PACKETID.REQ_DB_LOGIN, sessionID, sessionIndex, jobDatas);
                 RequestDBJob(ServerNetwork.GetPacketDistributor(), dbQueue);
-                                
-                DevLog.Write("DB에 로그인 요청 보냄", LOG_LEVEL.DEBUG);
+
+                MainServer.WriteLog("DB에 로그인 요청 보냄", LOG_LEVEL.DEBUG);
             }
             catch(Exception ex)
             {
                 // 패킷 해제에 의해서 로그가 남지 않도록 로그 수준을 Debug로 한다.
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 
         public void ResponseLoginFromDB(ServerPacketData packetData)
         {
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("DB에서 로그인 답변 받음", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("DB에서 로그인 답변 받음", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -144,13 +144,13 @@ namespace ChatServer
                 SessionManager.SetLogin(sessionIndex, resData.UserID);
 
                 ResponseLoginToClient(errorCode, packetData.SessionID);
-                
-                DevLog.Write("로그인 요청 답변 보냄", LOG_LEVEL.DEBUG);
+
+                MainServer.WriteLog("로그인 요청 답변 보냄", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
                 // 패킷 해제에 의해서 로그가 남지 않도록 로그 수준을 Debug로 한다.
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 
@@ -185,7 +185,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("RequestRoomEnter", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("RequestRoomEnter", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -212,13 +212,13 @@ namespace ChatServer
                     return;
                 }
 
-                SessionManager.SetPreRoomEnter(sessionIndex, reqData.RoomNumber);                            
+                SessionManager.SetPreRoomEnter(sessionIndex, reqData.RoomNumber);
 
-                DevLog.Write("패킷 분배", LOG_LEVEL.DEBUG);
+                MainServer.WriteLog("패킷 분배", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 
@@ -255,7 +255,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("ResponseRoomEnterInternal", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("ResponseRoomEnterInternal", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -281,13 +281,13 @@ namespace ChatServer
                     SessionManager.SetRoomEntered(sessionIndex, resData.RoomNumber);
                 }
 
-                ResponseEnterRoomToClient(resData.Result, sessionID);                
+                ResponseEnterRoomToClient(resData.Result, sessionID);
 
-                DevLog.Write("ResponseRoomEnterInternal - Success", LOG_LEVEL.DEBUG);
+                MainServer.WriteLog("ResponseRoomEnterInternal - Success", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 

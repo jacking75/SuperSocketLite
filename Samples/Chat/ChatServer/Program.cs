@@ -24,8 +24,7 @@ namespace ChatServer
             (error == CSBaseLib.ERROR_CODE.NONE).IfFalse(() =>
             {
                 var errorMsg = string.Format("서버 컴포넌트 생성 실패. {0}: {1}", error, error.ToString());
-                MainServer.WriteLog(errorMsg, CommonServerLib.LOG_LEVEL.INFO);
-                CommonServerLib.DevLog.Write(errorMsg, CommonServerLib.LOG_LEVEL.ERROR);
+                MainServer.WriteLog(errorMsg, CommonServerLib.LOG_LEVEL.INFO);                
             });
 
             while (true)
@@ -61,7 +60,7 @@ namespace ChatServer
 
         static void OnProcessTimedEvent(object sender, System.Timers.ElapsedEventArgs e)
        {
-           ProcessLog();
+           //ProcessLog();
            ProcessInnerMessage();
        }
 

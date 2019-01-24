@@ -113,7 +113,7 @@ namespace ChatServer
                 }
                 catch (Exception ex)
                 {
-                    IsThreadRunning.IfTrue(() => DevLog.Write(ex.ToString(), LOG_LEVEL.ERROR));
+                    IsThreadRunning.IfTrue(() => MainServer.WriteLog(ex.ToString(), LOG_LEVEL.ERROR));
                 }
             }
         }

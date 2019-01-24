@@ -40,6 +40,7 @@ namespace ChatServer
                 PacketProcessorList.Add(packetProcess);
             }
 
+            DBProcessor.LogFunc = MainServer.WriteLog;
             var error = DBWorker.CreateAndStart(ChatServerEnvironment.DBWorkerThreadCount, DistributeDBJobResult, ChatServerEnvironment.RedisAddress);
             if (error != ERROR_CODE.NONE)
             {
@@ -66,7 +67,7 @@ namespace ChatServer
                         
             if(IsClientRequestPacket(packetId) == false)
             {
-                DevLog.Write("[Distribute] - 클라리언트의 요청 패킷이 아니다.", LOG_LEVEL.DEBUG);
+                MainServer.WriteLog("[Distribute] - 클라리언트의 요청 패킷이 아니다.", LOG_LEVEL.DEBUG);
                 return; 
             }
 
@@ -97,7 +98,7 @@ namespace ChatServer
             {
                 if (isPreRoomEnter == false && SessionManager.IsStateRoom(sessionIndex) == false)
                 {
-                    DevLog.Write("[DistributeRoomProcessor] - 방에 입장하지 않은 유저 - 1", LOG_LEVEL.DEBUG);
+                    MainServer.WriteLog("[DistributeRoomProcessor] - 방에 입장하지 않은 유저 - 1", LOG_LEVEL.DEBUG);
                     return false;
                 }
 
@@ -105,7 +106,7 @@ namespace ChatServer
                 return true;
             }
 
-            DevLog.Write("[DistributeRoomProcessor] - 방에 입장하지 않은 유저 - 2", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("[DistributeRoomProcessor] - 방에 입장하지 않은 유저 - 2", LOG_LEVEL.DEBUG);
             return false;
         }
 

@@ -761,11 +761,10 @@ namespace SuperSocket.SocketBase
                 return true;
             }
 
-            //TODO NLog로 변경하기
-            //Log4NetLogFactory is default log factory
+            //NLogLogFactory is default log factory
             if (LogFactory == null)
             {
-                //LogFactory = new Log4NetLogFactory();
+                LogFactory = new NLogLogFactory();
             }
 
             return true;
@@ -1448,15 +1447,13 @@ namespace SuperSocket.SocketBase
         /// <param name="session">The session.</param>
         protected virtual void OnNewSessionConnected(TAppSession session)
         {
-            //TODO 동작 확인 필요
             var handler = m_NewSessionConnected;
             if (handler == null)
             {
                 return;
             }
 
-            Task.Run(() => handler(session));
-            
+            Task.Run(() => handler(session));            
             //var handler = m_NewSessionConnected;
             //if (handler == null)
             //    return;
@@ -1520,7 +1517,6 @@ namespace SuperSocket.SocketBase
         /// <param name="reason">The reason.</param>
         protected virtual void OnSessionClosed(TAppSession session, CloseReason reason)
         {
-            //TODO 동작 확인 필요
             var handler = m_SessionClosed;
 
             if (handler != null)
@@ -1529,7 +1525,6 @@ namespace SuperSocket.SocketBase
             }
 
             session.OnSessionClosed(reason);
-
             //var handler = m_SessionClosed;
 
             //if (handler != null)

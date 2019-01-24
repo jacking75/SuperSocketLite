@@ -79,7 +79,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("방 입장 요청 받음", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("방 입장 요청 받음", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -104,12 +104,12 @@ namespace ChatServer
                 room.NofifyPacketNewUser(sessionIndex, reqData.UserID);
 
                 SendInternalRoomEnterPacketToCommon(ERROR_CODE.NONE, reqData.RoomNumber, reqData.UserID, sessionID, sessionIndex);
-                    
-                DevLog.Write("RequestEnterInternal - Success", LOG_LEVEL.DEBUG);
+
+                MainServer.WriteLog("RequestEnterInternal - Success", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 
@@ -135,7 +135,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("로그인 요청 받음", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("로그인 요청 받음", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -148,11 +148,11 @@ namespace ChatServer
 
                 ResponseLeaveRoomToClient(sessionID);
 
-                DevLog.Write("Room RequestLeave - Success", LOG_LEVEL.DEBUG);
+                MainServer.WriteLog("Room RequestLeave - Success", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
 
@@ -199,7 +199,7 @@ namespace ChatServer
         {
             var sessionID = packetData.SessionID;
             var sessionIndex = packetData.SessionIndex;
-            DevLog.Write("Room RequestChat", LOG_LEVEL.DEBUG);
+            MainServer.WriteLog("Room RequestChat", LOG_LEVEL.DEBUG);
 
             try
             {
@@ -224,11 +224,11 @@ namespace ChatServer
 
                 roomObject.Item2.Broadcast(-1, sendData);
 
-                 DevLog.Write("Room RequestChat - Success", LOG_LEVEL.DEBUG);
+                MainServer.WriteLog("Room RequestChat - Success", LOG_LEVEL.DEBUG);
             }
             catch (Exception ex)
             {
-                DevLog.Write(ex.ToString(), LOG_LEVEL.DEBUG);
+                MainServer.WriteLog(ex.ToString(), LOG_LEVEL.DEBUG);
             }
         }
        

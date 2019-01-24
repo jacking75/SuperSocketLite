@@ -59,14 +59,12 @@ namespace SuperSocket.SocketEngine
 
         protected void OnNewClientAcceptedAsync(Socket socket, object state)
         {
-            //TODO 동작 확인 필요
             var handler = NewClientAccepted;
 
             if (handler != null)
             {
                 System.Threading.Tasks.Task.Run(() => handler(this, socket, state));
             }
-
             //var handler = NewClientAccepted;
 
             //if (handler != null)

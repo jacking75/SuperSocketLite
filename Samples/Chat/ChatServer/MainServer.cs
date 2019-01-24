@@ -20,6 +20,7 @@ namespace ChatServer
 {
     public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
+        static SuperSocket.SocketBase.Logging.ILog MainLogger; 
         IBootstrap ActiveServerBootstrap;
         static RemoteConnectCheck RemoteCheck = null;
         PacketDistributor Distributor = new PacketDistributor();
@@ -39,11 +40,13 @@ namespace ChatServer
 
             if (!ActiveServerBootstrap.Initialize())
             {
-                DevLog.Write(string.Format("서버 초기화 실패"), LOG_LEVEL.ERROR);
+                Console.WriteLine(string.Format("서버 초기화 실패"), LOG_LEVEL.ERROR);
                 return;
             }
             else
             {
+                var refAppServer = ActiveServerBootstrap.AppServers.FirstOrDefault() as MainServer;
+                MainLogger = refAppServer.Logger;
                 WriteLog("서버 초기화 성공", LOG_LEVEL.INFO);
             }
 
@@ -52,7 +55,7 @@ namespace ChatServer
 
             if (result != StartResult.Success)
             {
-                DevLog.Write(string.Format("서버 시작 실패"), LOG_LEVEL.ERROR);
+                MainServer.WriteLog(string.Format("서버 시작 실패"), LOG_LEVEL.ERROR);
                 return;
             }
             else
@@ -60,7 +63,7 @@ namespace ChatServer
                 WriteLog("서버 시작 성공", LOG_LEVEL.INFO);
             }
 
-            DevLog.Write(string.Format("서버 생성 및 시작 성공"), LOG_LEVEL.INFO);
+            WriteLog(string.Format("서버 생성 및 시작 성공"), LOG_LEVEL.INFO);
 
             
             ChatServerEnvironment.Setting();
@@ -70,7 +73,7 @@ namespace ChatServer
             var appServer = ActiveServerBootstrap.AppServers.FirstOrDefault() as MainServer;
             InnerMessageHostProgram.ServerStart(ChatServerEnvironment.ChatServerUniqueID, appServer.Config.Port);
 
-            ClientSession.CreateIndexPool(appServer.Config.MaxConnectionNumber);
+            ClientSession.CreateIndexPool(appServer.Config.MaxConnectionNumber);            
         }
 
         public void StartRemoteConnect()
@@ -84,7 +87,7 @@ namespace ChatServer
                 var infoList = server.Split(":");
                 remoteInfoList.Add(new Tuple<string, string, int>(infoList[0], infoList[1], infoList[2].ToInt32()));
 
-                DevLog.Write(string.Format("(To)연결할 서버 정보: {0}, {1}, {2}", infoList[0], infoList[1], infoList[2]), LOG_LEVEL.INFO);
+                MainServer.WriteLog(string.Format("(To)연결할 서버 정보: {0}, {1}, {2}", infoList[0], infoList[1], infoList[2]), LOG_LEVEL.INFO);
             }
 
             RemoteCheck.Init(ActiveServerBootstrap, remoteInfoList);
@@ -130,30 +133,26 @@ namespace ChatServer
 
         public PacketDistributor GetPacketDistributor() { return Distributor; }
 
-        public static void WriteLog(string msg, LOG_LEVEL logLevel = LOG_LEVEL.TRACE,
-                                [CallerFilePath] string fileName = "",
-                                [CallerMemberName] string methodName = "",
-                                [CallerLineNumber] int lineNumber = 0)
+        public static void WriteLog(string msg, LOG_LEVEL logLevel = LOG_LEVEL.DEBUG)
         {
-            var sourceFileName = System.IO.Path.GetFileName(fileName);
-            //var logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            var logMsg = string.Format("{0}:{1} {2} {3}| {4}", DateTime.Now, sourceFileName, methodName, lineNumber, msg);
-
             switch (logLevel)
             {
                 case LOG_LEVEL.INFO:
-                   // logger.Info(logMsg);
+                    MainLogger.Info(msg);
                     break;
                 case LOG_LEVEL.ERROR:
-                    //logger.Error(logMsg);
+                    MainLogger.Error(msg);
                     break;
                 case LOG_LEVEL.DEBUG:
-                    //logger.Debug(logMsg);
+                    MainLogger.Debug(msg);
                     break;
-                default:
-                    //logger.Error(string.Format("{0}:{1} {2} {3}| 지원하지 않은 로그 레벨 사용", DateTime.Now, fileName, methodName, lineNumber));
+                case LOG_LEVEL.WARN:
+                    MainLogger.Warn(msg);
                     break;
-            }
+                case LOG_LEVEL.FATAL:
+                    MainLogger.Fatal(msg);
+                    break;
+             }
         }
                 
         void OnConnected(ClientSession session)
@@ -161,7 +160,7 @@ namespace ChatServer
             //옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
 
             session.AllocSessionIndex();
-            DevLog.Write(string.Format("세션 번호 {0} 접속", session.SessionID), LOG_LEVEL.INFO);
+            WriteLog(string.Format("세션 번호 {0} 접속", session.SessionID), LOG_LEVEL.INFO);
                         
             var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID, session.SessionIndex);            
             Distributor.DistributeCommon(false, packet);
@@ -169,7 +168,7 @@ namespace ChatServer
 
         void OnClosed(ClientSession session, CloseReason reason)
         {
-            DevLog.Write(string.Format("세션 번호 {0} 접속해제: {1}", session.SessionID, reason.ToString()), LOG_LEVEL.INFO);
+            WriteLog(string.Format("세션 번호 {0} 접속해제: {1}", session.SessionID, reason.ToString()), LOG_LEVEL.INFO);
 
 
             var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID, session.SessionIndex);
@@ -180,7 +179,7 @@ namespace ChatServer
 
         void OnPacketReceived(ClientSession session, EFBinaryRequestInfo reqInfo)
         {
-            DevLog.Write(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId), LOG_LEVEL.TRACE);
+            WriteLog(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId), LOG_LEVEL.DEBUG);
 
             var packet = new ServerPacketData();
             packet.SessionID = session.SessionID;
