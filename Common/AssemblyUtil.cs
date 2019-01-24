@@ -57,7 +57,6 @@ namespace SuperSocket.Common
         /// <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
         /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
         /// <returns></returns>
-#if !NET35
         public static Type GetType(string fullTypeName, bool throwOnError, bool ignoreCase)
         {
             var targetType = Type.GetType(fullTypeName, false, ignoreCase);
@@ -90,28 +89,7 @@ namespace SuperSocket.Common
                 return null;
             }
         }
-#else
-        public static Type GetType(string fullTypeName, bool throwOnError, bool ignoreCase)
-        {
-            return Type.GetType(fullTypeName, null, (a, n, ign) =>
-                {
-                    var targetType = a.GetType(n, false, ign);
 
-                    if (targetType != null)
-                        return targetType;
-
-                    var typeNamePrefix = n + "`";
-
-                    var matchedTypes = a.GetExportedTypes().Where(t => t.IsGenericType
-                            && t.FullName.StartsWith(typeNamePrefix, ign, CultureInfo.InvariantCulture)).ToArray();
-
-                    if (matchedTypes.Length != 1)
-                        return null;
-
-                    return matchedTypes[0];
-                }, throwOnError, ignoreCase);
-        }
-#endif
 
         /// <summary>
         /// Gets the implement types from assembly.
@@ -167,8 +145,6 @@ namespace SuperSocket.Common
             return result;
         }
 
-#if SILVERLIGHT
-#else
         /// <summary>
         /// Clone object in binary format.
         /// </summary>
@@ -185,7 +161,6 @@ namespace SuperSocket.Common
                 return (T)formatter.Deserialize(ms);
             }
         }
-#endif
 
 
         /// <summary>

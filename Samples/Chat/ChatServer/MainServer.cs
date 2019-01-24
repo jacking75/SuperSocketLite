@@ -118,16 +118,26 @@ namespace ChatServer
             return ERROR_CODE.NONE;
         }
 
+        //TODO 세션별 초당 최대 보낼 수 있는 횟수를 설정해야 한다
         public bool SendData(string sessionID, byte[] sendData)
         {
-            var session = GetSessionByID(sessionID);
-
-            if (session == null)
+            try
             {
-                return false;
-            }
+                var session = GetSessionByID(sessionID);
 
-            session.Send(sendData, 0, sendData.Length);
+                if (session == null)
+                {
+                    return false;
+                }
+
+                session.Send(sendData, 0, sendData.Length);
+            }
+            catch(Exception ex)
+            {
+                //TODO send time out 등의 문제이므로 접속을 끊는 것이 좋다.
+                //session.SendEndWhenSendingTimeOut(); 
+                //session.Close();
+            }
             return true;
         }
 

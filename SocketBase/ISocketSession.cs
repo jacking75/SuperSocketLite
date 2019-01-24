@@ -137,5 +137,10 @@ namespace SuperSocket.SocketBase
         /// The original receive buffer offset.
         /// </value>
         int OrigReceiveOffset { get; }
+
+        /// <summary>
+        /// 최흥배. 보내기 실패 예외가 발생한 경우 보내기 상태를 취소 시켜서 즉각 접속이 종료 되도록 한다.
+        /// </summary>
+        void SendEndWhenSendingTimeOut();
     }
 }

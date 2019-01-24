@@ -670,5 +670,10 @@ namespace SuperSocket.SocketEngine
 
             return IsIgnorableSocketError(socketErrorCode);
         }
+
+        public void SendEndWhenSendingTimeOut()
+        {
+            OnSendEnd(CloseReason.TimeOut, false);
+        }
     }
 }
