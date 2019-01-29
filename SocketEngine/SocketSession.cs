@@ -347,8 +347,7 @@ namespace SuperSocket.SocketEngine
             queue.StopEnqueue();
 
             if (queue.Count == 0)
-            {
-                
+            {                
                 m_SendingQueuePool.Push(queue);
                 OnSendEnd(CloseReason.InternalError, true);
                 AppSession.Logger.Error("There is no data to be sent in the queue.");
@@ -395,6 +394,7 @@ namespace SuperSocket.SocketEngine
             {
                 OnSendEnd();
 
+                //TODO 이 코드는 실행 불가 -_-
                 if (newQueue.Count > 0)
                 {
                     StartSend(newQueue, newQueue.TrackID, true);

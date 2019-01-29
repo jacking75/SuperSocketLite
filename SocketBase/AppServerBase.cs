@@ -583,9 +583,8 @@ namespace SuperSocket.SocketBase
 
             SetupBasic(rootConfig, config, socketServerFactory);
 
-            if (!SetupLogFactory(logFactory))
-                return false;
-
+            SetupLogFactory(logFactory);
+  
             Logger = CreateLogger(this.Name);
 
             if (!SetupMedium(receiveFilterFactory, connectionFilters, commandLoaders))
@@ -653,8 +652,7 @@ namespace SuperSocket.SocketBase
 
             SetupBasic(rootConfig, config, GetSingleProviderInstance<ISocketServerFactory>(factories, ProviderKey.SocketServerFactory));
 
-            if (!SetupLogFactory(GetSingleProviderInstance<ILogFactory>(factories, ProviderKey.LogFactory)))
-                return false;
+            SetupLogFactory(GetSingleProviderInstance<ILogFactory>(factories, ProviderKey.LogFactory));
 
             Logger = CreateLogger(this.Name);
 

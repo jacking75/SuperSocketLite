@@ -167,8 +167,7 @@ namespace SuperSocket.SocketEngine
                         workItemFactory.LogFactory = GetBootstrapLogFactory();
                 }
 
-                if (workItemFactory.LogFactory != null)
-                    factories.Add(workItemFactory.LogFactory);
+              factories.Add(workItemFactory.LogFactory);
 
                 //Initialize Receive filter factory
                 if (!string.IsNullOrEmpty(serverConfig.ReceiveFilterFactory))
@@ -192,9 +191,10 @@ namespace SuperSocket.SocketEngine
         private IEnumerable<ProviderFactoryInfo> GetSelectedFactories(List<ProviderFactoryInfo> source, string selectedItems)
         {
             var items = selectedItems.Split(new char[] { ',', ';' });
-
-            if (items == null && !items.Any())
+            if (!items.Any())
+            {
                 return null;
+            }
 
             items = items.Select(f => f.Trim()).ToArray();
 
