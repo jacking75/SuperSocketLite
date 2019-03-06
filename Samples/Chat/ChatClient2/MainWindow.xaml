@@ -1,0 +1,41 @@
+﻿<Window x:Class="ChatClient2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatClient2"
+        mc:Ignorable="d"
+        Title="채팅 클라이언트" Height="621.459" Width="518.045">
+    <Grid Margin="0,0,0,0.226" HorizontalAlignment="Left" Width="771">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="489*"/>
+            <ColumnDefinition Width="14*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="더미 클라이언트 설정" HorizontalAlignment="Left" Height="59" Margin="10,10,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2">
+            <Label Content="서버 주소:" HorizontalAlignment="Left" Height="23" Margin="2,15,0,0" VerticalAlignment="Top" Width="58"/>
+        </GroupBox>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="79,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
+        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,40,0,0" VerticalAlignment="Top" Width="58"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
+        <CheckBox Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,43,0,0" VerticalAlignment="Top" Width="98"/>
+        <Label Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
+        <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,74,0,0" VerticalAlignment="Top" Width="484"/>
+        <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,93,0,0" VerticalAlignment="Top" Width="45"/>
+        <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,94,0,0" VerticalAlignment="Top" Width="55"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="68,93,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="219,94,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
+        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,92,0,0" VerticalAlignment="Top" Width="37"/>
+        <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="357,92,0,0" VerticalAlignment="Top" Width="38"/>
+        <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="407,92,0,0" VerticalAlignment="Top" Width="64"/>
+        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="324" Margin="10,134,0,0" VerticalAlignment="Top" Width="484"/>
+        <ListBox HorizontalAlignment="Left" Height="186" Margin="23,155,0,0" VerticalAlignment="Top" Width="116"/>
+        <TextBox HorizontalAlignment="Left" Height="19" Margin="23,355,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="45"/>
+        <Button Content="방 입장" HorizontalAlignment="Left" Height="21" Margin="74,355,0,0" VerticalAlignment="Top" Width="65"/>
+        <Button Content="방 나가기" HorizontalAlignment="Left" Height="21" Margin="23,381,0,0" VerticalAlignment="Top" Width="65"/>
+        <ListBox HorizontalAlignment="Left" Height="270" Margin="153,155,0,0" VerticalAlignment="Top" Width="318"/>
+        <TextBox HorizontalAlignment="Left" Height="22" Margin="153,430,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="271"/>
+        <Button Content="chat" HorizontalAlignment="Left" Height="21" Margin="429,431,0,0" VerticalAlignment="Top" Width="42"/>
+        <ListBox HorizontalAlignment="Left" Height="111" Margin="10,470,0,0" VerticalAlignment="Top" Width="484"/>
+
+    </Grid>
+</Window>
