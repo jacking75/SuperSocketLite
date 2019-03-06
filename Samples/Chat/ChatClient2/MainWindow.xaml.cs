@@ -210,7 +210,7 @@ namespace ChatClient2
 
             SendPacketQueue.Clear();
 
-            ClearUIRoomOut();
+            //ClearUIRoomOut();
             //labelStatus.Text = "서버 접속이 끊어짐";
         }
 

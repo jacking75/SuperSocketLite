@@ -16,7 +16,7 @@
         </GroupBox>
         <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="23" Margin="79,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
         <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,40,0,0" VerticalAlignment="Top" Width="58"/>
-        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
+        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="77"/>
         <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,43,0,0" VerticalAlignment="Top" Width="98"/>
         <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
         <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,74,0,0" VerticalAlignment="Top" Width="484"/>
