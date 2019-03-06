@@ -18,22 +18,22 @@
         <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,40,0,0" VerticalAlignment="Top" Width="58"/>
         <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
         <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,43,0,0" VerticalAlignment="Top" Width="98"/>
-        <Label Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
+        <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
         <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,74,0,0" VerticalAlignment="Top" Width="484"/>
         <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,93,0,0" VerticalAlignment="Top" Width="45"/>
         <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,94,0,0" VerticalAlignment="Top" Width="55"/>
-        <TextBox x:Name="textBoxID" HorizontalAlignment="Left" Height="25" Margin="68,93,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
-        <TextBox x:Name="textBoxPW" HorizontalAlignment="Left" Height="25" Margin="219,94,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="textBoxID" HorizontalAlignment="Left" Height="25" Margin="68,93,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="textBoxPW" HorizontalAlignment="Left" Height="25" Margin="219,94,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="87"/>
         <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,92,0,0" VerticalAlignment="Top" Width="37" Click="Button_Click"/>
         <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="357,92,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_1"/>
         <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="407,92,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
         <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="324" Margin="10,134,0,0" VerticalAlignment="Top" Width="484"/>
         <ListBox x:Name="listBoxRoomUserList" HorizontalAlignment="Left" Height="186" Margin="23,155,0,0" VerticalAlignment="Top" Width="116"/>
-        <TextBox x:Name="textBoxRoomNum" HorizontalAlignment="Left" Height="19" Margin="23,355,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="45"/>
+        <TextBox x:Name="textBoxRoomNum" HorizontalAlignment="Left" Height="19" Margin="23,355,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="45"/>
         <Button Content="방 입장" HorizontalAlignment="Left" Height="21" Margin="74,355,0,0" VerticalAlignment="Top" Width="65" Click="Button_Click_3"/>
         <Button Content="방 나가기" HorizontalAlignment="Left" Height="21" Margin="23,381,0,0" VerticalAlignment="Top" Width="65" Click="Button_Click_4"/>
         <ListBox x:Name="listBoxChat" HorizontalAlignment="Left" Height="270" Margin="153,155,0,0" VerticalAlignment="Top" Width="318"/>
-        <TextBox x:Name="textBoxSendChat" HorizontalAlignment="Left" Height="22" Margin="153,430,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="271"/>
+        <TextBox x:Name="textBoxSendChat" HorizontalAlignment="Left" Height="22" Margin="153,430,0,0" TextWrapping="Wrap" Text="Hi~~" VerticalAlignment="Top" Width="271"/>
         <Button Content="chat" HorizontalAlignment="Left" Height="21" Margin="429,431,0,0" VerticalAlignment="Top" Width="42" Click="Button_Click_5"/>
         <ListBox x:Name="listBoxLog" HorizontalAlignment="Left" Height="111" Margin="10,470,0,0" VerticalAlignment="Top" Width="484"/>
 

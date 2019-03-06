@@ -346,37 +346,74 @@ namespace ChatClient2
         // 접속하기
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            string address = textBoxIP.Text;
 
+            if (checkBoxLocalHostIP.IsChecked == true)
+            {
+                address = "127.0.0.1";
+            }
+
+            int port = Convert.ToInt32(textBoxPort.Text);
+
+            if (Network.Connect(address, port))
+            {
+                labelConnState.Content = string.Format("{0}. 서버에 접속 중", DateTime.Now);
+                ClientState = CLIENT_STATE.CONNECTED;
+            }
+            else
+            {
+                labelConnState.Content = string.Format("{0}. 서버에 접속 실패", DateTime.Now);
+            }
         }
 
         // 로그인
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            if (ClientState == CLIENT_STATE.CONNECTED)
+            {
+                RequestLogin(textBoxID.Text, textBoxPW.Text);
+            }
         }
 
         // 접속 끊기
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            ClientState = CLIENT_STATE.NONE;
+            SetDisconnectd();
+            Network.Close();
         }
 
         // 방 입장
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            var roomNum = textBoxRoomNum.Text.ToInt32();
 
+            PrintLog("서버에 방 입장 요청");
+
+            var request = new CSBaseLib.PKTReqRoomEnter() { RoomNumber = roomNum };
+
+            var Body = MessagePackSerializer.Serialize(request);
+            var sendData = CSBaseLib.PacketToBytes.Make(CSBaseLib.PACKETID.REQ_ROOM_ENTER, Body);
+            PostSendPacket(sendData);
         }
 
         // 방 나가기
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
+            PrintLog("서버에 방 나가기 요청");
 
+            var sendData = CSBaseLib.PacketToBytes.Make(CSBaseLib.PACKETID.REQ_ROOM_LEAVE, null);
+            PostSendPacket(sendData);
         }
 
         // 방 채팅
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
+            var request = new CSBaseLib.PKTReqRoomChat() { ChatMessage = textBoxSendChat.Text };
 
+            var Body = MessagePackSerializer.Serialize(request);
+            var sendData = CSBaseLib.PacketToBytes.Make(CSBaseLib.PACKETID.REQ_ROOM_CHAT, Body);
+            PostSendPacket(sendData);
         }
 
         private void Window_Closed(object sender, EventArgs e)
