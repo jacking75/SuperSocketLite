@@ -24,7 +24,7 @@
         <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,94,0,0" VerticalAlignment="Top" Width="55"/>
         <TextBox HorizontalAlignment="Left" Height="25" Margin="68,93,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
         <TextBox HorizontalAlignment="Left" Height="25" Margin="219,94,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="87"/>
-        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,92,0,0" VerticalAlignment="Top" Width="37"/>
+        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,92,0,0" VerticalAlignment="Top" Width="37" Click="Button_Click"/>
         <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="357,92,0,0" VerticalAlignment="Top" Width="38"/>
         <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="407,92,0,0" VerticalAlignment="Top" Width="64"/>
         <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="324" Margin="10,134,0,0" VerticalAlignment="Top" Width="484"/>
