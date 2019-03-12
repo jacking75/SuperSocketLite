@@ -78,7 +78,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClientSimpleTcp.cs" />
-    <Compile Include="ClientSocket.cs" />
     <Compile Include="DevLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
