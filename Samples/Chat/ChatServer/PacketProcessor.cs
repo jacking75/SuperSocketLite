@@ -85,6 +85,7 @@ namespace ChatServer
             }
             else
             {
+                RoomPacketHandler.Init(serverNetwork, sessionManager);
                 RoomPacketHandler.Init(RoomList);
                 RoomPacketHandler.RegistPacketHandler(PacketHandlerMap);
             }
