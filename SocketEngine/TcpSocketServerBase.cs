@@ -57,8 +57,10 @@ namespace SuperSocket.SocketEngine
             else
                 client.IOControl(IOControlCode.KeepAliveValues, m_KeepAliveOptionValues, m_KeepAliveOptionOutValues);
 
+            //TODO 외부 옵션에서 NoDelay를 지정할 수 있는지 확인 필요    
             client.NoDelay = true;
-            client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
+            client.LingerState = new LingerOption(enable:true, seconds:0);
+            //client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true); //닷넷코어에서 사용 불가
 
             return this.AppServer.CreateAppSession(session);
         }
