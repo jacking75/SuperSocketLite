@@ -140,6 +140,12 @@ namespace SuperSocket.SocketBase
 
         /// <summary>
         /// 최흥배. 보내기 실패 예외가 발생한 경우 보내기 상태를 취소 시켜서 즉각 접속이 종료 되도록 한다.
+        /// 클라이언트에게 Send를 할 때 ‘Send Time Out’ 예외가 발생 후 서버에서 해당 클라이언트를 Disconnect 할 수 없다. 단 클라이언트에서 접속을 끊으면 접속이 끊어진다.
+        /// 서버에서 Disconnect 할 수 없는 이유는 close 시킬 때 클라이언트의 소켓 상태가 ‘보내는 중’으로 되어 있어서 끝날 때까지 기다리기 때문이다.즉 이런 상태가 되면 해당 클라이언트가 접속을 끊어 줄 때까지 어떻게 할 방법이 없다.
+        /// 그래서 코드를 수정하여 강제적으로 끊을 수 있게 해야 한다.
+        /// timeout 이 발생하는 사유는 send 큐에 데이터를 못 넣는 경우고, 이후 넣을 때까지 무한 시도를 한다.
+        /// 즉 timeout 크면 그만큼 성능에 나쁜 영향을 줄 수 있다.
+        /// timeout가 발생하면 OnSendEnd(false); 호출 후 소켓을 짤라야 한다.
         /// </summary>
         void SendEndWhenSendingTimeOut();
     }
