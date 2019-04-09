@@ -16,6 +16,8 @@ namespace EchoServerEx
 {
     class MainServer : AppServer<NetworkSession, EFBinaryRequestInfo>
     {
+        public static SuperSocket.SocketBase.Logging.ILog MainLogger;
+
         Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
         CommonHandler CommonHan = new CommonHandler();
 
@@ -35,7 +37,7 @@ namespace EchoServerEx
         {
             HandlerMap.Add((int)PACKETID.REQ_ECHO, CommonHan.RequestEcho);
 
-            DevLog.Write(string.Format("핸들러 등록 완료"), LOG_LEVEL.INFO);
+            MainLogger.Info("핸들러 등록 완료");
         }
 
         public void InitConfig(ServerOption option)
@@ -54,22 +56,25 @@ namespace EchoServerEx
         {
             try
             {
-                //TODO NLog로 변경하기
-                bool bResult = Setup(new RootConfig(), m_Config, logFactory: new ConsoleLogFactory());
+                bool bResult = Setup(new RootConfig(), m_Config, logFactory: new NLogLogFactory());
 
                 if (bResult == false)
                 {
-                    DevLog.Write(string.Format("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ"), LOG_LEVEL.ERROR);
+                    Console.WriteLine("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
                     return;
+                }
+                else
+                {
+                    MainLogger = base.Logger;
                 }
 
                 RegistHandler();
 
-                DevLog.Write(string.Format("서버 생성 성공"), LOG_LEVEL.INFO);
+                MainLogger.Info("서버 생성 성공");
             }
             catch(Exception ex)
             {
-                DevLog.Write(string.Format($"서버 생성 실패: {ex.ToString()}"), LOG_LEVEL.ERROR);
+                Console.WriteLine($"[ERROR] 서버 생성 실패: {ex.ToString()}");
             }
         }
 
@@ -85,17 +90,17 @@ namespace EchoServerEx
 
         void OnConnected(NetworkSession session)
         {
-            DevLog.Write(string.Format("세션 번호 {0} 접속", session.SessionID), LOG_LEVEL.INFO);
+            MainLogger.Info($"세션 번호 {session.SessionID} 접속");
         }
 
         void OnClosed(NetworkSession session, CloseReason reason)
         {
-            DevLog.Write(string.Format("세션 번호 {0} 접속해제: {1}", session.SessionID, reason.ToString()), LOG_LEVEL.INFO);
+            MainLogger.Info($"세션 번호 {session.SessionID} 접속해제: {reason.ToString()}");
         }
 
         void RequestReceived(NetworkSession session, EFBinaryRequestInfo reqInfo)
         {
-            DevLog.Write(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId), LOG_LEVEL.INFO);
+            MainLogger.Info($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
             
             var PacketID = reqInfo.PacketID;
             
@@ -105,7 +110,7 @@ namespace EchoServerEx
             }
             else
             {
-                DevLog.Write(string.Format("세션 번호 {0} 받은 데이터 크기: {1}", session.SessionID, reqInfo.Body.Length), LOG_LEVEL.INFO);
+                MainLogger.Info($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
             }
         }
     }
