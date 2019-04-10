@@ -119,6 +119,7 @@ namespace CSBaseLib
     [MessagePackObject]
     public class PKTResRoomLeave
     {
+        [Key(0)]
         public short Result;
     }
 

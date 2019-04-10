@@ -30,3 +30,6 @@
   
   
 ## MultiPortServer  
+서버가 복수의 port 번호를 사용하는 경우에 대한 예제이다.  
+  
+빌드 후 run_MultiPortServer.bat 배치 파일로 실행한다. 
