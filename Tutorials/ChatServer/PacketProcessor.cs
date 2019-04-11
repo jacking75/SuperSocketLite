@@ -30,7 +30,7 @@ namespace ChatServer
                 
 
         //TODO MainServer를 인자로 주지말고, func을 인자로 넘겨주는 것이 좋다
-        public void CreateAndStart(List<Room> roomList, MainServer mainServer, ConnectSessionManager sessionMgr)
+        public void CreateAndStart(List<Room> roomList, MainServer mainServer)
         {
             var maxUserCount = MainServer.ServerOption.RoomMaxCount * MainServer.ServerOption.RoomMaxUserCount;
             UserMgr.Init(maxUserCount);
@@ -40,7 +40,7 @@ namespace ChatServer
             var maxRoomNum = RoomList[0].Number + RoomList.Count() - 1;
             RoomNumberRange = new Tuple<int, int>(minRoomNum, maxRoomNum);
             
-            RegistPacketHandler(mainServer, sessionMgr);
+            RegistPacketHandler(mainServer);
 
             IsThreadRunning = true;
             ProcessThread = new System.Threading.Thread(this.Process);
@@ -59,13 +59,13 @@ namespace ChatServer
         }
 
         
-        void RegistPacketHandler(MainServer serverNetwork, ConnectSessionManager sessionManager)
+        void RegistPacketHandler(MainServer serverNetwork)
         {            
-            CommonPacketHandler.Init(serverNetwork, sessionManager, UserMgr);
+            CommonPacketHandler.Init(serverNetwork, UserMgr);
             CommonPacketHandler.RegistPacketHandler(PacketHandlerMap);                
             
-            RoomPacketHandler.Init(serverNetwork, sessionManager, UserMgr);
-            RoomPacketHandler.Init(RoomList);
+            RoomPacketHandler.Init(serverNetwork, UserMgr);
+            RoomPacketHandler.SetRooomList(RoomList);
             RoomPacketHandler.RegistPacketHandler(PacketHandlerMap);
         }
 

@@ -24,11 +24,9 @@ namespace ChatServer
 
         SuperSocket.SocketBase.Config.IServerConfig m_Config;
 
-        ConnectSessionManager SessionManager = new ConnectSessionManager();
         PacketProcessor MainPacketProcessor = new PacketProcessor();
         RoomManager RoomMgr = new RoomManager();
-        //PacketDistributor Distributor = new PacketDistributor();
-
+        
         
         public MainServer()
             : base(new DefaultReceiveFilterFactory<ReceiveFilter, EFBinaryRequestInfo>())
@@ -97,13 +95,11 @@ namespace ChatServer
         {
             ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
 
-            SessionManager.CreateSession(ClientSession.MaxSessionCount);
-
             Room.NetSendFunc = this.SendData;
             RoomMgr.CreateRooms();
 
             MainPacketProcessor = new PacketProcessor();
-            MainPacketProcessor.CreateAndStart(RoomMgr.GetRoomsList(), this, SessionManager);
+            MainPacketProcessor.CreateAndStart(RoomMgr.GetRoomsList(), this);
 
             MainLogger.Info("CreateComponent - Success");
             return ERROR_CODE.NONE;

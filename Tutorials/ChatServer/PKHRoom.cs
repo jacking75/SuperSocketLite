@@ -16,7 +16,7 @@ namespace ChatServer
         List<Room> RoomList = null;
         int StartRoomNumber;
         
-        public void Init(List<Room> roomList)
+        public void SetRooomList(List<Room> roomList)
         {
             RoomList = roomList;
             StartRoomNumber = roomList[0].Number;
@@ -42,34 +42,31 @@ namespace ChatServer
 
             return RoomList[index];
         }
-
-        (Room, RoomUser) GetRoomAndRoomUser(int userNetSessionIndex)
-        {
-            Room room = null;
-            RoomUser user = null;
-
-            var roomNumber = SessionManager.GetRoomNumber(userNetSessionIndex);
-            
-            room = GetRoom(roomNumber);
-            if (room == null)
-            {
-                return (room, user);
-            }
-
-            user = room.GetUser(userNetSessionIndex);
-            return (room, user);
-        }
-
+                
         (bool, Room, RoomUser) CheckRoomAndRoomUser(int userNetSessionIndex)
         {
-            var roomObject = GetRoomAndRoomUser(userNetSessionIndex);
-
-            if(roomObject.Item1 == null || roomObject.Item2 == null)
+            var user = UserMgr.GetUser(userNetSessionIndex);
+            if (user == null)
             {
-                return (false, roomObject.Item1, roomObject.Item2);
+                return (false, null, null);
             }
 
-            return (true, roomObject.Item1, roomObject.Item2);
+            var roomNumber = user.RoomNumber;
+            var room = GetRoom(roomNumber);
+
+            if(room == null)
+            {
+                return (false, null, null);
+            }
+
+            var roomUser = room.GetUser(userNetSessionIndex);
+
+            if (roomUser == null)
+            {
+                return (false, room, null);
+            }
+
+            return (true, room, roomUser);
         }
 
 
@@ -90,7 +87,7 @@ namespace ChatServer
                     return;
                 }
 
-                if (SessionManager.EnableReuqestEnterRoom(sessionIndex) == false)
+                if (user.IsStateRoom())
                 {
                     ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_INVALID_STATE, sessionID);
                     return;
@@ -113,7 +110,7 @@ namespace ChatServer
                 }
 
 
-                SessionManager.SetRoomEntered(sessionIndex, reqData.RoomNumber);
+                user.EnteredRoom(reqData.RoomNumber);
 
                 room.NotifyPacketUserList(sessionID);
                 room.NofifyPacketNewUser(sessionIndex, user.ID());
@@ -149,12 +146,18 @@ namespace ChatServer
 
             try
             {
-                if(LeaveRoomUser(sessionIndex) == false)
+                var user = UserMgr.GetUser(sessionIndex);
+                if(user == null)
                 {
                     return;
                 }
-                
-                SessionManager.SetStateLogin(sessionIndex);
+
+                if(LeaveRoomUser(sessionIndex, user.RoomNumber) == false)
+                {
+                    return;
+                }
+
+                user.LeaveRoom();
 
                 ResponseLeaveRoomToClient(sessionID);
 
@@ -166,21 +169,24 @@ namespace ChatServer
             }
         }
 
-        bool LeaveRoomUser(int sessionIndex)
+        bool LeaveRoomUser(int sessionIndex, int roomNumber)
         {
             MainServer.MainLogger.Debug($"LeaveRoomUser. SessionIndex:{sessionIndex}");
 
-            var roomObject = GetRoomAndRoomUser(sessionIndex);
-            var room = roomObject.Item1;
-            var user = roomObject.Item2;
-
-            if (room == null || user == null)
+            var room = GetRoom(roomNumber);
+            if (room == null)
             {
                 return false;
             }
 
-            var userID = user.UserID;
-            room.RemoveUser(user);
+            var roomUser = room.GetUser(sessionIndex);
+            if (roomUser == null)
+            {
+                return false;
+            }
+                        
+            var userID = roomUser.UserID;
+            room.RemoveUser(roomUser);
 
             room.NotifyPacketLeaveUser(userID);
             return true;
@@ -201,14 +207,13 @@ namespace ChatServer
 
         public void NotifyLeaveInternal(ServerPacketData packetData)
         {
-            MainServer.MainLogger.Debug($"NotifyLeaveInternal. SessionIndex: {packetData.SessionIndex}");
-
             var sessionIndex = packetData.SessionIndex;
-            LeaveRoomUser(sessionIndex);
+            MainServer.MainLogger.Debug($"NotifyLeaveInternal. SessionIndex: {sessionIndex}");
+
+            var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfRoomLeave>(packetData.BodyData);            
+            LeaveRoomUser(sessionIndex, reqData.RoomNumber);
         }
-
-
-
+                
         public void RequestChat(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;

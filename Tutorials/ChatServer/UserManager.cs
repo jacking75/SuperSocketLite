@@ -71,6 +71,7 @@ namespace ChatServer
         UInt64 SequenceNumber = 0;
         string SessionID;
         int SessionIndex = -1;
+        public int RoomNumber { get; private set; } = -1;
         string UserID;
                 
         public void Set(UInt64 sequence, string sessionID, int sessionIndex, string userID)
@@ -91,6 +92,19 @@ namespace ChatServer
             return UserID;
         }
 
+        public void EnteredRoom(int roomNumber)
+        {
+            RoomNumber = roomNumber;
+        }
+
+        public void LeaveRoom()
+        {
+            RoomNumber = -1;
+        }
+
+        public bool IsStateLogin() { return SessionIndex != -1; }
+
+        public bool IsStateRoom() { return RoomNumber != -1; }
     }
     
 }

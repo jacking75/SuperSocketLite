@@ -30,30 +30,30 @@ namespace ChatServer
         public void NotifyInDisConnectClient(ServerPacketData requestData)
         {
             var sessionIndex = requestData.SessionIndex;
-            var roomNum = SessionManager.GetRoomNumber(sessionIndex);
             var user = UserMgr.GetUser(sessionIndex);
-
-            if (roomNum != PacketDef.INVALID_ROOM_NUMBER && user != null)
-            {                
-                var packet = new PKTInternalNtfRoomLeave()
-                {
-                    RoomNumber = roomNum,
-                    UserID = user.ID(),
-                };
-
-                var packetBodyData = MessagePackSerializer.Serialize(packet);
-                var internalPacket = new ServerPacketData();
-                internalPacket.Assign("", sessionIndex, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
-
-                ServerNetwork.Distribute(internalPacket);
-            }
-
+            
             if (user != null)
             {
+                var roomNum = user.RoomNumber;
+
+                if (roomNum != PacketDef.INVALID_ROOM_NUMBER)
+                {
+                    var packet = new PKTInternalNtfRoomLeave()
+                    {
+                        RoomNumber = roomNum,
+                        UserID = user.ID(),
+                    };
+
+                    var packetBodyData = MessagePackSerializer.Serialize(packet);
+                    var internalPacket = new ServerPacketData();
+                    internalPacket.Assign("", sessionIndex, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
+
+                    ServerNetwork.Distribute(internalPacket);
+                }
+
                 UserMgr.RemoveUser(sessionIndex);
             }
-
-            SessionManager.SetClear(sessionIndex);
+                        
             MainServer.MainLogger.Debug($"Current Connected Session Count: {ServerNetwork.SessionCount}");
         }
 
@@ -66,7 +66,7 @@ namespace ChatServer
 
             try
             {
-                if( SessionManager.EnableReuqestLogin(sessionIndex) == false)
+                if(UserMgr.GetUser(sessionIndex) != null)
                 {
                     ResponseLoginToClient(ERROR_CODE.LOGIN_ALREADY_WORKING, packetData.SessionID);
                     return;
@@ -81,17 +81,10 @@ namespace ChatServer
                     if (errorCode == ERROR_CODE.LOGIN_FULL_USER_COUNT)
                     {
                         NotifyMustCloseToClient(ERROR_CODE.LOGIN_FULL_USER_COUNT, packetData.SessionID);
-                        SessionManager.SetDisable(sessionIndex);
                     }
-                    else
-                    {
-                        SessionManager.SetStateNone(sessionIndex);
-                    }
-
+                    
                     return;
                 }
-
-                SessionManager.SetLogin(sessionIndex, reqData.UserID);
 
                 ResponseLoginToClient(errorCode, packetData.SessionID);
 

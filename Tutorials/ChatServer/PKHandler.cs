@@ -12,14 +12,12 @@ namespace ChatServer
     public class PKHandler
     {
         protected MainServer ServerNetwork;
-        protected ConnectSessionManager SessionManager;
         protected UserManager UserMgr = null;
 
 
-        public void Init(MainServer serverNetwork, ConnectSessionManager sessionManager, UserManager userMgr)
+        public void Init(MainServer serverNetwork, UserManager userMgr)
         {
             ServerNetwork = serverNetwork;
-            SessionManager = sessionManager;
             UserMgr = userMgr;
         }            
                 
