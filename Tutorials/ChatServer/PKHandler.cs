@@ -21,11 +21,7 @@ namespace ChatServer
             ServerNetwork = serverNetwork;
             SessionManager = sessionManager;
             UserMgr = userMgr;
-        }                
-        
-        protected void SendInternalCommonPacket(ServerPacketData packetData)
-        {
-            ServerNetwork.GetPacketDistributor().DistributeCommon(false, packetData);
-        }        
+        }            
+                
     }
 }

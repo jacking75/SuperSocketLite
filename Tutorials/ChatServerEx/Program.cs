@@ -16,17 +16,8 @@ namespace ChatServer
            
             var serverApp = new MainServer();
             serverApp.InitConfig(serverOption);
-
             serverApp.CreateStartServer();
-
-            var error = serverApp.CreateComponent();
-
-            (error == CSBaseLib.ERROR_CODE.NONE).IfFalse(() =>
-            {
-                var errorMsg = string.Format("서버 컴포넌트 생성 실패. {0}: {1}", error, error.ToString());
-                MainServer.MainLogger.Error(errorMsg);                
-            });
-
+            
             MainServer.MainLogger.Info("Press q to shut down the server");
 
             while (true)

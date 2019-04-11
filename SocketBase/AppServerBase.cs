@@ -1409,8 +1409,8 @@ namespace SuperSocket.SocketBase
 
             appSession.SocketSession.Closed += OnSocketSessionClosed;
 
-            if (Config.LogBasicSessionActivity && Logger.IsInfoEnabled)
-                Logger.Info(session, "A new session connected!");
+            //if (Config.LogBasicSessionActivity && Logger.IsInfoEnabled)
+                //Logger.Info(session, "A new session connected!");
 
             OnNewSessionConnected(appSession);
             return true;
@@ -1490,8 +1490,8 @@ namespace SuperSocket.SocketBase
         private void OnSocketSessionClosed(ISocketSession session, CloseReason reason)
         {
             //Even if LogBasicSessionActivity is false, we also log the unexpected closing because the close reason probably be useful
-            if (Logger.IsInfoEnabled && (Config.LogBasicSessionActivity || (reason != CloseReason.ServerClosing && reason != CloseReason.ClientClosing && reason != CloseReason.ServerShutdown && reason != CloseReason.SocketError)))
-                Logger.Info(session, string.Format("This session was closed for {0}!", reason));
+            //if (Logger.IsInfoEnabled && (Config.LogBasicSessionActivity || (reason != CloseReason.ServerClosing && reason != CloseReason.ClientClosing && reason != CloseReason.ServerShutdown && reason != CloseReason.SocketError)))
+                //Logger.Info(session, string.Format("This session was closed for {0}!", reason));
 
             var appSession = session.AppSession as TAppSession;
             appSession.Connected = false;

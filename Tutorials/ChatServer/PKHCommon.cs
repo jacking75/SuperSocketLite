@@ -13,11 +13,6 @@ namespace ChatServer
 {
     public class PKHCommon : PKHandler
     {
-        //public void SetConfig(int maxUserCount)
-        //{
-        //    UserMgr.Init(maxUserCount);
-        //}
-
         public void RegistPacketHandler(Dictionary<int, Action<ServerPacketData>> packetHandlerMap)
         {            
             packetHandlerMap.Add((int)PACKETID.NTF_IN_CONNECT_CLIENT, NotifyInConnectClient);
@@ -48,9 +43,9 @@ namespace ChatServer
 
                 var packetBodyData = MessagePackSerializer.Serialize(packet);
                 var internalPacket = new ServerPacketData();
-                internalPacket.Assign("", -1, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
+                internalPacket.Assign("", sessionIndex, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
 
-                ServerNetwork.SendInternalPacket(internalPacket);
+                ServerNetwork.Distribute(internalPacket);
             }
 
             if (user != null)

@@ -9,14 +9,6 @@ using MessagePack;
 
 namespace ChatServer
 {
-    public class RawPacketData
-    {
-        public short Size;
-        public short PacketID;
-        public sbyte Type;
-        public byte[] Body;
-    }
-
     public class ServerPacketData
     {
         public Int16 PacketSize;

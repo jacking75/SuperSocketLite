@@ -77,6 +77,9 @@ namespace CSBaseLib
         NTF_IN_ROOM_LEAVE = 8036,
 
 
+        // DB 8101 ~ 9000
+        REQ_DB_LOGIN = 8101,
+        RES_DB_LOGIN = 8102,
     }
 
     

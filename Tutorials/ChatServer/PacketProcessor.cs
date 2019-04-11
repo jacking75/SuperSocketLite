@@ -52,28 +52,15 @@ namespace ChatServer
             IsThreadRunning = false;
             MsgBuffer.Complete();
         }
-
-        public bool 관리중인_Room(int roomNumber)
+              
+        public void InsertPacket(ServerPacketData data)
         {
-            //InRange의 min, max도 포함된다.
-            return roomNumber.InRange(RoomNumberRange.Item1, RoomNumberRange.Item2);
-        }
-
-        public void InsertMsg(bool isClientRequest, ServerPacketData data)
-        {
-            if (isClientRequest && (data.PacketID.InRange((int)PACKETID.CS_BEGIN, (int)PACKETID.CS_END) == false))
-            {
-                return;
-            }
-
             MsgBuffer.Post(data);
-            //DevLog.Write($"[InsertMsg] - PktID: {data.PacketID}", LOG_LEVEL.DEBUG);
         }
 
         
         void RegistPacketHandler(MainServer serverNetwork, ConnectSessionManager sessionManager)
-        {
-            
+        {            
             CommonPacketHandler.Init(serverNetwork, sessionManager, UserMgr);
             CommonPacketHandler.RegistPacketHandler(PacketHandlerMap);                
             

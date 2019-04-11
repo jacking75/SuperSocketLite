@@ -70,58 +70,21 @@ namespace ChatServer
                     MainLogger.Info("서버 초기화 성공");
                 }
 
+                if( CreateComponent() != ERROR_CODE.NONE)
+                {
+                    return;
+                }
+
                 Start();
 
                 StartRemoteConnect();
-
-                ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
-
+                
                 MainLogger.Info("서버 생성 성공");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] 서버 생성 실패: {ex.ToString()}");
-            }
-
-
-            //ActiveServerBootstrap = BootstrapFactory.CreateBootstrap();
-
-            //if (!ActiveServerBootstrap.Initialize())
-            //{
-            //    Console.WriteLine(string.Format("서버 초기화 실패"), LOG_LEVEL.ERROR);
-            //    return;
-            //}
-            //else
-            //{
-            //    var refAppServer = ActiveServerBootstrap.AppServers.FirstOrDefault() as MainServer;
-            //    MainLogger = refAppServer.Logger;
-            //    WriteLog("서버 초기화 성공", LOG_LEVEL.INFO);
-            //}
-
-
-            //var result = ActiveServerBootstrap.Start();
-
-            //if (result != StartResult.Success)
-            //{
-            //    MainServer.WriteLog(string.Format("서버 시작 실패"), LOG_LEVEL.ERROR);
-            //    return;
-            //}
-            //else
-            //{
-            //    WriteLog("서버 시작 성공", LOG_LEVEL.INFO);
-            //}
-
-            //WriteLog(string.Format("서버 생성 및 시작 성공"), LOG_LEVEL.INFO);
-
-            
-            //ChatServerEnvironment.Setting();
-                        
-            //StartRemoteConnect();
-
-            //var appServer = ActiveServerBootstrap.AppServers.FirstOrDefault() as MainServer;
-            //InnerMessageHostProgram.ServerStart(ChatServerEnvironment.ChatServerUniqueID, appServer.Config.Port);
-
-            //ClientSession.CreateIndexPool(appServer.Config.MaxConnectionNumber);            
+            }         
         }
 
         public void StartRemoteConnect()
@@ -152,10 +115,13 @@ namespace ChatServer
 
         public ERROR_CODE CreateComponent()
         {
+            ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
+
             var error = Distributor.Create(this);
 
             if (error != ERROR_CODE.NONE)
             {
+                MainLogger.Info($"CreateComponent - Failes. {error}");
                 return error;
             }
 

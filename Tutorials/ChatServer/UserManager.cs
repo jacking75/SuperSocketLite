@@ -91,10 +91,6 @@ namespace ChatServer
             return UserID;
         }
 
-        //public void EnteredRoom(int roomNumber)
-        //{
-        //    RoomNumber = roomNumber;
-        //}
     }
     
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 
+//TODO System.Configuration.ConfigurationManager 클래스를 Nuget에서 제거할 수 있는지 작업해보자
+
 namespace SuperSocket.Common
 {
     /// <summary>

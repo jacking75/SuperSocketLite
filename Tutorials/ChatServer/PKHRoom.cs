@@ -141,24 +141,6 @@ namespace ChatServer
             ServerNetwork.SendData(sessionID, sendData);
         }
 
-
-        void SendInternalRoomLeavePacket(int roomNumber, string userID)
-        {
-            // 구현하기
-            var packet = new PKTInternalNtfRoomLeave()
-            {
-                RoomNumber = roomNumber,
-                UserID = userID,
-            };
-
-            var packetBodyData = MessagePackSerializer.Serialize(packet);
-
-            var internalPacket = new ServerPacketData();
-            internalPacket.Assign("", -1, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
-
-            ServerNetwork.SendInternalPacket(internalPacket);
-        }
-
         public void RequestLeave(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;
@@ -186,6 +168,8 @@ namespace ChatServer
 
         bool LeaveRoomUser(int sessionIndex)
         {
+            MainServer.MainLogger.Debug($"LeaveRoomUser. SessionIndex:{sessionIndex}");
+
             var roomObject = GetRoomAndRoomUser(sessionIndex);
             var room = roomObject.Item1;
             var user = roomObject.Item2;

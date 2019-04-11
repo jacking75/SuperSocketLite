@@ -22,8 +22,12 @@ namespace ChatServer
         public static ChatServerOption ServerOption;
         public static SuperSocket.SocketBase.Logging.ILog MainLogger;
 
-        SuperSocket.SocketBase.Config.IServerConfig m_Config;        
-        PacketDistributor Distributor = new PacketDistributor();
+        SuperSocket.SocketBase.Config.IServerConfig m_Config;
+
+        ConnectSessionManager SessionManager = new ConnectSessionManager();
+        PacketProcessor MainPacketProcessor = new PacketProcessor();
+        RoomManager RoomMgr = new RoomManager();
+        //PacketDistributor Distributor = new PacketDistributor();
 
         
         public MainServer()
@@ -68,9 +72,10 @@ namespace ChatServer
                     MainLogger.Info("서버 초기화 성공");
                 }
 
-                Start();
 
-                ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
+                CreateComponent();
+
+                Start();
 
                 MainLogger.Info("서버 생성 성공");
             }
@@ -85,17 +90,20 @@ namespace ChatServer
         {            
             Stop();
 
-            Distributor.Destory();
+            MainPacketProcessor.Destory();
         }
 
         public ERROR_CODE CreateComponent()
         {
-            var error = Distributor.Create(this);
+            ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
 
-            if (error != ERROR_CODE.NONE)
-            {
-                return error;
-            }
+            SessionManager.CreateSession(ClientSession.MaxSessionCount);
+
+            Room.NetSendFunc = this.SendData;
+            RoomMgr.CreateRooms();
+
+            MainPacketProcessor = new PacketProcessor();
+            MainPacketProcessor.CreateAndStart(RoomMgr.GetRoomsList(), this, SessionManager);
 
             MainLogger.Info("CreateComponent - Success");
             return ERROR_CODE.NONE;
@@ -124,13 +132,11 @@ namespace ChatServer
             return true;
         }
 
-        public void SendInternalPacket(ServerPacketData packet)
+        public void Distribute(ServerPacketData requestPacket)
         {
-            Distributor.Distribute(packet);
+            MainPacketProcessor.InsertPacket(requestPacket);
         }
-
-        public PacketDistributor GetPacketDistributor() { return Distributor; }
-                
+                        
         void OnConnected(ClientSession session)
         {
             //옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
@@ -139,7 +145,7 @@ namespace ChatServer
             MainLogger.Info(string.Format("세션 번호 {0} 접속", session.SessionID));
                         
             var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID, session.SessionIndex);            
-            Distributor.DistributeCommon(false, packet);
+            Distribute(packet);
         }
 
         void OnClosed(ClientSession session, CloseReason reason)
@@ -148,7 +154,7 @@ namespace ChatServer
 
 
             var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID, session.SessionIndex);
-            Distributor.DistributeCommon(false, packet);
+            Distribute(packet);
 
             session.FreeSessionIndex(session.SessionIndex);
         }
@@ -165,7 +171,7 @@ namespace ChatServer
             packet.Type = reqInfo.Type;
             packet.BodyData = reqInfo.Body;
                     
-            Distributor.Distribute(packet);
+            Distribute(packet);
         }
     }
 
