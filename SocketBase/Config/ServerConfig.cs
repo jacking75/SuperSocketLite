@@ -396,6 +396,9 @@ namespace SuperSocket.SocketBase.Config
         /// </value>
         public IEnumerable<ICommandAssemblyConfig> CommandAssemblies { get; set; }
 
+
+        public bool NoDelay { get; set; }
+
         #endregion
     }
 }

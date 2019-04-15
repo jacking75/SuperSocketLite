@@ -30,7 +30,6 @@ namespace ChatServer
         PKHRoom RoomPacketHandler = new PKHRoom();
                 
 
-        //TODO MainServer를 인자로 주지말고, func을 인자로 넘겨주는 것이 좋다
         public void CreateAndStart(bool IsCommon, List<Room> roomList, MainServer mainServer, ConnectSessionManager sessionMgr)
         {
             공용_프로세서 = IsCommon;

@@ -14,7 +14,6 @@ using CSBaseLib;
 using CommonServerLib;
 
 
-//TODO 1. 주기적으로 접속한 세션이 패킷을 주고 받았는지 조사(좀비 클라이언트 검사)
 
 namespace ChatServer
 {
@@ -121,9 +120,11 @@ namespace ChatServer
         //TODO TimeOut을 3초로 잡고, 상대방이 3초동안 receive를 하지 않아도 send에 문제가 없는지 알아본다.
         public bool SendData(string sessionID, byte[] sendData)
         {
+            ClientSession session = null;
+
             try
             {
-                var session = GetSessionByID(sessionID);
+                session = GetSessionByID(sessionID);
 
                 if (session == null)
                 {
@@ -134,9 +135,8 @@ namespace ChatServer
             }
             catch(Exception)
             {
-                //TODO send time out 등의 문제이므로 접속을 끊는 것이 좋다.
-                //session.SendEndWhenSendingTimeOut(); 
-                //session.Close();
+                session.SendEndWhenSendingTimeOut(); 
+                session.Close();
             }
             return true;
         }

@@ -469,6 +469,10 @@ namespace SuperSocket.SocketBase
             InternalSend(new ArraySegment<byte>(data, 0, data.Length));
         }
 
+        public void SendEndWhenSendingTimeOut()
+        {
+            this.SocketSession.SendEndWhenSendingTimeOut();
+        }
         #endregion
 
         #region Receiving processing

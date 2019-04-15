@@ -268,5 +268,13 @@ namespace SuperSocket.SocketBase.Config
         /// The command assemblies.
         /// </value>
         IEnumerable<ICommandAssemblyConfig> CommandAssemblies { get; }
+
+        /// <summary>
+        /// Nodelay
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [disable nagel]; otherwise, <c>false</c>.
+        /// </value>
+        bool NoDelay { get; }
     }
 }

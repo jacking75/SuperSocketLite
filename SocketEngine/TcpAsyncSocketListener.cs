@@ -41,7 +41,7 @@ namespace SuperSocket.SocketEngine
                 m_ListenSocket.Bind(this.Info.EndPoint);
                 m_ListenSocket.Listen(m_ListenBackLog);
 
-                //TODO 이 옵션은 설정 파일에서 할 수 있도록 해야 한다
+                //아래 옵션은 사용하지 않는다. 만약 사용한다면 아래 API는 닷넷코어에서 지원하지 않으므로 바꾸어야 한다.
                 //m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                 //m_ListenSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
 

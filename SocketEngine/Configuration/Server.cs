@@ -491,5 +491,11 @@ namespace SuperSocket.SocketEngine.Configuration
                 return (string)this["defaultCulture"];
             }
         }
+
+        [ConfigurationProperty("noDelay", IsRequired = false, DefaultValue = false)]
+        public bool NoDelay
+        {
+            get { return (bool)this["noDelay"]; }
+        }
     }
 }

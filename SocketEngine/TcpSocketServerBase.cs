@@ -20,6 +20,7 @@ namespace SuperSocket.SocketEngine
         private readonly int m_SendTimeOut;
         private readonly int m_ReceiveBufferSize;
         private readonly int m_SendBufferSize;
+        private readonly bool m_NoDelay;
 
         public TcpSocketServerBase(IAppServer appServer, ListenerInfo[] listeners)
             : base(appServer, listeners)
@@ -39,6 +40,8 @@ namespace SuperSocket.SocketEngine
             m_SendTimeOut = config.SendTimeOut;
             m_ReceiveBufferSize = config.ReceiveBufferSize;
             m_SendBufferSize = config.SendBufferSize;
+
+            m_NoDelay = config.NoDelay;
         }
 
         protected IAppSession CreateSession(Socket client, ISocketSession session)
@@ -57,8 +60,7 @@ namespace SuperSocket.SocketEngine
             else
                 client.IOControl(IOControlCode.KeepAliveValues, m_KeepAliveOptionValues, m_KeepAliveOptionOutValues);
 
-            //TODO 외부 옵션에서 NoDelay를 지정할 수 있는지 확인 필요    
-            client.NoDelay = true;
+            client.NoDelay = m_NoDelay;
             client.LingerState = new LingerOption(enable:true, seconds:0);
             //client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true); //닷넷코어에서 사용 불가
 

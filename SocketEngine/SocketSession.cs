@@ -394,7 +394,6 @@ namespace SuperSocket.SocketEngine
             {
                 OnSendEnd();
 
-                //TODO 이 코드는 실행 불가 -_-
                 if (newQueue.Count > 0)
                 {
                     StartSend(newQueue, newQueue.TrackID, true);
