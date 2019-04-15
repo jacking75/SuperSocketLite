@@ -117,7 +117,6 @@ namespace ChatServer
             return ERROR_CODE.NONE;
         }
 
-        //TODO TimeOut을 3초로 잡고, 상대방이 3초동안 receive를 하지 않아도 send에 문제가 없는지 알아본다.
         public bool SendData(string sessionID, byte[] sendData)
         {
             ClientSession session = null;

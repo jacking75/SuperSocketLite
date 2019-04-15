@@ -8,9 +8,7 @@ namespace SuperSocket.SocketBase.Metadata
     /// <summary>
     /// StatusInfo Metadata
     /// </summary>
-#if !SILVERLIGHT
     [Serializable]
-#endif
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class StatusInfoAttribute : Attribute
     {
