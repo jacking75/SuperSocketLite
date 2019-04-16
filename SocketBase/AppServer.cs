@@ -205,7 +205,7 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        #region Clear idle sessions
+        
 
         private System.Threading.Timer m_ClearIdleSessionTimer = null;
 
@@ -265,9 +265,9 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        #endregion
+        
 
-        #region Take session snapshot
+        
 
         private System.Threading.Timer m_SessionSnapshotTimer = null;
 
@@ -288,9 +288,9 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        #endregion
+        
 
-        #region Search session utils
+        
 
         /// <summary>
         /// Gets the matched sessions from sessions snapshot.
@@ -368,6 +368,6 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        #endregion
+        
     }
 }

@@ -9,6 +9,7 @@
     <Compile Remove="Config\IServerConfig.Net45.cs" />
     <Compile Remove="Config\RootConfig.Net45.cs" />
     <Compile Remove="Config\ServerConfig.Net45.cs" />
+    <Compile Remove="IsolationMode.cs" />
   </ItemGroup>
 
   <ItemGroup>

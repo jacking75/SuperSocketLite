@@ -39,93 +39,24 @@ namespace SuperSocket.SocketBase.Logging
                 configFile = Path.GetFileNameWithoutExtension(configFile) + ".unix" + Path.GetExtension(configFile);
             }
 
-            var currentAppDomain = AppDomain.CurrentDomain;
-            var isolation = IsolationMode.None;
+            
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configFile);
 
-            var isolationValue = currentAppDomain.GetData(typeof(IsolationMode).Name);
-
-            if (isolationValue != null)
-                isolation = (IsolationMode)isolationValue;
-
-            if (isolation == IsolationMode.None)
+            if (File.Exists(filePath))
             {
-                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    return;
-                }
-
-                filePath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"), configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    return;
-                }
-
-                ConfigFile = configFile;
+                ConfigFile = filePath;
                 return;
             }
-            else //The running AppServer is in isolated appdomain
+
+            filePath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"), configFile);
+
+            if (File.Exists(filePath))
             {
-                //1. search the appDomain's base directory
-                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    return;
-                }
-
-                //go to the application's root
-                //the appdomain's root is /WorkingDir/DomainName, so get parent path twice to reach the application root
-                var rootDir = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
-
-                //2. search the file with appdomain's name as prefix in the application's root
-                //the config file whose name have appDomain's name has higher priority
-                filePath = Path.Combine(rootDir, AppDomain.CurrentDomain.FriendlyName + "." + configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    return;
-                }
-
-                //3. search in the application's root without appdomain's name as prefix
-                filePath = Path.Combine(rootDir, configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    IsSharedConfig = true;
-                    return;
-                }
-
-                
-                rootDir = Path.Combine(rootDir, "Config");
-                //Search the config file with appdomain's name as prefix in the Config dir
-                filePath = Path.Combine(rootDir, AppDomain.CurrentDomain.FriendlyName + "." + configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    return;
-                }
-
-                filePath = Path.Combine(rootDir, configFile);
-
-                if (File.Exists(filePath))
-                {
-                    ConfigFile = filePath;
-                    IsSharedConfig = true;
-                    return;
-                }
-
-                ConfigFile = configFile;
+                ConfigFile = filePath;
                 return;
             }
+
+            ConfigFile = configFile;
         }
 
         /// <summary>

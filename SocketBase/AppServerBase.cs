@@ -1593,21 +1593,11 @@ namespace SuperSocket.SocketBase
         /// <returns></returns>
         public string GetFilePath(string relativeFilePath)
         {
-            var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeFilePath);
-
-            if (!System.IO.File.Exists(filePath) && RootConfig != null && RootConfig.Isolation != IsolationMode.None)
-            {
-                var rootDir = System.IO.Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
-                var rootFilePath = System.IO.Path.Combine(rootDir, relativeFilePath);
-
-                if (System.IO.File.Exists(rootFilePath))
-                    return rootFilePath;
-            }
-
+            var filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativeFilePath);                        
             return filePath;
         }
 
-        #region IActiveConnector
+        
 
         /// <summary>
         /// Connect the remote endpoint actively.
@@ -1637,9 +1627,9 @@ namespace SuperSocket.SocketBase
             return ((IActiveConnector)this).ActiveConnect(targetEndPoint, null);
         }
 
-        #endregion IActiveConnector
+        
 
-        #region ISystemEndPoint
+        
         /// <summary>
         /// Transfers the system message
         /// </summary>
@@ -1660,10 +1650,7 @@ namespace SuperSocket.SocketBase
 
         }
 
-        #endregion ISystemEndPoint
-
-        #region IStatusInfoSource
-
+        
         private StatusInfoCollection m_ServerStatus;
 
         StatusInfoAttribute[] IStatusInfoSource.GetServerStatusMetadata()
@@ -1721,9 +1708,9 @@ namespace SuperSocket.SocketBase
 
         }
 
-        #endregion IStatusInfoSource
 
-        #region IDisposable Members
+
+        
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
@@ -1734,7 +1721,7 @@ namespace SuperSocket.SocketBase
                 Stop();
         }
 
-        #endregion
+        
 
 
         partial void SetDefaultCulture(IRootConfig rootConfig, IServerConfig config)
@@ -1744,19 +1731,13 @@ namespace SuperSocket.SocketBase
             //default culture has been set for this server instance
             if (!string.IsNullOrEmpty(defaultCulture))
             {
-                if (rootConfig.Isolation == IsolationMode.None)
-                {
-                    Logger.WarnFormat("The default culture '{0}' cannot be set, because you cannot set default culture for one server instance if the Isolation is None!");
-                    return;
-                }
+                Logger.WarnFormat("The default culture '{0}' cannot be set, because you cannot set default culture for one server instance if the Isolation is None!");
+                return;
             }
             else if (!string.IsNullOrEmpty(rootConfig.DefaultCulture))
             {
                 defaultCulture = rootConfig.DefaultCulture;
-
-                //Needn't set default culture in this case, because it has been set in the bootstrap
-                if (rootConfig.Isolation == IsolationMode.None)
-                    return;
+                return;
             }
 
             if (string.IsNullOrEmpty(defaultCulture))

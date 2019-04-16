@@ -41,8 +41,6 @@ namespace SuperSocket.SocketBase.Config
             MinCompletionPortThreads = minCompletionPortThreads;
 
             PerformanceDataCollectInterval = 60;
-
-            Isolation = IsolationMode.None;
         }
 
         
@@ -80,11 +78,7 @@ namespace SuperSocket.SocketBase.Config
         /// </value>
         public bool DisablePerformanceDataCollector { get; set; }
 
-        /// <summary>
-        /// Gets/sets the isolation mode.
-        /// </summary>
-        public IsolationMode Isolation { get; set; }
-
+        
         /// <summary>
         /// Gets/sets the log factory name.
         /// </summary>

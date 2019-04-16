@@ -162,15 +162,7 @@ namespace SuperSocket.SocketEngine.Configuration
             }
         }
 
-        /// <summary>
-        /// Gets the isolation mode.
-        /// </summary>
-        [ConfigurationProperty("isolation", IsRequired = false, DefaultValue = IsolationMode.None)]
-        public IsolationMode Isolation
-        {
-            get { return (IsolationMode)this["isolation"]; }
-        }
-
+        
         /// <summary>
         /// Gets the logfactory name of the bootstrap.
         /// </summary>

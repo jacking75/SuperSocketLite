@@ -56,12 +56,7 @@ namespace SuperSocket.SocketBase.Config
         string LogFactory { get; }
 
 
-        /// <summary>
-        /// Gets the isolation mode.
-        /// </summary>
-        IsolationMode Isolation { get; }
-
-
+        
         /// <summary>
         /// Gets the option elements.
         /// </summary>

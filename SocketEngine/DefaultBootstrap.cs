@@ -419,8 +419,10 @@ namespace SuperSocket.SocketEngine
                     return false;
 
                 if (factoryInfo.IsServerManager)
+                {
                     serverManager = appServer;
-                else if (!(appServer is IsolationAppServer))//No isolation
+                }
+                else
                 {
                     //In isolation mode, cannot check whether is server manager in the factory info loader
                     if (TypeValidator.IsServerManagerType(appServer.GetType()))
@@ -527,13 +529,7 @@ namespace SuperSocket.SocketEngine
                 }
                 else
                 {
-                    succeeded++;
-
-                    if (Config.Isolation != IsolationMode.None)
-                    {
-                        if (m_GlobalLog.IsInfoEnabled)
-                            m_GlobalLog.InfoFormat("The server instance {0} has been started!", server.Name);
-                    }
+                    succeeded++;                    
                 }
             }
 
@@ -574,13 +570,7 @@ namespace SuperSocket.SocketEngine
             {
                 if (server.State == ServerState.Running)
                 {
-                    server.Stop();
-
-                    if (Config.Isolation != IsolationMode.None)
-                    {
-                        if (m_GlobalLog.IsInfoEnabled)
-                            m_GlobalLog.InfoFormat("The server instance {0} has been stopped!", server.Name);
-                    }
+                    server.Stop();                    
                 }
             }
 
@@ -593,31 +583,7 @@ namespace SuperSocket.SocketEngine
             }
         }
 
-        /// <summary>
-        /// Registers the bootstrap remoting access service.
-        /// </summary>
-        //protected virtual void RegisterRemotingService()
-        //{
-        //    var bootstrapIpcPort = string.Format("SuperSocket.Bootstrap[{0}]", Math.Abs(AppDomain.CurrentDomain.BaseDirectory.TrimEnd(System.IO.Path.DirectorySeparatorChar).GetHashCode()));
-
-        //    var serverChannelName = "Bootstrap";
-
-        //    var serverChannel = ChannelServices.RegisteredChannels.FirstOrDefault(c => c.ChannelName == serverChannelName);
-
-        //    if (serverChannel != null)
-        //        ChannelServices.UnregisterChannel(serverChannel);
-
-        //    serverChannel = new IpcServerChannel(serverChannelName, bootstrapIpcPort, new BinaryServerFormatterSinkProvider { TypeFilterLevel = TypeFilterLevel.Full });
-        //    ChannelServices.RegisterChannel(serverChannel, false);
-
-        //    AppDomain.CurrentDomain.SetData("BootstrapIpcPort", bootstrapIpcPort);
-
-        //    var bootstrapProxyType = typeof(RemoteBootstrapProxy);
-
-        //    if (!RemotingConfiguration.GetRegisteredWellKnownServiceTypes().Any(s => s.ObjectType == bootstrapProxyType))
-        //        RemotingConfiguration.RegisterWellKnownServiceType(bootstrapProxyType, "Bootstrap.rem", WellKnownObjectMode.Singleton);
-        //}
-
+        
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
