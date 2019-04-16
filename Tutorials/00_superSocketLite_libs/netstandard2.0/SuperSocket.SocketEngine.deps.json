@@ -11,7 +11,6 @@
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "SuperSocket.Common": "1.0.0",
-          "SuperSocket.Facility": "1.0.0",
           "SuperSocket.SocketBase": "1.0.0",
           "System.Diagnostics.PerformanceCounter": "4.5.0"
         },
@@ -238,15 +237,6 @@
           "SuperSocket.Common.dll": {}
         }
       },
-      "SuperSocket.Facility/1.0.0": {
-        "dependencies": {
-          "SuperSocket.Common": "1.0.0",
-          "SuperSocket.SocketBase": "1.0.0"
-        },
-        "runtime": {
-          "SuperSocket.Facility.dll": {}
-        }
-      },
       "SuperSocket.SocketBase/1.0.0": {
         "dependencies": {
           "NLog.Extensions.Logging": "1.4.0",
@@ -393,7 +383,7 @@
     "System.Security.AccessControl/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aVjTe36YkO8FzfNhMLoPEzv3gF9rphoW9ngFhG/MH4zzEPLx07sNrgCLwMP4Wx2leI6qarMrGv21OwQXYUKLmw==",
+      "sha512": "sha512-vW8Eoq0TMyz5vAG/6ce483x/CP83fgm4SJe5P8Tb1tZaobcvPrbMEL7rhH1DRdrYbbb6F0vq3OlzmK0Pkwks5A==",
       "path": "system.security.accesscontrol/4.5.0",
       "hashPath": "system.security.accesscontrol.4.5.0.nupkg.sha512"
     },
@@ -407,7 +397,7 @@
     "System.Security.Permissions/4.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-O+e9qamSTJ4YOJCpnLgsf9FTGfsxJv2On1OdYkhmd/XA5AYRvUatkz7Rp3dS9XR7rhVuklnjST1dRoMK7N4cGw==",
+      "sha512": "sha512-9gdyuARhUR7H+p5CjyUB/zPk7/Xut3wUSP8NJQB6iZr8L3XUXTMdoLeVAg9N4rqF8oIpE7MpdqHdDHQ7XgJe0g==",
       "path": "system.security.permissions/4.5.0",
       "hashPath": "system.security.permissions.4.5.0.nupkg.sha512"
     },
@@ -419,11 +409,6 @@
       "hashPath": "system.security.principal.windows.4.5.0.nupkg.sha512"
     },
     "SuperSocket.Common/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "SuperSocket.Facility/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EchoServer", "EchoServer.csproj", "{191FCBF6-F42D-401C-9173-F8E096775177}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketBase", "..\..\SocketBase\SuperSocket.SocketBase.csproj", "{8D9067B6-F697-455F-8AC4-B4AB90B21E3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketEngine", "..\..\SocketEngine\SuperSocket.SocketEngine.csproj", "{B022F01F-F00C-4D7C-985B-E11590BE0735}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Facility", "..\..\Facility\SuperSocket.Facility.csproj", "{9C81E5E3-0059-428F-947F-A514484E5238}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Common", "..\..\Common\SuperSocket.Common.csproj", "{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1}"
 EndProject
@@ -33,10 +31,6 @@ Global
 		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C81E5E3-0059-428F-947F-A514484E5238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C81E5E3-0059-428F-947F-A514484E5238}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C81E5E3-0059-428F-947F-A514484E5238}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C81E5E3-0059-428F-947F-A514484E5238}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,7 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8D9067B6-F697-455F-8AC4-B4AB90B21E3C} = {6AEC95C6-4EA4-46B7-AB13-8EC7E450D553}
 		{B022F01F-F00C-4D7C-985B-E11590BE0735} = {6AEC95C6-4EA4-46B7-AB13-8EC7E450D553}
-		{9C81E5E3-0059-428F-947F-A514484E5238} = {6AEC95C6-4EA4-46B7-AB13-8EC7E450D553}
 		{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1} = {6AEC95C6-4EA4-46B7-AB13-8EC7E450D553}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

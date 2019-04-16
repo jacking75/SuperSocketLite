@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using SuperSocket.Common;
 using SuperSocket.SocketBase.Protocol;
-using SuperSocket.Facility.Protocol;
+using SuperSocket.SocketEngine.Protocol;
 
 namespace MultiPortServer
 {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -29,9 +29,6 @@
   <ItemGroup>
     <Reference Include="SuperSocket.Common">
       <HintPath>..\00_superSocketLite_libs\netstandard2.0\SuperSocket.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.Facility">
-      <HintPath>..\00_superSocketLite_libs\netstandard2.0\SuperSocket.Facility.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.SocketBase">
       <HintPath>..\00_superSocketLite_libs\netstandard2.0\SuperSocket.SocketBase.dll</HintPath>

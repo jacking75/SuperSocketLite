@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\SuperSocket.Common.csproj" />
-    <ProjectReference Include="..\..\Facility\SuperSocket.Facility.csproj" />
     <ProjectReference Include="..\..\SocketBase\SuperSocket.SocketBase.csproj" />
     <ProjectReference Include="..\..\SocketEngine\SuperSocket.SocketEngine.csproj" />
   </ItemGroup>

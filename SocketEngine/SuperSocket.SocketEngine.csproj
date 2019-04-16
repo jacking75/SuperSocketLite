@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
-    <ProjectReference Include="..\Facility\SuperSocket.Facility.csproj" />
     <ProjectReference Include="..\SocketBase\SuperSocket.SocketBase.csproj" />
   </ItemGroup>
 
