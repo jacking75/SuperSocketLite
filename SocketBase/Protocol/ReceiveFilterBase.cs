@@ -49,7 +49,7 @@ namespace SuperSocket.SocketBase.Protocol
             m_BufferSegments = previousRequestFilter.BufferSegments;
         }
 
-        #region IReceiveFilter<TRequestInfo> Members
+        
 
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace SuperSocket.SocketBase.Protocol
         /// </value>
         public IReceiveFilter<TRequestInfo> NextReceiveFilter { get; protected set; }
 
-        #endregion
+        
 
         /// <summary>
         /// Adds the array segment.

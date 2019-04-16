@@ -11,8 +11,6 @@ namespace SuperSocket.SocketBase.Metadata
     /// </summary>
     public class StatusInfoKeys
     {
-        #region Shared
-
         /// <summary>
         /// The cpu usage
         /// </summary>
@@ -48,9 +46,8 @@ namespace SuperSocket.SocketBase.Metadata
         /// </summary>
         public const string MaxCompletionPortThreads = "MaxCompletionPortThreads";
 
-        #endregion
-
-        #region For server instance
+        
+        
 
         /// <summary>
         /// The started time.
@@ -101,8 +98,6 @@ namespace SuperSocket.SocketBase.Metadata
         /// The total sending queue items.
         /// </summary>
         public const string TotalSendingQueueItems = "TotalSendingQueueItems";
-
-        #endregion
-
+        
     }
 }

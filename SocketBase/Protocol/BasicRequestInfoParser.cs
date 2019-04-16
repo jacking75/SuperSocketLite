@@ -39,7 +39,7 @@ namespace SuperSocket.SocketBase.Protocol
             m_ParameterSpliters = new string[] { parameterSpliter };
         }
 
-        #region IRequestInfoParser<StringRequestInfo> Members
+        
 
         /// <summary>
         /// Parses the request info.
@@ -66,7 +66,6 @@ namespace SuperSocket.SocketBase.Protocol
             return new StringRequestInfo(name, param,
                 param.Split(m_ParameterSpliters, StringSplitOptions.RemoveEmptyEntries));
         }
-
-        #endregion
+                
     }
 }
