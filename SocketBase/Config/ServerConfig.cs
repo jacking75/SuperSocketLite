@@ -131,7 +131,7 @@ namespace SuperSocket.SocketBase.Config
             SessionSnapshotInterval = DefaultSessionSnapshotInterval;
         }
 
-        #region IServerConfig Members
+        
 
         /// <summary>
         /// Gets/sets the name of the server type of this appServer want to use.
@@ -397,8 +397,18 @@ namespace SuperSocket.SocketBase.Config
         public IEnumerable<ICommandAssemblyConfig> CommandAssemblies { get; set; }
 
 
+
+        /// <summary>
+        /// Gets or sets the default culture.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        public string DefaultCulture { get; set; }
+
+
+
         public bool NoDelay { get; set; }
 
-        #endregion
     }
 }

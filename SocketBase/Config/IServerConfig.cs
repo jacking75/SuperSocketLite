@@ -276,5 +276,14 @@ namespace SuperSocket.SocketBase.Config
         /// 	<c>true</c> if [disable nagel]; otherwise, <c>false</c>.
         /// </value>
         bool NoDelay { get; }
+
+
+        /// <summary>
+        /// Gets the default culture for this server.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        string DefaultCulture { get; }
     }
 }

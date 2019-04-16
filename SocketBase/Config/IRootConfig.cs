@@ -75,5 +75,14 @@ namespace SuperSocket.SocketBase.Config
         /// <returns></returns>
         TConfig GetChildConfig<TConfig>(string childConfigName)
             where TConfig : ConfigurationElement, new();
+
+
+        /// <summary>
+        /// Gets the default culture for all server instances.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        string DefaultCulture { get; }
     }
 }

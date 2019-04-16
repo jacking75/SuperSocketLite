@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Config\IRootConfig.Net45.cs" />
+    <Compile Remove="Config\IServerConfig.Net45.cs" />
+    <Compile Remove="Config\RootConfig.Net45.cs" />
+    <Compile Remove="Config\ServerConfig.Net45.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
   </ItemGroup>
 

@@ -45,7 +45,7 @@ namespace SuperSocket.SocketBase.Config
             Isolation = IsolationMode.None;
         }
 
-        #region IRootConfig Members
+        
 
         /// <summary>
         /// Gets/Sets the max working threads.
@@ -110,6 +110,13 @@ namespace SuperSocket.SocketBase.Config
             return this.OptionElements.GetChildConfig<TConfig>(childConfigName);
         }
 
-        #endregion
+
+        /// <summary>
+        /// Gets or sets the default culture.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        public string DefaultCulture { get; set; }
     }
 }

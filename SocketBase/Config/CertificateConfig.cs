@@ -12,8 +12,6 @@ namespace SuperSocket.SocketBase.Config
     [Serializable]
     public class CertificateConfig : ICertificateConfig
     {
-        #region ICertificateConfig Members
-
         /// <summary>
         /// Gets/sets the file path.
         /// </summary>
@@ -58,6 +56,5 @@ namespace SuperSocket.SocketBase.Config
         /// </summary>
         public X509KeyStorageFlags KeyStorageFlags { get; set; }
 
-        #endregion
     }
 }
