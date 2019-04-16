@@ -12,8 +12,6 @@ namespace SuperSocket.SocketEngine.Configuration
     /// </summary>
     public class CertificateConfig : ConfigurationElement, ICertificateConfig
     {
-        #region ICertificateConfig Members
-
         /// <summary>
         /// Gets the certificate file path.
         /// </summary>
@@ -106,7 +104,6 @@ namespace SuperSocket.SocketEngine.Configuration
                 return (X509KeyStorageFlags)this["keyStorageFlags"];
             }
         }
-
-        #endregion ICertificateConfig Members
+                
     }
 }

@@ -22,9 +22,7 @@ namespace SuperSocket.SocketBase
     public abstract class AppSession<TAppSession, TRequestInfo> : IAppSession, IAppSession<TAppSession, TRequestInfo>
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
         where TRequestInfo : class, IRequestInfo
-    {
-        #region Properties
-
+    {        
         /// <summary>
         /// Gets the app server instance assosiated with the session.
         /// </summary>
@@ -163,8 +161,7 @@ namespace SuperSocket.SocketBase
 
         IReceiveFilter<TRequestInfo> m_ReceiveFilter;
 
-        #endregion
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSession&lt;TAppSession, TRequestInfo&gt;"/> class.
         /// </summary>
@@ -279,8 +276,7 @@ namespace SuperSocket.SocketBase
             Close(CloseReason.ServerClosing);
         }
 
-        #region Sending processing
-
+        
         /// <summary>
         /// Try to send the message to client.
         /// </summary>
@@ -473,9 +469,9 @@ namespace SuperSocket.SocketBase
         {
             this.SocketSession.SendEndWhenSendingTimeOut();
         }
-        #endregion
+        
 
-        #region Receiving processing
+        
 
         /// <summary>
         /// Sets the next Receive filter which will be used when next data block received
@@ -600,7 +596,6 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        #endregion
     }
 
     /// <summary>

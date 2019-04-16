@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AppDomainBootstrap.cs" />
+    <Compile Remove="AppDomainBootstrap.Net40.cs" />
+    <Compile Remove="Extensions.Net35.cs" />
+    <Compile Remove="ProcessBootstrap.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
   </ItemGroup>
 

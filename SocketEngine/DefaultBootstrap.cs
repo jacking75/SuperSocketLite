@@ -693,49 +693,6 @@ namespace SuperSocket.SocketEngine
 
             return server;
         }
-
-        //bool IDynamicBootstrap.Add(IServerConfig config)
-        //{
-        //    var newWorkItem = AddNewServer(config);
-        //    return newWorkItem != null;
-        //}
-
-        //bool IDynamicBootstrap.AddAndStart(IServerConfig config)
-        //{
-        //    var newWorkItem = AddNewServer(config);
-
-        //    if (newWorkItem == null)
-        //        return false;
-
-        //    return newWorkItem.Start();
-        //}
-
-        //void IDynamicBootstrap.Remove(string name)
-        //{
-        //    if (string.IsNullOrEmpty(name))
-        //        throw new ArgumentNullException("name");
-
-        //    var server = m_AppServers.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-        //    if (server == null)
-        //        throw new Exception("The server is not found.");
-
-        //    if (server.State != ServerState.NotStarted)
-        //        throw new Exception("The server is running now, you cannot remove it. Please stop it at first.");
-
-        //    m_AppServers.Remove(server);
-
-        //    ResetPerfMoniter();
-
-        //    var section = m_Config as SocketServiceConfig;
-
-        //    if (section != null) //file configuration
-        //    {
-        //        section.Servers.Remove(name);
-        //        ConfigurationWatcher.Pause();
-        //        section.GetCurrentConfiguration().Save(ConfigurationSaveMode.Minimal);
-        //        ConfigurationWatcher.Resume();
-        //    }
-        //}
+                
     }
 }

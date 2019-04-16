@@ -14,8 +14,6 @@ namespace SuperSocket.SocketEngine
     /// </summary>
     public class SocketServerFactory : ISocketServerFactory
     {
-        #region ISocketServerFactory Members
-
         /// <summary>
         /// Creates the socket server.
         /// </summary>
@@ -46,7 +44,5 @@ namespace SuperSocket.SocketEngine
                     throw new NotSupportedException("Unsupported SocketMode:" + config.Mode);
             }
         }
-
-        #endregion
     }
 }
