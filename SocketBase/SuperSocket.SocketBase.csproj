@@ -1,17 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Config\IRootConfig.Net45.cs" />
-    <Compile Remove="Config\IServerConfig.Net45.cs" />
-    <Compile Remove="Config\RootConfig.Net45.cs" />
-    <Compile Remove="Config\ServerConfig.Net45.cs" />
-    <Compile Remove="IsolationMode.cs" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
   </ItemGroup>
