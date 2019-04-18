@@ -12,12 +12,12 @@
             <ColumnDefinition Width="14*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="더미 클라이언트 설정" HorizontalAlignment="Left" Height="59" Margin="10,10,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2">
-            <Label Content="서버 주소:" HorizontalAlignment="Left" Height="23" Margin="2,15,0,0" VerticalAlignment="Top" Width="58"/>
+            <CheckBox x:Name="checkBoxLocalStopRecv" Content="받기 금지" HorizontalAlignment="Left" Height="17" Margin="362,19,0,0" VerticalAlignment="Top" Width="98"/>
         </GroupBox>
         <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="23" Margin="79,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
-        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,40,0,0" VerticalAlignment="Top" Width="58"/>
-        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="77"/>
-        <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,43,0,0" VerticalAlignment="Top" Width="98"/>
+        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,39,0,0" VerticalAlignment="Top" Width="58"/>
+        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="50"/>
+        <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="277,44,0,0" VerticalAlignment="Top" Width="98"/>
         <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
         <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,74,0,0" VerticalAlignment="Top" Width="484"/>
         <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,93,0,0" VerticalAlignment="Top" Width="45"/>

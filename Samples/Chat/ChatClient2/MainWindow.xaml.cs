@@ -28,6 +28,7 @@ namespace ChatClient2
 
         bool IsNetworkThreadRunning = false;
         bool IsBackGroundProcessRunning = false;
+        bool IsNetworkThreadStopRead = false;
 
         System.Threading.Thread NetworkReadThread = null;
         System.Threading.Thread NetworkSendThread = null;
@@ -145,6 +146,13 @@ namespace ChatClient2
                     System.Threading.Thread.Sleep(1);
                     continue;
                 }
+
+                if(IsNetworkThreadStopRead)
+                {
+                    System.Threading.Thread.Sleep(1);
+                    continue;
+                }
+
 
                 var recvData = Network.Receive();
 
@@ -351,6 +359,12 @@ namespace ChatClient2
             if (checkBoxLocalHostIP.IsChecked == true)
             {
                 address = "127.0.0.1";
+            }
+
+            IsNetworkThreadStopRead = false;
+            if (checkBoxLocalStopRecv.IsChecked == true)
+            {
+                IsNetworkThreadStopRead = true;
             }
 
             int port = Convert.ToInt32(textBoxPort.Text);
