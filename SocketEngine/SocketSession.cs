@@ -45,6 +45,8 @@ namespace SuperSocket.SocketEngine
         //0001 0000: in closing
         private int m_State = 0;
 
+        private ReuseLockBaseBuffer CollectSendBuffer = null;
+
         private void AddStateFlag(int stateValue)
         {
             AddStateFlag(stateValue, false);
@@ -113,6 +115,7 @@ namespace SuperSocket.SocketEngine
 
         private ISmartPool<SendingQueue> m_SendingQueuePool;
 
+        
         public SocketSession(Socket client)
             : this(Guid.NewGuid().ToString())
         {
@@ -143,6 +146,12 @@ namespace SuperSocket.SocketEngine
             {
                 m_SendingQueue = queue;
                 queue.StartEnqueue();
+            }
+
+            if (Config.CollectSendIntervalMillSec > 0)
+            {
+                CollectSendBuffer = new ReuseLockBaseBuffer(Config.ReceiveBufferSize);
+                SyncSend = true;
             }
         }
 
@@ -213,6 +222,23 @@ namespace SuperSocket.SocketEngine
         public Action<ISocketSession, CloseReason> Closed { get; set; }
 
         private SendingQueue m_SendingQueue;
+
+
+        public bool CollectSend(byte[] source, int pos, int count)
+        {
+            return CollectSendBuffer.Copy(source, pos, count);
+        }
+
+        public ArraySegment<byte> GetCollectSendData()
+        {
+            return CollectSendBuffer.GetData();
+        }
+
+        public void CommitCollectSend(int size)
+        {
+            CollectSendBuffer.Commit(size);
+        }
+
 
         /// <summary>
         /// Tries to send array segment.

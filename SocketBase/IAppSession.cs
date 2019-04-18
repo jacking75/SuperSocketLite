@@ -114,6 +114,12 @@ namespace SuperSocket.SocketBase
         /// Starts the session.
         /// </summary>
         void StartSession();
+
+
+        ArraySegment<byte> GetCollectSendData();
+
+        void CommitCollectSend(int size);
+        
     }
 
     /// <summary>

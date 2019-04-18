@@ -14,6 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DevLog.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Common\SuperSocket.Common.csproj" />
     <ProjectReference Include="..\..\SocketBase\SuperSocket.SocketBase.csproj" />
     <ProjectReference Include="..\..\SocketEngine\SuperSocket.SocketEngine.csproj" />

@@ -422,12 +422,7 @@ namespace SuperSocket.SocketEngine
                 {
                     serverManager = appServer;
                 }
-                else
-                {
-                    //In isolation mode, cannot check whether is server manager in the factory info loader
-                    if (TypeValidator.IsServerManagerType(appServer.GetType()))
-                        serverManager = appServer;
-                }
+                
 
                 m_AppServers.Add(appServer);
             }

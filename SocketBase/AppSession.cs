@@ -162,6 +162,7 @@ namespace SuperSocket.SocketBase
         IReceiveFilter<TRequestInfo> m_ReceiveFilter;
 
         
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSession&lt;TAppSession, TRequestInfo&gt;"/> class.
         /// </summary>
@@ -186,7 +187,7 @@ namespace SuperSocket.SocketBase
             SessionID = socketSession.SessionID;
             m_Connected = true;
             m_ReceiveFilter = castedAppServer.ReceiveFilterFactory.CreateFilter(appServer, this, socketSession.RemoteEndPoint);
-
+                        
             var filterInitializer = m_ReceiveFilter as IReceiveFilterInitializer;
             if (filterInitializer != null)
                 filterInitializer.Initialize(castedAppServer, this);
@@ -469,9 +470,23 @@ namespace SuperSocket.SocketBase
         {
             this.SocketSession.SendEndWhenSendingTimeOut();
         }
-        
 
-        
+
+        public bool CollectSend(byte[] source, int pos, int count)
+        {
+            return this.SocketSession.CollectSend(source, pos, count);
+        }
+
+        public ArraySegment<byte> GetCollectSendData()
+        {
+            return this.SocketSession.GetCollectSendData();
+        }
+
+        public void CommitCollectSend(int size)
+        {
+            this.SocketSession.CommitCollectSend(size);
+        }
+
 
         /// <summary>
         /// Sets the next Receive filter which will be used when next data block received

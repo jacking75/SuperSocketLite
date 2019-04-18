@@ -124,6 +124,11 @@ namespace SuperSocket.SocketBase
             if (Config.ClearIdleSession)
                 StartClearSessionTimer();
 
+            if(Config.CollectSendIntervalMillSec > 0)
+            {
+                StartCollectSendSessionTimer();
+            }
+
             return true;
         }
 
@@ -205,7 +210,65 @@ namespace SuperSocket.SocketBase
             }
         }
 
-        
+
+        private System.Threading.Timer m_CollectSendSessionTimer = null;
+
+        private void StartCollectSendSessionTimer()
+        {
+            int interval = Config.CollectSendIntervalMillSec;
+            m_CollectSendSessionTimer = new System.Threading.Timer(CollectSendSession, new object(), interval, interval);
+
+            if (Logger.IsInfoEnabled)
+            {
+                Logger.Info($"StartCollectSendSessionTimer. CollectSendIntervalMillSec:{interval}");
+            }
+        }
+
+        /// <summary>
+        /// 세션들의 데이터를 모아서 보내기
+        /// </summary>
+        /// <param name="state">The state.</param>
+        private void CollectSendSession(object state)
+        {
+            if (Monitor.TryEnter(state))
+            {
+                try
+                {
+                    var sessionSource = SessionSource;
+
+                    if (sessionSource == null)
+                    {
+                        return;
+                    }
+                    
+                    System.Threading.Tasks.Parallel.ForEach(sessionSource, s =>
+                    {
+                        var session = s.Value;
+                        var sendData = session.GetCollectSendData();
+                        var sendDataLength = sendData.Count;
+
+                        if (sendData.Count > 0)
+                        {
+                            session.Send(sendData);
+                        }
+
+                        session.CommitCollectSend(sendDataLength);
+                    });
+                }
+                catch (Exception e)
+                {
+                    if (Logger.IsErrorEnabled)
+                        Logger.Error("Collect Send Session error!", e);
+                }
+                finally
+                {
+                    Monitor.Exit(state);
+                }
+            }
+        }
+   
+         
+
 
         private System.Threading.Timer m_ClearIdleSessionTimer = null;
 

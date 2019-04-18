@@ -23,19 +23,14 @@ namespace EchoServer
 
             if (IsResult)
             {
-                DevLog.Write(string.Format("서버 네트워크 시작"), LOG_LEVEL.INFO);
+                MainServer.MainLogger.Info("서버 네트워크 시작");
             }
             else
             {
-                DevLog.Write(string.Format("[ERROR] 서버 네트워크 시작 실패"), LOG_LEVEL.ERROR);
+                Console.WriteLine("서버 네트워크 시작 실패");
                 return;
             }
-
-            var workProcessTimer = new System.Timers.Timer(32);
-            workProcessTimer.Elapsed += OnProcessTimedEvent;
-            workProcessTimer.AutoReset = true;
-            workProcessTimer.Enabled = true;
-
+                        
 
             Console.WriteLine("key를 누르면 종료한다....");
             Console.ReadKey();
@@ -51,34 +46,7 @@ namespace EchoServer
             };
 
             return option;
-        }
-
-        static void OnProcessTimedEvent(object sender, EventArgs e)
-        {
-            // 너무 이 작업만 할 수 없으므로 일정 작업 이상을 하면 일단 패스한다.
-            int logWorkCount = 0;
-
-            while (true)
-            {
-                string msg;
-
-                if (DevLog.GetLog(out msg))
-                {
-                    ++logWorkCount;
-
-                    Console.WriteLine(msg);
-                }
-                else
-                {
-                    break;
-                }
-
-                if (logWorkCount > 7)
-                {
-                    break;
-                }
-            }
-        }
+        }               
 
     }
 

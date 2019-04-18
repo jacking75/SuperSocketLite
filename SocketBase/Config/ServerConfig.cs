@@ -410,5 +410,8 @@ namespace SuperSocket.SocketBase.Config
 
         public bool NoDelay { get; set; }
 
+
+        public int CollectSendIntervalMillSec { get; set; }
+
     }
 }

@@ -269,6 +269,16 @@ namespace SuperSocket.SocketBase.Config
         /// </value>
         IEnumerable<ICommandAssemblyConfig> CommandAssemblies { get; }
 
+        
+        /// <summary>
+        /// Gets the default culture for this server.
+        /// </summary>
+        /// <value>
+        /// The default culture.
+        /// </value>
+        string DefaultCulture { get; }
+
+
         /// <summary>
         /// Nodelay
         /// </summary>
@@ -279,11 +289,12 @@ namespace SuperSocket.SocketBase.Config
 
 
         /// <summary>
-        /// Gets the default culture for this server.
+        /// 데이터를 모은 후 send 스레드에서 일괄적으로 보내기 사용 시의 send 간격. 시간은 밀리세컨드이면 0 보다 크면 사용.
+        /// 클라이언트에 데이터를 자주 보내는 경우에만 사용하는 것이 좋다.
         /// </summary>
         /// <value>
-        /// The default culture.
+        /// default는 0
         /// </value>
-        string DefaultCulture { get; }
+        int CollectSendIntervalMillSec { get; }
     }
 }

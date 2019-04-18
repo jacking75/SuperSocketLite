@@ -84,6 +84,14 @@ namespace SuperSocket.SocketBase
         void Close(CloseReason reason);
 
 
+        bool CollectSend(byte[] source, int pos, int count);
+
+
+        ArraySegment<byte> GetCollectSendData();
+
+        void CommitCollectSend(int size);
+        
+
         /// <summary>
         /// Tries to send array segment.
         /// </summary>

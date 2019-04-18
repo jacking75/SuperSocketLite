@@ -497,5 +497,12 @@ namespace SuperSocket.SocketEngine.Configuration
         {
             get { return (bool)this["noDelay"]; }
         }
+
+        [ConfigurationProperty("collectSendIntervalMillSec", IsRequired = false, DefaultValue = 0)]
+        public int CollectSendIntervalMillSec
+        {
+            get { return (int)this["collectSendIntervalMillSec"]; }
+        }
+
     }
 }
