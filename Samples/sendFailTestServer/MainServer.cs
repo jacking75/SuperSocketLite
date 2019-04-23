@@ -94,7 +94,7 @@ namespace sendFailTestServer
 
         void OnConnected(NetworkSession session)
         {
-            MainLogger.Info($"세션 번호 {session.SessionID} 접속");
+            MainLogger.Info($"세션 번호 {session.SessionID} 접속. SendBufferSize. {session.SocketSession.Client.SendBufferSize}");
         }
 
         void OnClosed(NetworkSession session, CloseReason reason)

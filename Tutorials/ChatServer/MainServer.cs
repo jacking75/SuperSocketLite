@@ -105,13 +105,12 @@ namespace ChatServer
             return ERROR_CODE.NONE;
         }
 
-        //TODO TimeOut을 3초로 잡고, 상대방이 3초동안 receive를 하지 않아도 send에 문제가 없는지 알아본다.
         public bool SendData(string sessionID, byte[] sendData)
         {
+            var session = GetSessionByID(sessionID);
+
             try
             {
-                var session = GetSessionByID(sessionID);
-
                 if (session == null)
                 {
                     return false;
@@ -119,11 +118,13 @@ namespace ChatServer
 
                 session.Send(sendData, 0, sendData.Length);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                //TODO send time out 등의 문제이므로 접속을 끊는 것이 좋다.
-                //session.SendEndWhenSendingTimeOut(); 
-                //session.Close();
+                // TimeoutException 예외가 발생할 수 있다
+                MainServer.MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
+
+                session.SendEndWhenSendingTimeOut(); 
+                session.Close();
             }
             return true;
         }

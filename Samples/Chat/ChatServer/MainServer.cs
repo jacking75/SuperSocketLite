@@ -134,6 +134,7 @@ namespace ChatServer
             }
             catch(Exception)
             {
+                // 클라이언트가 네트워크 받기를 못하는 상태이면 TimeoutException가 발생한다
                 session.SendEndWhenSendingTimeOut(); 
                 session.Close();
             }

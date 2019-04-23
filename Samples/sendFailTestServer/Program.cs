@@ -42,9 +42,24 @@ namespace sendFailTestServer
 
                 foreach (var session in server.GetAllSessions())
                 {
-                    session.Send(packet);
+                    try
+                    {
+                        session.Send(packet);
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        MainServer.MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
+
+                        // TimeoutException 발생 후 세션을 짜르고 싶으면 꼭 SendEndWhenSendingTimeOut()를 호출해야 한다.
+                        session.SendEndWhenSendingTimeOut(); 
+                        session.Close();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        MainServer.MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
+                    }
                 }
-                Console.WriteLine(DateTime.Now);
             };
 
             timer.Start();
