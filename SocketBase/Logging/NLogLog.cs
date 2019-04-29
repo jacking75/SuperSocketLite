@@ -156,7 +156,7 @@ namespace SuperSocket.SocketBase.Logging
         /// <param name="exception">The exception.</param>
         public void Error(object message, Exception exception)
         {
-            throw new Exception("You have called a method that has not implemented this.");
+            Log.Error($"msg:{message}, exception:{exception.ToString()}");
         }
 
         /// <summary>

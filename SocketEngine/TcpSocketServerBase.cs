@@ -61,7 +61,7 @@ namespace SuperSocket.SocketEngine
                 client.IOControl(IOControlCode.KeepAliveValues, m_KeepAliveOptionValues, m_KeepAliveOptionOutValues);
 
             client.NoDelay = m_NoDelay;
-            client.LingerState = new LingerOption(enable:true, seconds:0);
+            client.LingerState = new LingerOption(enable:false, seconds:0); // socket 종료하면 즉시 제거한다.
             //client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true); //닷넷코어에서 사용 불가
 
             return this.AppServer.CreateAppSession(session);

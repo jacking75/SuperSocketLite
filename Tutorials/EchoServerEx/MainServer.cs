@@ -100,7 +100,7 @@ namespace EchoServerEx
 
         void RequestReceived(NetworkSession session, EFBinaryRequestInfo reqInfo)
         {
-            MainLogger.Info($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
+            //MainLogger.Info($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
             
             var PacketID = reqInfo.PacketID;
             
