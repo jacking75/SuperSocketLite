@@ -36,7 +36,9 @@ namespace SuperSocket.SocketBase.Logging
 
             if (Path.DirectorySeparatorChar != '\\')
             {
-                configFile = Path.GetFileNameWithoutExtension(configFile) + ".unix" + Path.GetExtension(configFile);
+                // 원본에서는 윈도우와 비윈도우 간에 로그 파일을 다르게 하기 위해서 아래처럼 했음
+                //configFile = Path.GetFileNameWithoutExtension(configFile) + ".unix" + Path.GetExtension(configFile);
+                configFile = Path.GetFileNameWithoutExtension(configFile) + Path.GetExtension(configFile);
             }
 
             

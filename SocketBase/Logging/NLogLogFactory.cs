@@ -7,7 +7,7 @@ namespace SuperSocket.SocketBase.Logging
     public class NLogLogFactory :  LogFactoryBase
     {
         public NLogLogFactory()
-            : this("Nlog.config")
+            : this("NLog.config")
         {
         }
 

@@ -229,7 +229,7 @@ namespace SuperSocket.SocketBase.Logging
         /// <param name="exception">The exception.</param>
         public void Fatal(object message, Exception exception)
         {
-            throw new Exception("You have called a method that has not implemented this.");
+            Log.Fatal($"msg:{message}, exception:{exception.ToString()}");
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace SuperSocket.SocketBase.Logging
         /// <param name="exception">The exception.</param>
         public void Info(object message, Exception exception)
         {
-            throw new Exception("You have called a method that has not implemented this.");
+            Log.Info($"msg:{message}, exception:{exception.ToString()}");
         }
 
         /// <summary>
@@ -375,7 +375,7 @@ namespace SuperSocket.SocketBase.Logging
         /// <param name="exception">The exception.</param>
         public void Warn(object message, Exception exception)
         {
-            throw new Exception("You have called a method that has not implemented this.");
+            Log.Warn($"msg:{message}, exception:{exception.ToString()}");
         }
 
         /// <summary>
