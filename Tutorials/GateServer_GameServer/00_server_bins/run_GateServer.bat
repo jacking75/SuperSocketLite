@@ -1,0 +1,1 @@
+dotnet netcoreapp2.2\GateServer.dll --uniqueID 1 --name GateServer --port 11021 --maxConnectionNumber 256  --maxRequestLength 1024 --receiveBufferSize 16384 --sendBufferSize 16384
