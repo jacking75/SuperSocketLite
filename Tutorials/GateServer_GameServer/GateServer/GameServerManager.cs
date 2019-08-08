@@ -81,6 +81,8 @@ namespace GateServer
                     if (ConnectToGameServer(server) == false)
                     {
                         //TODO 로그 남겨야 할 듯
+
+                        DisConnectedSessionIDQueue.Add(sessionID);
                         continue;
                     }
                 }                

@@ -104,8 +104,6 @@ namespace GateServer
 
         public string ConnetcToServer(System.Net.IPEndPoint serverAddress)
         {
-            //var serverAddress = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(ip), port);
-
             var activeConnector = this as SuperSocket.SocketBase.IActiveConnector;
 
             try
