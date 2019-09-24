@@ -1,1 +1,1 @@
-dotnet netcoreapp2.2\EchoServerEx.dll --port 12021 --maxConnectionNumber 32 --name EchoServer
+dotnet netcoreapp3.0\EchoServerEx.dll --port 12021 --maxConnectionNumber 32 --name EchoServer

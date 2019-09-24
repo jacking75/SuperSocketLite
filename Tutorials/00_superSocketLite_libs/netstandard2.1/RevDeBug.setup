@@ -1,0 +1,8 @@
+Repository.Port=42742;
+Repository.Address=127.0.0.1;
+Application.Name=SuperSocket.SocketEngine;
+SolutionName=SuperSocket.SocketEngine;
+StateStorageClassName=LiveRecorder;
+AuthorizationToken=;
+Release=;
+BacklogSize=1000;

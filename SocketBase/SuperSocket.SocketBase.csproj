@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>1.0.1</Version>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.4" />
   </ItemGroup>
 
   <ItemGroup>

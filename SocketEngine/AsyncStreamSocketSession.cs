@@ -203,15 +203,9 @@ namespace SuperSocket.SocketEngine
                 case (SslProtocols.None):
                     m_Stream = new NetworkStream(Client);
                     break;
-                case (SslProtocols.Default):
                 case (SslProtocols.Tls):
-                case (SslProtocols.Ssl3):
                     SslStream sslStream = CreateSslStream(certConfig);
-                    result = sslStream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Default, false, asyncCallback, sslStream);
-                    break;
-                case (SslProtocols.Ssl2):
-                    SslStream ssl2Stream = CreateSslStream(certConfig);
-                    result = ssl2Stream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Ssl2, false, asyncCallback, ssl2Stream);
+                    result = sslStream.BeginAuthenticateAsServer(AppSession.AppServer.Certificate, certConfig.ClientCertificateRequired, SslProtocols.Tls, false, asyncCallback, sslStream);
                     break;
                 default:
                     var unknownSslStream = CreateSslStream(certConfig);

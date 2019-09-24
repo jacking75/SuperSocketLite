@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <PackageVersion>1.0.1</PackageVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.5.0" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>

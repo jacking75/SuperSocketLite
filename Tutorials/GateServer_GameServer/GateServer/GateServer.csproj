@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.4.3" />
-    <PackageReference Include="MessagePack" Version="1.7.3.4" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="MessagePack" Version="1.7.3.7" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.4" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
     <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
   </ItemGroup>
 
@@ -33,13 +33,13 @@
 
   <ItemGroup>
     <Reference Include="SuperSocket.Common">
-      <HintPath>..\..\00_superSocketLite_libs\netstandard2.0\SuperSocket.Common.dll</HintPath>
+      <HintPath>..\..\00_superSocketLite_libs\netstandard2.1\SuperSocket.Common.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.SocketBase">
-      <HintPath>..\..\00_superSocketLite_libs\netstandard2.0\SuperSocket.SocketBase.dll</HintPath>
+      <HintPath>..\..\00_superSocketLite_libs\netstandard2.1\SuperSocket.SocketBase.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.SocketEngine">
-      <HintPath>..\..\00_superSocketLite_libs\netstandard2.0\SuperSocket.SocketEngine.dll</HintPath>
+      <HintPath>..\..\00_superSocketLite_libs\netstandard2.1\SuperSocket.SocketEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
 
