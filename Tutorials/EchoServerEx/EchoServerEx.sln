@@ -5,14 +5,6 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EchoServerEx", "EchoServerEx.csproj", "{191FCBF6-F42D-401C-9173-F8E096775177}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperSocket", "SuperSocket", "{6277710D-1BD5-4A02-9BF1-7B4B246AED5F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Common", "..\..\Common\SuperSocket.Common.csproj", "{82F5EC58-2D97-434B-A78F-49666A79C4A2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketBase", "..\..\SocketBase\SuperSocket.SocketBase.csproj", "{7E048E3B-2BCE-481B-A37F-13EED4985BF1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketEngine", "..\..\SocketEngine\SuperSocket.SocketEngine.csproj", "{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,26 +15,9 @@ Global
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82F5EC58-2D97-434B-A78F-49666A79C4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82F5EC58-2D97-434B-A78F-49666A79C4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82F5EC58-2D97-434B-A78F-49666A79C4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82F5EC58-2D97-434B-A78F-49666A79C4A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E048E3B-2BCE-481B-A37F-13EED4985BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E048E3B-2BCE-481B-A37F-13EED4985BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E048E3B-2BCE-481B-A37F-13EED4985BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E048E3B-2BCE-481B-A37F-13EED4985BF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{82F5EC58-2D97-434B-A78F-49666A79C4A2} = {6277710D-1BD5-4A02-9BF1-7B4B246AED5F}
-		{7E048E3B-2BCE-481B-A37F-13EED4985BF1} = {6277710D-1BD5-4A02-9BF1-7B4B246AED5F}
-		{3CA4886E-FFD8-4342-BAE2-3F97B8E003B0} = {6277710D-1BD5-4A02-9BF1-7B4B246AED5F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2804119-9424-4C9F-9A29-D72B9FA068E9}

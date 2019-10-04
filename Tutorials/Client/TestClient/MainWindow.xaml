@@ -11,22 +11,22 @@
             <ColumnDefinition Width="489*"/>
             <ColumnDefinition Width="14*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="더미 클라이언트 설정" HorizontalAlignment="Left" Height="59" Margin="10,10,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2">
-            <Label Content="서버 주소:" HorizontalAlignment="Left" Height="23" Margin="2,15,0,0" VerticalAlignment="Top" Width="58"/>
+        <GroupBox Header="더미 클라이언트 설정" HorizontalAlignment="Left" Height="69" Margin="10,10,0,0" VerticalAlignment="Top" Width="484">
+            <Label Content="서버 주소:" HorizontalAlignment="Left" Height="23" Margin="2,22,0,0" VerticalAlignment="Top" Width="66"/>
         </GroupBox>
-        <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="23" Margin="79,40,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
-        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="161,40,0,0" VerticalAlignment="Top" Width="58"/>
-        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="221,40,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="77"/>
-        <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,43,0,0" VerticalAlignment="Top" Width="98"/>
-        <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="23" Margin="310,20,0,0" VerticalAlignment="Top" Width="116"/>
-        <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,74,0,0" VerticalAlignment="Top" Width="484"/>
-        <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,93,0,0" VerticalAlignment="Top" Width="45"/>
-        <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,94,0,0" VerticalAlignment="Top" Width="55"/>
-        <TextBox x:Name="textBoxID" HorizontalAlignment="Left" Height="25" Margin="68,93,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="87"/>
-        <TextBox x:Name="textBoxPW" HorizontalAlignment="Left" Height="25" Margin="219,94,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="87"/>
-        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,92,0,0" VerticalAlignment="Top" Width="37" Click="Button_Click"/>
-        <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="357,92,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_1"/>
-        <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="407,92,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
+        <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="23" Margin="87,50,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
+        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="164,50,0,0" VerticalAlignment="Top" Width="62"/>
+        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="229,50,0,0" TextWrapping="Wrap" Text="12021" VerticalAlignment="Top" Width="77"/>
+        <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="312,54,0,0" VerticalAlignment="Top" Width="98"/>
+        <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="27" Margin="153,23,0,0" VerticalAlignment="Top" Width="329"/>
+        <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,84,0,0" VerticalAlignment="Top" Width="484"/>
+        <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,101,0,0" VerticalAlignment="Top" Width="45"/>
+        <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,102,0,0" VerticalAlignment="Top" Width="55"/>
+        <TextBox x:Name="textBoxID" HorizontalAlignment="Left" Height="25" Margin="68,101,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="textBoxPW" HorizontalAlignment="Left" Height="25" Margin="219,102,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="87"/>
+        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="312,100,0,0" VerticalAlignment="Top" Width="37" Click="Button_Click"/>
+        <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="357,100,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_1"/>
+        <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="407,100,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2"/>
         <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="309" Margin="10,180,0,0" VerticalAlignment="Top" Width="484"/>
         <ListBox x:Name="listBoxRoomUserList" HorizontalAlignment="Left" Height="186" Margin="23,232,0,0" VerticalAlignment="Top" Width="116"/>
         <TextBox x:Name="textBoxRoomNum" HorizontalAlignment="Left" Height="19" Margin="24,431,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="45"/>
@@ -36,8 +36,8 @@
         <TextBox x:Name="textBoxSendChat" HorizontalAlignment="Left" Height="22" Margin="153,459,0,0" TextWrapping="Wrap" Text="Hi~~" VerticalAlignment="Top" Width="271"/>
         <Button Content="chat" HorizontalAlignment="Left" Height="21" Margin="429,459,0,0" VerticalAlignment="Top" Width="42" Click="Button_Click_5"/>
         <ListBox x:Name="listBoxLog" HorizontalAlignment="Left" Height="111" Margin="10,498,0,0" VerticalAlignment="Top" Width="484"/>
-        <TextBox x:Name="textBoxEcho" HorizontalAlignment="Left" Height="25" Margin="13,130,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="353"/>
-        <Button Content="Echo" HorizontalAlignment="Left" Height="26" Margin="371,129,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_6" RenderTransformOrigin="0.836,2.049"/>
+        <TextBox x:Name="textBoxEcho" HorizontalAlignment="Left" Height="25" Margin="13,142,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="353"/>
+        <Button Content="Echo" HorizontalAlignment="Left" Height="26" Margin="371,141,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_6" RenderTransformOrigin="0.836,2.049"/>
 
     </Grid>
 </Window>
