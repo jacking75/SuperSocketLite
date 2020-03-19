@@ -38,9 +38,7 @@ namespace SuperSocket.SocketBase.Config
             int minWorkingThread, minCompletionPortThreads;
             ThreadPool.GetMinThreads(out minWorkingThread, out minCompletionPortThreads);
             MinWorkingThreads = minWorkingThread;
-            MinCompletionPortThreads = minCompletionPortThreads;
-
-            PerformanceDataCollectInterval = 60;
+            MinCompletionPortThreads = minCompletionPortThreads;            
         }
 
         
@@ -64,19 +62,6 @@ namespace SuperSocket.SocketBase.Config
         /// Gets/sets the min completion port threads.
         /// </summary>
         public int MinCompletionPortThreads { get; set; }
-
-        /// <summary>
-        /// Gets/sets the performance data collect interval, in seconds.
-        /// </summary>
-        public int PerformanceDataCollectInterval { get; set; }
-
-        /// <summary>
-        /// Gets/sets a value indicating whether [disable performance data collector].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [disable performance data collector]; otherwise, <c>false</c>.
-        /// </value>
-        public bool DisablePerformanceDataCollector { get; set; }
 
         
         /// <summary>
