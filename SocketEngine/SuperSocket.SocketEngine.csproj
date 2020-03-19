@@ -11,18 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AppDomainBootstrap.cs" />
-    <Compile Remove="AppDomainBootstrap.Net40.cs" />
-    <Compile Remove="Extensions.Net35.cs" />
-    <Compile Remove="IProcessServer.cs" />
-    <Compile Remove="IRemoteWorkItem.cs" />
-    <Compile Remove="MarshalAppServer.cs" />
-    <Compile Remove="ProcessBootstrap.cs" />
-    <Compile Remove="ProcessLocker.cs" />
-    <Compile Remove="TypeValidator.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.6.0" />
   </ItemGroup>
 
