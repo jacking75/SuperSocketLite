@@ -83,14 +83,7 @@ namespace SuperSocket.SocketEngine
         /// Gets the startup config file.
         /// </summary>
         public string StartupConfigFile { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="PerformanceMonitor"/> class.
-        /// </summary>
-        public IPerformanceMonitor PerfMonitor { get { return m_PerfMonitor; } }
-
-        private PerformanceMonitor m_PerfMonitor;
-
+                
         private readonly string m_BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         /// <summary>
@@ -159,15 +152,7 @@ namespace SuperSocket.SocketEngine
             m_GlobalLog = logFactory.GetLog(this.GetType().Name);
 
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-            if (!rootConfig.DisablePerformanceDataCollector)
-            {
-                m_PerfMonitor = new PerformanceMonitor(rootConfig, m_AppServers, null, logFactory);
-
-                if (m_GlobalLog.IsDebugEnabled)
-                    m_GlobalLog.Debug("The PerformanceMonitor has been initialized!");
-            }
-
+                        
             if (m_GlobalLog.IsDebugEnabled)
                 m_GlobalLog.Debug("The Bootstrap has been initialized!");
 
@@ -429,29 +414,9 @@ namespace SuperSocket.SocketEngine
 
             if (serverManager != null)
                 m_ServerManager = serverManager;
-
-            if (!m_Config.DisablePerformanceDataCollector)
-            {
-                m_PerfMonitor = new PerformanceMonitor(m_Config, m_AppServers, serverManager, logFactory);
-
-                if (m_GlobalLog.IsDebugEnabled)
-                    m_GlobalLog.Debug("The PerformanceMonitor has been initialized!");
-            }
-
+                        
             if (m_GlobalLog.IsDebugEnabled)
                 m_GlobalLog.Debug("The Bootstrap has been initialized!");
-
-            //try
-            //{
-            //    RegisterRemotingService();
-            //}
-            //catch (Exception e)
-            //{
-            //    if (m_GlobalLog.IsErrorEnabled)
-            //        m_GlobalLog.Error("Failed to register remoting access service!", e);
-
-            //    return false;
-            //}
 
             m_Initialized = true;
 
@@ -537,15 +502,7 @@ namespace SuperSocket.SocketEngine
                 else
                     result = StartResult.PartialSuccess;
             }
-
-            if (m_PerfMonitor != null)
-            {
-                m_PerfMonitor.Start();
-
-                if (m_GlobalLog.IsDebugEnabled)
-                    m_GlobalLog.Debug("The PerformanceMonitor has been started!");
-            }
-
+                        
             return result;
         }
 
@@ -567,15 +524,7 @@ namespace SuperSocket.SocketEngine
                 {
                     server.Stop();                    
                 }
-            }
-
-            if (m_PerfMonitor != null)
-            {
-                m_PerfMonitor.Stop();
-
-                if (m_GlobalLog.IsDebugEnabled)
-                    m_GlobalLog.Debug("The PerformanceMonitor has been stoppped!");
-            }
+            }                        
         }
 
         
@@ -599,24 +548,7 @@ namespace SuperSocket.SocketEngine
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        private void ResetPerfMoniter()
-        {
-            if (m_PerfMonitor != null)
-            {
-                m_PerfMonitor.Stop();
-                m_PerfMonitor.Dispose();
-                m_PerfMonitor = null;
-            }
-
-            m_PerfMonitor = new PerformanceMonitor(m_Config, m_AppServers, m_ServerManager, LogFactory);
-            m_PerfMonitor.Start();
-
-            if (m_GlobalLog.IsDebugEnabled)
-                m_GlobalLog.Debug("The PerformanceMonitor has been reset for new server has been added!");
-        }
-
-
+                
         // 4.5
         partial void SetDefaultCulture(SocketBase.Config.IRootConfig rootConfig)
         {
@@ -667,12 +599,7 @@ namespace SuperSocket.SocketEngine
             if (server != null)
             {
                 m_AppServers.Add(server);
-
-                if (!m_Config.DisablePerformanceDataCollector)
-                {
-                    ResetPerfMoniter();
-                }
-
+                                
                 var section = m_Config as SocketServiceConfig;
 
                 if (section != null) //file configuration

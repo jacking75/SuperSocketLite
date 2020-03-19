@@ -135,33 +135,7 @@ namespace SuperSocket.SocketEngine.Configuration
             }
         }
 
-        /// <summary>
-        /// Gets the performance data collect interval, in seconds.
-        /// </summary>
-        [ConfigurationProperty("performanceDataCollectInterval", IsRequired = false, DefaultValue = 60)]
-        public int PerformanceDataCollectInterval
-        {
-            get
-            {
-                return (int)this["performanceDataCollectInterval"];
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether [disable performance data collector].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [disable performance data collector]; otherwise, <c>false</c>.
-        /// </value>
-        [ConfigurationProperty("disablePerformanceDataCollector", IsRequired = false, DefaultValue = false)]
-        public bool DisablePerformanceDataCollector
-        {
-            get
-            {
-                return (bool)this["disablePerformanceDataCollector"];
-            }
-        }
-
+                
         
         /// <summary>
         /// Gets the logfactory name of the bootstrap.
