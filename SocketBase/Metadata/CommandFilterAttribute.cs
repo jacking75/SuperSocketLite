@@ -1,6 +1,4 @@
 using System;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 
 namespace SuperSocket.SocketBase.Metadata
 {

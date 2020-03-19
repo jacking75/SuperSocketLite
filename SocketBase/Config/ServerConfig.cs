@@ -332,18 +332,7 @@ namespace SuperSocket.SocketBase.Config
         /// </summary>
         public int StartupOrder { get; set; }
 
-        /// <summary>
-        /// Gets the child config.
-        /// </summary>
-        /// <typeparam name="TConfig">The type of the config.</typeparam>
-        /// <param name="childConfigName">Name of the child config.</param>
-        /// <returns></returns>
-        public virtual TConfig GetChildConfig<TConfig>(string childConfigName)
-            where TConfig : ConfigurationElement, new()
-        {
-            return this.OptionElements.GetChildConfig<TConfig>(childConfigName);
-        }
-
+       
         /// <summary>
         /// Gets and sets the listeners' configuration.
         /// </summary>

@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
 

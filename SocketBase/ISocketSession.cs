@@ -6,7 +6,6 @@ using System.IO;
 using System.Net;
 using System.Security.Authentication;
 using System.Net.Sockets;
-using SuperSocket.SocketBase.Command;
 
 namespace SuperSocket.SocketBase
 {

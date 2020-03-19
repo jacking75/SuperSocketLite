@@ -14,7 +14,6 @@ using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Metadata;
 using SuperSocket.SocketBase.Provider;
-using SuperSocket.SocketEngine.Configuration;
 
 namespace SuperSocket.SocketEngine
 {
@@ -159,27 +158,7 @@ namespace SuperSocket.SocketEngine
             m_Initialized = true;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultBootstrap"/> class.
-        /// </summary>
-        /// <param name="config">The config.</param>
-        public DefaultBootstrap(IConfigurationSource config)
-        {
-            if (config == null)
-                throw new ArgumentNullException("config");
-
-            SetDefaultCulture(config);
-
-            var fileConfigSource = config as ConfigurationSection;
-
-            if (fileConfigSource != null)
-                StartupConfigFile = fileConfigSource.GetConfigSource();
-
-            m_Config = config;
-
-            AppDomain.CurrentDomain.SetData("Bootstrap", this);
-        }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultBootstrap"/> class.
         /// </summary>
@@ -556,65 +535,6 @@ namespace SuperSocket.SocketEngine
                 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(rootConfig.DefaultCulture);
         }
 
-        // 4.0
-        IWorkItem AddNewServer(IServerConfig config)
-        {
-            if (config == null)
-                throw new ArgumentNullException("config");
-
-            if (string.IsNullOrEmpty(config.Name))
-                throw new ArgumentException("The new server's name cannot be empty.", "config");
-
-            if (!m_Initialized)
-                throw new Exception("The bootstrap must be initialized already!");
-
-            if (m_AppServers.Any(s => config.Name.Equals(s.Name, StringComparison.OrdinalIgnoreCase)))
-            {
-                m_GlobalLog.ErrorFormat("The new server's name '{0}' has been taken by another server.", config.Name);
-                return null;
-            }
-
-            var configSource = new ConfigurationSource(m_Config);
-            configSource.Servers = new IServerConfig[] { new ServerConfig(config) };
-
-            IEnumerable<WorkItemFactoryInfo> workItemFactories;
-
-            using (var factoryInfoLoader = GetWorkItemFactoryInfoLoader(configSource, null))
-            {
-                try
-                {
-                    workItemFactories = factoryInfoLoader.LoadResult((c) => c);
-                }
-                catch (Exception e)
-                {
-                    if (m_GlobalLog.IsErrorEnabled)
-                        m_GlobalLog.Error(e);
-
-                    return null;
-                }
-            }
-
-            var server = InitializeAndSetupWorkItem(workItemFactories.FirstOrDefault());
-
-            if (server != null)
-            {
-                m_AppServers.Add(server);
-                                
-                var section = m_Config as SocketServiceConfig;
-
-                if (section != null) //file configuration
-                {
-                    var serverConfig = new Server();
-                    serverConfig.LoadFrom(config);
-                    section.Servers.AddNew(serverConfig);
-                    ConfigurationWatcher.Pause();
-                    section.GetCurrentConfiguration().Save(ConfigurationSaveMode.Minimal);
-                    ConfigurationWatcher.Resume();
-                }
-            }
-
-            return server;
-        }
                 
     }
 }

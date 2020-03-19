@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.AsyncSocket;
 

@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SuperSocket.Common;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Metadata;
@@ -82,12 +81,7 @@ namespace SuperSocket.SocketBase
         {
             get { return this.ReceiveFilterFactory; }
         }
-
-        private List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> m_CommandLoaders = new List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>>();
-
-        private Dictionary<string, CommandInfo<ICommand<TAppSession, TRequestInfo>>> m_CommandContainer;
-
-        private CommandFilterAttribute[] m_GlobalCommandFilters;
+          
 
         private ISocketServerFactory m_SocketServerFactory;
 
@@ -181,121 +175,7 @@ namespace SuperSocket.SocketBase
             this.ReceiveFilterFactory = receiveFilterFactory;
         }
 
-        /// <summary>
-        /// Gets the filter attributes.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        internal static CommandFilterAttribute[] GetCommandFilterAttributes(Type type)
-        {
-            var attrs = type.GetCustomAttributes(true);
-            return attrs.OfType<CommandFilterAttribute>().ToArray();
-        }
-
-        /// <summary>
-        /// Setups the command into command dictionary
-        /// </summary>
-        /// <param name="discoveredCommands">The discovered commands.</param>
-        /// <returns></returns>
-        protected virtual bool SetupCommands(Dictionary<string, ICommand<TAppSession, TRequestInfo>> discoveredCommands)
-        {
-            foreach (var loader in m_CommandLoaders)
-            {
-                loader.Error += new EventHandler<ErrorEventArgs>(CommandLoaderOnError);
-                loader.Updated += new EventHandler<CommandUpdateEventArgs<ICommand<TAppSession, TRequestInfo>>>(CommandLoaderOnCommandsUpdated);
-
-                if (!loader.Initialize(RootConfig, this))
-                {
-                    if (Logger.IsErrorEnabled)
-                        Logger.ErrorFormat("Failed initialize the command loader {0}.", loader.ToString());
-                    return false;
-                }
-
-                IEnumerable<ICommand<TAppSession, TRequestInfo>> commands;
-                if (!loader.TryLoadCommands(out commands))
-                {
-                    if (Logger.IsErrorEnabled)
-                        Logger.ErrorFormat("Failed load commands from the command loader {0}.", loader.ToString());
-                    return false;
-                }
-
-                if (commands != null && commands.Any())
-                {
-                    foreach (var c in commands)
-                    {
-                        if (discoveredCommands.ContainsKey(c.Name))
-                        {
-                            if (Logger.IsErrorEnabled)
-                                Logger.Error("Duplicated name command has been found! Command name: " + c.Name);
-                            return false;
-                        }
-
-                        var castedCommand = c as ICommand<TAppSession, TRequestInfo>;
-
-                        if (castedCommand == null)
-                        {
-                            if (Logger.IsErrorEnabled)
-                                Logger.Error("Invalid command has been found! Command name: " + c.Name);
-                            return false;
-                        }
-
-                        if (Logger.IsDebugEnabled)
-                            Logger.DebugFormat("The command {0}({1}) has been discovered", castedCommand.Name, castedCommand.ToString());
-
-                        discoveredCommands.Add(c.Name, castedCommand);
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        void CommandLoaderOnCommandsUpdated(object sender, CommandUpdateEventArgs<ICommand<TAppSession, TRequestInfo>> e)
-        {
-            var workingDict = m_CommandContainer.Values.ToDictionary(c => c.Command.Name, c => c.Command, StringComparer.OrdinalIgnoreCase);
-            var updatedCommands = 0;
-
-            foreach (var c in e.Commands)
-            {
-                if (c == null)
-                    continue;
-
-                if (c.UpdateAction == CommandUpdateAction.Remove)
-                {
-                    workingDict.Remove(c.Command.Name);
-                    if (Logger.IsInfoEnabled)
-                        Logger.InfoFormat("The command '{0}' has been removed from this server!", c.Command.Name);
-                }
-                else if (c.UpdateAction == CommandUpdateAction.Add)
-                {
-                    workingDict.Add(c.Command.Name, c.Command);
-                    if (Logger.IsInfoEnabled)
-                        Logger.InfoFormat("The command '{0}' has been added into this server!", c.Command.Name);
-                }
-                else
-                {
-                    workingDict[c.Command.Name] = c.Command;
-                    if (Logger.IsInfoEnabled)
-                        Logger.InfoFormat("The command '{0}' has been updated!", c.Command.Name);
-                }
-
-                updatedCommands++;
-            }
-
-            if (updatedCommands > 0)
-            {
-                OnCommandSetup(workingDict);
-            }
-        }
-
-        void CommandLoaderOnError(object sender, ErrorEventArgs e)
-        {
-            if (!Logger.IsErrorEnabled)
-                return;
-
-            Logger.Error(e.Exception);
-        }
-
+                
         /// <summary>
         /// Setups the specified root config.
         /// </summary>
@@ -358,7 +238,7 @@ namespace SuperSocket.SocketBase
                 TextEncoding = new ASCIIEncoding();
         }
 
-        private bool SetupMedium(IReceiveFilterFactory<TRequestInfo> receiveFilterFactory, IEnumerable<IConnectionFilter> connectionFilters, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders)
+        private bool SetupMedium(IReceiveFilterFactory<TRequestInfo> receiveFilterFactory, IEnumerable<IConnectionFilter> connectionFilters)
         {
             if (receiveFilterFactory != null)
                 ReceiveFilterFactory = receiveFilterFactory;
@@ -370,11 +250,8 @@ namespace SuperSocket.SocketBase
 
                 m_ConnectionFilters.AddRange(connectionFilters);
             }
-
-            if (commandLoaders != null && commandLoaders.Any())
-                m_CommandLoaders.AddRange(commandLoaders);
-
-            return SetupCommandLoaders(m_CommandLoaders);
+             
+            return true;
         }
 
         private bool SetupAdvanced(IServerConfig config)
@@ -384,30 +261,10 @@ namespace SuperSocket.SocketBase
 
             if (!SetupListeners(config))
                 return false;
-
-            m_GlobalCommandFilters = GetCommandFilterAttributes(this.GetType());
-
-            var discoveredCommands = new Dictionary<string, ICommand<TAppSession, TRequestInfo>>(StringComparer.OrdinalIgnoreCase);
-            if (!SetupCommands(discoveredCommands))
-                return false;
-
-            OnCommandSetup(discoveredCommands);
-
+                                    
             return true;
         }
 
-        private void OnCommandSetup(IDictionary<string, ICommand<TAppSession, TRequestInfo>> discoveredCommands)
-        {
-            var commandContainer = new Dictionary<string, CommandInfo<ICommand<TAppSession, TRequestInfo>>>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var command in discoveredCommands.Values)
-            {
-                commandContainer.Add(command.Name,
-                    new CommandInfo<ICommand<TAppSession, TRequestInfo>>(command, m_GlobalCommandFilters));
-            }
-
-            Interlocked.Exchange(ref m_CommandContainer, commandContainer);
-        }
 
         internal abstract IReceiveFilterFactory<TRequestInfo> CreateDefaultReceiveFilterFactory();
 
@@ -478,78 +335,6 @@ namespace SuperSocket.SocketBase
             }
         }
 
-#if NET_35
-
-        /// <summary>
-        /// Setups with the specified ip and port.
-        /// </summary>
-        /// <param name="ip">The ip.</param>
-        /// <param name="port">The port.</param>
-        /// <param name="providers">The providers.</param>
-        /// <returns></returns>
-        public bool Setup(string ip, int port, params object[] providers)
-        {
-            return Setup(new ServerConfig
-            {
-                Name = string.Format("{0}-{1}", this.GetType().Name, Math.Abs(this.GetHashCode())),
-                Ip = ip,
-                Port = port
-            }, providers);
-        }
-        /// <summary>
-        /// Setups with the specified config, used for programming setup
-        /// </summary>
-        /// <param name="config">The server config.</param>
-        /// <param name="providers">The providers.</param>
-        /// <returns></returns>
-        public bool Setup(IServerConfig config, params object[] providers)
-        {
-            return Setup(new RootConfig(), config, providers);
-        }
-
-        /// <summary>
-        /// Setups with the specified root config, used for programming setup
-        /// </summary>
-        /// <param name="rootConfig">The root config.</param>
-        /// <param name="config">The server config.</param>
-        /// <param name="providers">The providers.</param>
-        /// <returns></returns>
-        public bool Setup(IRootConfig rootConfig, IServerConfig config, params object[] providers)
-        {
-            TrySetInitializedState();
-
-            SetupBasic(rootConfig, config, GetProviderInstance<ISocketServerFactory>(providers));
-
-            if (!SetupLogFactory(GetProviderInstance<ILogFactory>(providers)))
-                return false;
-
-            Logger = CreateLogger(this.Name);
-
-            if (!SetupMedium(GetProviderInstance<IReceiveFilterFactory<TRequestInfo>>(providers), GetProviderInstance<IEnumerable<IConnectionFilter>>(providers), GetProviderInstance<IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>>>(providers)))
-                return false;
-
-            if (!SetupAdvanced(config))
-                return false;
-
-            if (!Setup(rootConfig, config))
-                return false;
-
-            if(!SetupFinal())
-                return false;
-
-            m_StateCode = ServerStateConst.NotStarted;
-            return true;
-        }
-
-        private T GetProviderInstance<T>(object[] providers)
-        {
-            if (providers == null || !providers.Any())
-                return default(T);
-
-            var providerType = typeof(T);
-            return (T)providers.FirstOrDefault(p => p != null && providerType.IsAssignableFrom(p.GetType()));
-        }
-#else
 
         /// <summary>
         /// Setups with the specified config.
@@ -561,9 +346,9 @@ namespace SuperSocket.SocketBase
         /// <param name="connectionFilters">The connection filters.</param>
         /// <param name="commandLoaders">The command loaders.</param>
         /// <returns></returns>
-        public bool Setup(IServerConfig config, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
+        public bool Setup(IServerConfig config, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null)
         {
-            return Setup(new RootConfig(), config, socketServerFactory, receiveFilterFactory, logFactory, connectionFilters, commandLoaders);
+            return Setup(new RootConfig(), config, socketServerFactory, receiveFilterFactory, logFactory, connectionFilters);
         }
 
         /// <summary>
@@ -577,7 +362,7 @@ namespace SuperSocket.SocketBase
         /// <param name="connectionFilters">The connection filters.</param>
         /// <param name="commandLoaders">The command loaders.</param>
         /// <returns></returns>
-        public bool Setup(IRootConfig rootConfig, IServerConfig config, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
+        public bool Setup(IRootConfig rootConfig, IServerConfig config, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null)
         {
             TrySetInitializedState();
 
@@ -587,7 +372,7 @@ namespace SuperSocket.SocketBase
   
             Logger = CreateLogger(this.Name);
 
-            if (!SetupMedium(receiveFilterFactory, connectionFilters, commandLoaders))
+            if (!SetupMedium(receiveFilterFactory, connectionFilters))
                 return false;
 
             if (!SetupAdvanced(config))
@@ -612,9 +397,8 @@ namespace SuperSocket.SocketBase
         /// <param name="receiveFilterFactory">The Receive filter factory.</param>
         /// <param name="logFactory">The log factory.</param>
         /// <param name="connectionFilters">The connection filters.</param>
-        /// <param name="commandLoaders">The command loaders.</param>
         /// <returns>return setup result</returns>
-        public bool Setup(string ip, int port, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
+        public bool Setup(string ip, int port, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null)
         {
             return Setup(new ServerConfig
                             {
@@ -624,10 +408,9 @@ namespace SuperSocket.SocketBase
                           socketServerFactory,
                           receiveFilterFactory,
                           logFactory,
-                          connectionFilters,
-                          commandLoaders);
+                          connectionFilters);
         }
-#endif
+
 
         /// <summary>
         /// Setups the specified root config.
@@ -676,11 +459,7 @@ namespace SuperSocket.SocketBase
 
             if (!SetupMedium(
                     GetSingleProviderInstance<IReceiveFilterFactory<TRequestInfo>>(factories, ProviderKey.ReceiveFilterFactory),
-                    connectionFilters,
-                    GetProviderInstances<ICommandLoader<ICommand<TAppSession, TRequestInfo>>>(
-                            factories,
-                            ProviderKey.CommandLoader,
-                            (t) => Activator.CreateInstance(t.MakeGenericType(typeof(ICommand<TAppSession, TRequestInfo>))))))
+                    connectionFilters))
             {
                 return false;
             }
@@ -768,16 +547,6 @@ namespace SuperSocket.SocketBase
             return true;
         }
 
-        /// <summary>
-        /// Setups the command loaders.
-        /// </summary>
-        /// <param name="commandLoaders">The command loaders.</param>
-        /// <returns></returns>
-        protected virtual bool SetupCommandLoaders(List<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders)
-        {
-            commandLoaders.Add(new ReflectCommandLoader<ICommand<TAppSession, TRequestInfo>>());
-            return true;
-        }
 
         /// <summary>
         /// Creates the logger for the AppServer.
@@ -1142,21 +911,6 @@ namespace SuperSocket.SocketBase
                 Logger.Info(string.Format("The server instance {0} has been stopped!", Name));
         }
 
-        /// <summary>
-        /// Gets command by command name.
-        /// </summary>
-        /// <param name="commandName">Name of the command.</param>
-        /// <returns></returns>
-        private CommandInfo<ICommand<TAppSession, TRequestInfo>> GetCommandByName(string commandName)
-        {
-            CommandInfo<ICommand<TAppSession, TRequestInfo>> commandProxy;
-
-            if (m_CommandContainer.TryGetValue(commandName, out commandProxy))
-                return commandProxy;
-            else
-                return null;
-        }
-
 
         private Func<TAppSession, byte[], int, int, bool> m_RawDataReceivedHandler;
 
@@ -1201,118 +955,7 @@ namespace SuperSocket.SocketBase
             remove { m_RequestHandler -= value; }
         }
 
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <param name="requestInfo">The request info.</param>
-        protected virtual void ExecuteCommand(TAppSession session, TRequestInfo requestInfo)
-        {
-            if (m_RequestHandler == null)
-            {
-                var commandProxy = GetCommandByName(requestInfo.Key);
-
-                if (commandProxy != null)
-                {
-                    var command = commandProxy.Command;
-                    var commandFilters = commandProxy.Filters;
-
-                    session.CurrentCommand = requestInfo.Key;
-
-                    var cancelled = false;
-
-                    if (commandFilters == null)
-                    {
-                        command.ExecuteCommand(session, requestInfo);
-                    }
-                    else
-                    {
-                        var commandContext = new CommandExecutingContext();
-                        commandContext.Initialize(session, requestInfo, command);
-
-                        for (var i = 0; i < commandFilters.Length; i++)
-                        {
-                            var filter = commandFilters[i];
-                            filter.OnCommandExecuting(commandContext);
-
-                            if (commandContext.Cancel)
-                            {
-                                cancelled = true;
-                                if(Logger.IsInfoEnabled)
-                                    Logger.Info(session, string.Format("The executing of the command {0} was cancelled by the command filter {1}.", command.Name, filter.GetType().ToString()));
-                                break;
-                            }
-                        }
-
-                        if (!cancelled)
-                        {
-                            try
-                            {
-                                command.ExecuteCommand(session, requestInfo);
-                            }
-                            catch (Exception exc)
-                            {
-                                commandContext.Exception = exc;
-                            }
-
-                            for (var i = 0; i < commandFilters.Length; i++)
-                            {
-                                var filter = commandFilters[i];
-                                filter.OnCommandExecuted(commandContext);
-                            }
-
-                            if (commandContext.Exception != null && !commandContext.ExceptionHandled)
-                            {
-                                try
-                                {
-                                    session.InternalHandleExcetion(commandContext.Exception);
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                        }
-                    }
-
-                    if(!cancelled)
-                    {
-                        session.PrevCommand = requestInfo.Key;
-
-                        if (Config.LogCommand && Logger.IsInfoEnabled)
-                            Logger.Info(session, string.Format("Command - {0}", requestInfo.Key));
-                    }
-                }
-                else
-                {
-                    session.InternalHandleUnknownRequest(requestInfo);
-                }
-
-                session.LastActiveTime = DateTime.Now;
-            }
-            else
-            {
-                session.CurrentCommand = requestInfo.Key;
-
-                try
-                {
-                    m_RequestHandler(session, requestInfo);
-                }
-                catch (Exception e)
-                {
-                    session.InternalHandleExcetion(e);
-                }
-                
-                session.PrevCommand = requestInfo.Key;
-                session.LastActiveTime = DateTime.Now;
-
-                if (Config.LogCommand && Logger.IsInfoEnabled)
-                    Logger.Info(session, string.Format("Command - {0}", requestInfo.Key));
-            }
-
-            Interlocked.Increment(ref m_TotalHandledRequests);
-        }
-
+  
         /// <summary>
         /// Executes the command for the session.
         /// </summary>

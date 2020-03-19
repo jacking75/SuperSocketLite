@@ -7,7 +7,6 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using SuperSocket.Common;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Protocol;

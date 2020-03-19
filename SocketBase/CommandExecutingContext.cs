@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Command;
 
 namespace SuperSocket.SocketBase
 {
@@ -21,11 +20,6 @@ namespace SuperSocket.SocketBase
         /// Gets the request info.
         /// </summary>
         public IRequestInfo RequestInfo { get; private set; }
-
-        /// <summary>
-        /// Gets the current command.
-        /// </summary>
-        public ICommand CurrentCommand { get; private set; }
 
         /// <summary>
         /// Gets the exception.
@@ -56,12 +50,10 @@ namespace SuperSocket.SocketBase
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="requestInfo">The request info.</param>
-        /// <param name="command">The command.</param>
-        public void Initialize(IAppSession session, IRequestInfo requestInfo, ICommand command)
+        public void Initialize(IAppSession session, IRequestInfo requestInfo)
         {
             Session = session;
             RequestInfo = requestInfo;
-            CurrentCommand = command;
         }
     }
 }

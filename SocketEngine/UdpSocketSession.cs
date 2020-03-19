@@ -8,7 +8,6 @@ using System.Net.Sockets;
 using System.Text;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Protocol;
 using System.Threading;
 

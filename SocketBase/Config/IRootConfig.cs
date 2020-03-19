@@ -48,16 +48,7 @@ namespace SuperSocket.SocketBase.Config
         /// </summary>
         NameValueCollection OptionElements { get; }
 
-        /// <summary>
-        /// Gets the child config.
-        /// </summary>
-        /// <typeparam name="TConfig">The type of the config.</typeparam>
-        /// <param name="childConfigName">Name of the child config.</param>
-        /// <returns></returns>
-        TConfig GetChildConfig<TConfig>(string childConfigName)
-            where TConfig : ConfigurationElement, new();
-
-
+ 
         /// <summary>
         /// Gets the default culture for all server instances.
         /// </summary>

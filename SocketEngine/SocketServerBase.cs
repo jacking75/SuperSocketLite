@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Protocol;
 

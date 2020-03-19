@@ -5,8 +5,6 @@ using System.Text;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Provider;
-using SuperSocket.SocketEngine.Configuration;
-using SuperSocket.SocketBase.Metadata;
 
 namespace SuperSocket.SocketEngine
 {

@@ -33,12 +33,7 @@ namespace SuperSocket.SocketEngine
             {
                 get { return m_Server.Name; }
             }
-
-            public void ReportPotentialConfigChange(IServerConfig config)
-            {
-                m_Server.ReportPotentialConfigChange(config);
-            }
-
+             
             public bool Start()
             {
                 return m_Server.Start();

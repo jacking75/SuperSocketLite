@@ -32,12 +32,7 @@ namespace SuperSocket.SocketBase
         /// <returns>return true if start successfull, else false</returns>
         bool Start();
 
-        /// <summary>
-        /// Reports the potential configuration change.
-        /// </summary>
-        /// <param name="config">The server config which may be changed.</param>
-        void ReportPotentialConfigChange(IServerConfig config);
-
+  
         /// <summary>
         /// Stops this server instance.
         /// </summary>
