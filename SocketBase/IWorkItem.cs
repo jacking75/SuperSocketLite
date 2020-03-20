@@ -10,7 +10,7 @@ namespace SuperSocket.SocketBase
     /// <summary>
     /// An item can be started and stopped
     /// </summary>
-    public interface IWorkItemBase : IStatusInfoSource, ISystemEndPoint
+    public interface IWorkItemBase : ISystemEndPoint
     {
         /// <summary>
         /// Gets the name.
@@ -48,17 +48,8 @@ namespace SuperSocket.SocketBase
     /// <summary>
     /// An item can be started and stopped
     /// </summary>
-    public interface IWorkItem : IWorkItemBase, IStatusInfoSource
-    {
-        /// <summary>
-        /// Setups with the specified root config.
-        /// </summary>
-        /// <param name="bootstrap">The bootstrap.</param>
-        /// <param name="config">The socket server instance config.</param>
-        /// <param name="factories">The factories.</param>
-        /// <returns></returns>
-        bool Setup(IBootstrap bootstrap, IServerConfig config, ProviderFactoryInfo[] factories);
-
+    public interface IWorkItem : IWorkItemBase
+    {        
         /// <summary>
         /// Gets the current state of the work item.
         /// </summary>

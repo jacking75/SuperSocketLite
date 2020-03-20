@@ -25,7 +25,7 @@ namespace SuperSocket.SocketBase
     /// <typeparam name="TAppSession">The type of the app session.</typeparam>
     /// <typeparam name="TRequestInfo">The type of the request info.</typeparam>
     [AppServerMetadataType(typeof(DefaultAppServerMetadata))]
-	public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IStatusInfoSource, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
+	public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
         where TRequestInfo : class, IRequestInfo
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
     {
@@ -99,12 +99,7 @@ namespace SuperSocket.SocketBase
         /// Gets the logger assosiated with this object.
         /// </summary>
         public ILog Logger { get; private set; }
-
-        /// <summary>
-        /// Gets the bootstrap of this appServer instance.
-        /// </summary>
-        protected IBootstrap Bootstrap { get; private set; }
-
+                
         private static bool m_ThreadPoolConfigured = false;
 
         private List<IConnectionFilter> m_ConnectionFilters;
@@ -410,73 +405,6 @@ namespace SuperSocket.SocketBase
                           logFactory,
                           connectionFilters);
         }
-
-
-        /// <summary>
-        /// Setups the specified root config.
-        /// </summary>
-        /// <param name="bootstrap">The bootstrap.</param>
-        /// <param name="config">The socket server instance config.</param>
-        /// <param name="factories">The factories.</param>
-        /// <returns></returns>
-        bool IWorkItem.Setup(IBootstrap bootstrap, IServerConfig config, ProviderFactoryInfo[] factories)
-        {
-            if (bootstrap == null)
-                throw new ArgumentNullException("bootstrap");
-
-            Bootstrap = bootstrap;
-
-            if (factories == null)
-                throw new ArgumentNullException("factories");
-
-            TrySetInitializedState();
-
-            var rootConfig = bootstrap.Config;
-
-            SetupBasic(rootConfig, config, GetSingleProviderInstance<ISocketServerFactory>(factories, ProviderKey.SocketServerFactory));
-
-            SetupLogFactory(GetSingleProviderInstance<ILogFactory>(factories, ProviderKey.LogFactory));
-
-            Logger = CreateLogger(this.Name);
-
-            IEnumerable<IConnectionFilter> connectionFilters = null;
-
-            if (!TryGetProviderInstances(factories, ProviderKey.ConnectionFilter, null,
-                    (p, f) =>
-                    {
-                        var ret = p.Initialize(f.Name, this);
-
-                        if(!ret)
-                        {
-                            Logger.ErrorFormat("Failed to initialize the connection filter: {0}.", f.Name);
-                        }
-
-                        return ret;
-                    }, out connectionFilters))
-            {
-                return false;
-            }
-
-            if (!SetupMedium(
-                    GetSingleProviderInstance<IReceiveFilterFactory<TRequestInfo>>(factories, ProviderKey.ReceiveFilterFactory),
-                    connectionFilters))
-            {
-                return false;
-            }
-
-            if (!SetupAdvanced(config))
-                return false;
-
-            if (!Setup(rootConfig, config))
-                return false;
-
-            if (!SetupFinal())
-                return false;
-
-            m_StateCode = ServerStateConst.NotStarted;
-            return true;
-        }
-
 
         private TProvider GetSingleProviderInstance<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key)
         {
@@ -1290,24 +1218,11 @@ namespace SuperSocket.SocketBase
         /// <param name="messageData">The message data.</param>
         protected virtual void OnSystemMessageReceived(string messageType, object messageData)
         {
-
         }
 
         
         private StatusInfoCollection m_ServerStatus;
-
-        StatusInfoAttribute[] IStatusInfoSource.GetServerStatusMetadata()
-        {
-            return this.GetType().GetStatusInfoMetadata();
-        }
-
-        StatusInfoCollection IStatusInfoSource.CollectServerStatus(StatusInfoCollection bootstrapStatus)
-        {
-            UpdateServerStatus(m_ServerStatus);
-            this.AsyncRun(() => OnServerStatusCollected(bootstrapStatus, m_ServerStatus), e => Logger.Error(e));
-            return m_ServerStatus;
-        }
-
+               
         /// <summary>
         /// Updates the summary of the server.
         /// </summary>
@@ -1340,20 +1255,7 @@ namespace SuperSocket.SocketBase
 
             serverStatus.CollectedTime = now;
         }
-
-        /// <summary>
-        /// Called when [server status collected].
-        /// </summary>
-        /// <param name="bootstrapStatus">The bootstrapStatus status.</param>
-        /// <param name="serverStatus">The server status.</param>
-        protected virtual void OnServerStatusCollected(StatusInfoCollection bootstrapStatus, StatusInfoCollection serverStatus)
-        {
-
-        }
-
-
-
-        
+                
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
