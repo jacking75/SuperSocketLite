@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SuperSocket.SocketBase.Logging
 {
-#if (__USE_NLOG__ != true)
+#if (__NOT_USE_NLOG__ != true)
     public class NLogLog : ILog
     {
         private NLog.ILogger Log;

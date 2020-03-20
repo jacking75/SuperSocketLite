@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SuperSocket.SocketBase.Logging
 {
-#if (__USE_NLOG__ != true)  //NLog를 사용하지 않는다면 __USE_NLOG__를 선언한다
+#if (__NOT_USE_NLOG__ != true)  //NLog를 사용하지 않는다면 __NOT_USE_NLOG__ 선언한다
     public class NLogLogFactory :  LogFactoryBase
     {
         public NLogLogFactory()
