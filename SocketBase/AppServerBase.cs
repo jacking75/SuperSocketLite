@@ -538,10 +538,10 @@ namespace SuperSocket.SocketBase
                 return true;
             }
 
-            //NLogLogFactory is default log factory
+            //ConsoleLogFactory is default log factory
             if (LogFactory == null)
             {
-                LogFactory = new NLogLogFactory();
+                LogFactory = new ConsoleLogFactory();
             }
 
             return true;

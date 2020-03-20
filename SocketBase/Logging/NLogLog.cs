@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SuperSocket.SocketBase.Logging
 {
+#if (__USE_NLOG__ != true)
     public class NLogLog : ILog
     {
         private NLog.ILogger Log;
@@ -432,4 +433,5 @@ namespace SuperSocket.SocketBase.Logging
             Log.Warn(format, arg0, arg1, arg2);
         }
     }
+#endif
 }
