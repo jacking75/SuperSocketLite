@@ -883,7 +883,37 @@ namespace SuperSocket.SocketBase
             remove { m_RequestHandler -= value; }
         }
 
-  
+
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="requestInfo">The request info.</param>
+        protected virtual void ExecuteCommand(TAppSession session, TRequestInfo requestInfo)
+        {            
+            session.CurrentCommand = requestInfo.Key;
+
+            try
+            {
+                m_RequestHandler(session, requestInfo);
+            }
+            catch (Exception e)
+            {
+                session.InternalHandleExcetion(e);
+            }
+
+            session.PrevCommand = requestInfo.Key;
+            session.LastActiveTime = DateTime.Now;
+
+            if (Config.LogCommand && Logger.IsInfoEnabled)
+            {
+                Logger.Info(session, string.Format("Command - {0}", requestInfo.Key));
+            }
+
+            Interlocked.Increment(ref m_TotalHandledRequests);
+        }
+
+
         /// <summary>
         /// Executes the command for the session.
         /// </summary>
