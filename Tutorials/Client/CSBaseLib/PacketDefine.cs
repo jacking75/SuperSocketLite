@@ -59,6 +59,13 @@ namespace CSBaseLib
         REQ_ROOM_CHAT = 1026,
         NTF_ROOM_CHAT = 1027,
 
+
+        REQ_ROOM_DEV_ALL_ROOM_START_GAME = 1091,
+        RES_ROOM_DEV_ALL_ROOM_START_GAME = 1092,
+
+        REQ_ROOM_DEV_ALL_ROOM_END_GAME = 1093,
+        RES_ROOM_DEV_ALL_ROOM_END_GAME = 1094,
+
         CS_END          = 1100,
 
 

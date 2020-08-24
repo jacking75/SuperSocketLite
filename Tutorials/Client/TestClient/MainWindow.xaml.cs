@@ -449,6 +449,18 @@ namespace ChatClient2
             }
         }
 
-        
+        // 모든 게임 방 게임 시작
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            var sendData = CSBaseLib.PacketToBytes.Make(CSBaseLib.PACKETID.REQ_ROOM_DEV_ALL_ROOM_START_GAME, null);
+            PostSendPacket(sendData);
+        }
+
+        // 모든 게임 방 게임 끝
+        private void Button_Click_8(object sender, RoutedEventArgs e)
+        {
+            var sendData = CSBaseLib.PacketToBytes.Make(CSBaseLib.PACKETID.REQ_ROOM_DEV_ALL_ROOM_END_GAME, null);
+            PostSendPacket(sendData);
+        }
     }
 }

@@ -21,13 +21,13 @@ namespace CSBaseLib
         public static byte[] Make(PACKETID packetID, byte[] bodyData)
         {
             byte type = 0;
-            var pktID = (Int16)packetID;
-            Int16 bodyDataSize = 0;
+            var pktID = (UInt16)packetID;
+            UInt16 bodyDataSize = 0;
             if (bodyData != null)
             {
-                bodyDataSize = (Int16)bodyData.Length;
+                bodyDataSize = (UInt16)bodyData.Length;
             }
-            var packetSize = (Int16)(bodyDataSize + PacketDef.PACKET_HEADER_SIZE);
+            var packetSize = (UInt16)(bodyDataSize + PacketDef.PACKET_HEADER_SIZE);
                         
             var dataSource = new byte[packetSize];
             Buffer.BlockCopy(BitConverter.GetBytes(packetSize), 0, dataSource, 0, 2);
@@ -44,8 +44,8 @@ namespace CSBaseLib
 
         public static Tuple<int, byte[]> ClientReceiveData(int recvLength, byte[] recvData)
         {
-            var packetSize = BitConverter.ToInt16(recvData, 0);
-            var packetID = BitConverter.ToInt16(recvData, 2);
+            var packetSize = BitConverter.ToUInt16(recvData, 0);
+            var packetID = BitConverter.ToUInt16(recvData, 2);
             var bodySize = packetSize - PacketDef.PACKET_HEADER_SIZE;
 
             var packetBody = new byte[bodySize];
