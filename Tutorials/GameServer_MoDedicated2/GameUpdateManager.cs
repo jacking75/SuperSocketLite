@@ -33,13 +33,20 @@ namespace GameServer
         {
             if(GameUpdateIndexPool.TryDequeue(out var index))
             {
-                GameUpdateList[index.UpdateIndex]
+                GameUpdateList[index.UpdateIndex].NewGame(index.ElementIndex, game);
                 return true;
             }
 
             return false;
         }
 
+        public void AllStop()
+        {
+            foreach(var gameUpdate in GameUpdateList)
+            {
+                gameUpdate.Stop();
+            }
+        }
        
     }
 

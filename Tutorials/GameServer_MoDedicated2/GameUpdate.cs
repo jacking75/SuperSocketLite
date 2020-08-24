@@ -27,14 +27,38 @@ namespace GameServer
             ProcessThread.Start();
         }
 
+        public void Stop()
+        {
+            if (IsThreadRunning == false)
+            {
+                return;
+            }
+
+            IsThreadRunning = false;
+            ProcessThread.Join();
+        }
+
+        public void NewGame(UInt16 index, GameLogic game)
+        {
+            InOutGameQueue.Enqueue(new InOutGameElement { IsIn = true, Index = index, GameObj = game })  ;
+        }
+
         void Process()
         {
             while (IsThreadRunning)
             {
                 if(InOutGameQueue.TryDequeue(out var newGame))
                 {
-                    GameLogics[newGame.index] = newGame.GameObj;
+                    if (newGame.IsIn)
+                    {
+                        GameLogics[newGame.Index] = newGame.GameObj;
+                    }
+                    else
+                    {
+                        GameLogics[newGame.Index] = null;
+                    }
                 }
+
 
                 foreach(var game in GameLogics)
                 {
@@ -53,7 +77,8 @@ namespace GameServer
 
     class InOutGameElement
     {
-        public UInt16 index;
+        public bool IsIn;
+        public UInt16 Index;
         public GameLogic GameObj;
     }
 }
