@@ -25,7 +25,7 @@ namespace GameServer
         public void Start()
         {
             IsRunable = true;
-            Task.Run(() => Update()).ConfigureAwait(false);
+            Task.Run(() => Update());
         }
 
         public void End()
@@ -44,9 +44,9 @@ namespace GameServer
 
             while (IsRunable)
             {
-                MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{Index}");
+                MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{Index}, [{DateTime.Now.Millisecond}]");
 
-                if (MsgQueue.TryDequeue(out var gameMsg) == false)
+                if (MsgQueue.TryDequeue(out var gameMsg))
                 {
                     MainServer.MainLogger.Debug($"[GameLogic-Update] id: {gameMsg.MsgId}. Index:{Index}");
 
@@ -57,7 +57,7 @@ namespace GameServer
                 }
 
                 MainServer.MainLogger.Debug($"[GameLogic-Update] Next Frame... Index:{Index}");
-                await Task.Delay(33);
+                await Task.Delay(16); // 16~30사이가 된다
             }
 
             MainServer.MainLogger.Debug($"[GameLogic-Update] End. Index:{Index}");
