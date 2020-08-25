@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace GameServer
 {
-    class GameUpdateManager
+    public class GameUpdateManager
     {
         ConcurrentQueue<GameUpdateIndexInfo> GameUpdateIndexPool = new ConcurrentQueue<GameUpdateIndexInfo>();
 
@@ -31,7 +31,9 @@ namespace GameServer
 
         public bool NewStartGame(GameLogic game)
         {
-            if(GameUpdateIndexPool.TryDequeue(out var index))
+            game.Start();
+
+            if (GameUpdateIndexPool.TryDequeue(out var index))
             {
                 GameUpdateList[index.UpdateIndex].NewGame(index.ElementIndex, game);
                 return true;

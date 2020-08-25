@@ -15,11 +15,14 @@ namespace GameServer
     {
         List<Room> RoomList = null;
         int StartRoomNumber;
-        
-        public void SetRooomList(List<Room> roomList)
+        GameUpdateManager GameUpdateMgrRef;
+
+        public void SetObject(List<Room> roomList, GameUpdateManager gameUpdateMgr)
         {
             RoomList = roomList;
             StartRoomNumber = roomList[0].Number;
+
+            GameUpdateMgrRef = gameUpdateMgr;
         }
 
         public void RegistPacketHandler(Dictionary<UInt16, Action<ServerPacketData>> packetHandlerMap)
@@ -264,7 +267,7 @@ namespace GameServer
             {
                 foreach(var room in RoomList)
                 {
-                    room.StartGame();
+                    GameUpdateMgrRef.NewStartGame(room.MoGameObj);
                 }                
             }
             catch (Exception ex)
@@ -281,10 +284,7 @@ namespace GameServer
 
             try
             {
-                foreach (var room in RoomList)
-                {
-                    room.EndGame();
-                }
+                GameUpdateMgrRef.AllStop();
             }
             catch (Exception ex)
             {

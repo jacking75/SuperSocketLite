@@ -9,7 +9,6 @@ namespace GameServer
     public class GameLogic
     {
         UInt32 Index = 0;
-        bool IsRunable = false;
         ConcurrentQueue<GameMessage> MsgQueue = new ConcurrentQueue<GameMessage>();
 
         UInt16 UpdateIntervalMilliSec = 0;
@@ -45,6 +44,8 @@ namespace GameServer
             {
                 return false;
             }
+
+            PrevUpdateTime = curTime;
 
             MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{Index}, [{curTime.Millisecond}]");
 

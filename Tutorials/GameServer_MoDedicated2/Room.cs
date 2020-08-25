@@ -19,7 +19,7 @@ namespace GameServer
 
         public static Func<string, byte[], bool> NetSendFunc;
 
-        GameLogic MoGameObj = new GameLogic();
+        public GameLogic MoGameObj {get; private set; } = new GameLogic();
 
 
         public void Init(int index, int number, int maxUserCount)
@@ -28,7 +28,8 @@ namespace GameServer
             Number = number;
             MaxUserCount = maxUserCount;
 
-            MoGameObj.Init((UInt32)index);
+            var interval = (UInt16)16;
+            MoGameObj.Init((UInt32)index, interval);
         }
 
         public bool AddUser(string userID, int netSessionIndex, string netSessionID)
@@ -125,15 +126,7 @@ namespace GameServer
             }
         }
 
-        public void StartGame()
-        {
-            MoGameObj.Start();
-        }
-
-        public void EndGame()
-        {
-            MoGameObj.End();
-        }
+        
     }
 
 

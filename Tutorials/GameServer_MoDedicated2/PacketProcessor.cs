@@ -21,6 +21,8 @@ namespace GameServer
 
         UserManager UserMgr = new UserManager();
 
+        GameUpdateManager GameUpdateMgr = new GameUpdateManager();
+
         Tuple<int,int> RoomNumberRange = new Tuple<int, int>(-1, -1);
         List<Room> RoomList = new List<Room>();
 
@@ -32,8 +34,11 @@ namespace GameServer
         //TODO MainServer를 인자로 주지말고, func을 인자로 넘겨주는 것이 좋다
         public void CreateAndStart(List<Room> roomList, MainServer mainServer)
         {
-            var maxUserCount = MainServer.ServerOption.RoomMaxCount * MainServer.ServerOption.RoomMaxUserCount;
+            var maxRoomCount = MainServer.ServerOption.RoomMaxCount;
+            var maxUserCount = maxRoomCount * MainServer.ServerOption.RoomMaxUserCount;
             UserMgr.Init(maxUserCount);
+
+            GameUpdateMgr.Init(4, (UInt16)(maxRoomCount/4));
 
             RoomList = roomList;
             var minRoomNum = RoomList[0].Number;
@@ -49,8 +54,12 @@ namespace GameServer
         
         public void Destory()
         {
+            GameUpdateMgr.AllStop();
+
             IsThreadRunning = false;
             MsgBuffer.Complete();
+
+            MainServer.MainLogger.Info("[PacketProcessor.Destory] End");
         }
               
         public void InsertPacket(ServerPacketData data)
@@ -65,7 +74,7 @@ namespace GameServer
             CommonPacketHandler.RegistPacketHandler(PacketHandlerMap);                
             
             RoomPacketHandler.Init(serverNetwork, UserMgr);
-            RoomPacketHandler.SetRooomList(RoomList);
+            RoomPacketHandler.SetObject(RoomList, GameUpdateMgr);
             RoomPacketHandler.RegistPacketHandler(PacketHandlerMap);
         }
 
