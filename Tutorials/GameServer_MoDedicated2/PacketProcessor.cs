@@ -21,7 +21,7 @@ namespace GameServer
 
         UserManager UserMgr = new UserManager();
 
-        GameUpdateManager GameUpdateMgr = new GameUpdateManager();
+        GameUpdaterManager GameUpdateMgr = new GameUpdaterManager();
 
         Tuple<int,int> RoomNumberRange = new Tuple<int, int>(-1, -1);
         List<Room> RoomList = new List<Room>();

@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace GameServer
 {
-    class GameUpdate
+    class GameUpdater
     {
         bool IsThreadRunning = false;
         Thread ProcessThread = null;

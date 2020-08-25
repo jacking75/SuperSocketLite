@@ -16,6 +16,8 @@
   <ItemGroup>
     <Compile Remove="ConnectSession.cs" />
     <Compile Remove="ConnectSessionManager.cs" />
+    <Compile Remove="GameUpdate.cs" />
+    <Compile Remove="GameUpdateManager.cs" />
     <Compile Remove="PacketDistribute.cs" />
   </ItemGroup>
 

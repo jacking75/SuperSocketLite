@@ -15,9 +15,9 @@ namespace GameServer
     {
         List<Room> RoomList = null;
         int StartRoomNumber;
-        GameUpdateManager GameUpdateMgrRef;
+        GameUpdaterManager GameUpdateMgrRef;
 
-        public void SetObject(List<Room> roomList, GameUpdateManager gameUpdateMgr)
+        public void SetObject(List<Room> roomList, GameUpdaterManager gameUpdateMgr)
         {
             RoomList = roomList;
             StartRoomNumber = roomList[0].Number;

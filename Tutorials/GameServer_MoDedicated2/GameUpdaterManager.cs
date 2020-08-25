@@ -6,11 +6,11 @@ using System.Threading;
 
 namespace GameServer
 {
-    public class GameUpdateManager
+    public class GameUpdaterManager
     {
         ConcurrentQueue<GameUpdateIndexInfo> UnUseUpdateSlotPool = new ConcurrentQueue<GameUpdateIndexInfo>();
 
-        List<GameUpdate> GameUpdaterList = new List<GameUpdate>();
+        List<GameUpdater> GameUpdaterList = new List<GameUpdater>();
 
         public void Init(int threadCount, UInt16 maxGameCountPerThread)
         {
