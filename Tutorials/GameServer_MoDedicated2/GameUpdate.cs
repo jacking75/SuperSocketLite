@@ -15,7 +15,7 @@ namespace GameServer
         UInt16 MaxGameCount = 0;
         GameLogic[] GameLogics = null;
 
-        ConcurrentQueue<InOutGameElement> InOutGameQueue = new ConcurrentQueue<InOutGameElement>();
+        ConcurrentQueue<InOutGameElement> NewGameQueue = new ConcurrentQueue<InOutGameElement>();
 
         public void Init(UInt16 maxGameCount)
         {
@@ -40,35 +40,32 @@ namespace GameServer
 
         public void NewGame(UInt16 index, GameLogic game)
         {
-            InOutGameQueue.Enqueue(new InOutGameElement { IsIn = true, Index = index, GameObj = game })  ;
+            NewGameQueue.Enqueue(new InOutGameElement { Index = index, GameObj = game })  ;
         }
 
         void Process()
         {
             while (IsThreadRunning)
             {
-                if(InOutGameQueue.TryDequeue(out var newGame))
+                if(NewGameQueue.TryDequeue(out var newGame))
                 {
-                    if (newGame.IsIn)
-                    {
-                        GameLogics[newGame.Index] = newGame.GameObj;
-                    }
-                    else
-                    {
-                        GameLogics[newGame.Index] = null;
-                    }
+                    GameLogics[newGame.Index] = newGame.GameObj;
                 }
 
-
-                foreach(var game in GameLogics)
+                for(var i = 0; i < MaxGameCount; ++ i)
                 {
-                    if(game == null)
+                    if (GameLogics[i] == null)
                     {
                         continue;
                     }
 
-                    game.Update();
-                }
+                    if(GameLogics[i].IsStop)
+                    {
+                        GameLogics[i] = null;
+                    }
+
+                    GameLogics[i].Update();
+                }                
 
                 Thread.Sleep(1);
             }
@@ -77,7 +74,6 @@ namespace GameServer
 
     class InOutGameElement
     {
-        public bool IsIn;
         public UInt16 Index;
         public GameLogic GameObj;
     }

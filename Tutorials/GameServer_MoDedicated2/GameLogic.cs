@@ -14,6 +14,9 @@ namespace GameServer
         UInt16 UpdateIntervalMilliSec = 0;
         DateTime PrevUpdateTime = DateTime.Now;
 
+        public bool IsStop { get; private set; } = false;
+
+
         public void Init(UInt32 index, UInt16 intervalMSec)
         {
             Index = index;
@@ -27,7 +30,13 @@ namespace GameServer
 
         public void Start()
         {
+            IsStop = false;
             PrevUpdateTime = DateTime.Now.AddMilliseconds(-UpdateIntervalMilliSec);
+        }
+
+        public void Stop()
+        {
+            IsStop = true;
         }
                 
         public void AddMessage(UInt16 msgId, byte[] msgData)

@@ -8,23 +8,23 @@ namespace GameServer
 {
     public class GameUpdateManager
     {
-        ConcurrentQueue<GameUpdateIndexInfo> GameUpdateIndexPool = new ConcurrentQueue<GameUpdateIndexInfo>();
+        ConcurrentQueue<GameUpdateIndexInfo> UnUseUpdateSlotPool = new ConcurrentQueue<GameUpdateIndexInfo>();
 
-        List<GameUpdate> GameUpdateList = new List<GameUpdate>();
+        List<GameUpdate> GameUpdaterList = new List<GameUpdate>();
 
         public void Init(int threadCount, UInt16 maxGameCountPerThread)
         {
             for (var i = 0; i < threadCount; ++i)
             {
-                GameUpdateList.Add(new GameUpdate());
-                GameUpdateList[i].Init(maxGameCountPerThread);
+                GameUpdaterList.Add(new GameUpdate());
+                GameUpdaterList[i].Init(maxGameCountPerThread);
             }
 
             for (int i = 0; i < maxGameCountPerThread; ++i)
             {
                 for (var j = 0; j < threadCount; ++j)
                 {
-                    GameUpdateIndexPool.Enqueue(new GameUpdateIndexInfo((UInt16)j, (UInt16)i));
+                    UnUseUpdateSlotPool.Enqueue(new GameUpdateIndexInfo((UInt16)j, (UInt16)i));
                 }
             }
         }
@@ -33,9 +33,9 @@ namespace GameServer
         {
             game.Start();
 
-            if (GameUpdateIndexPool.TryDequeue(out var index))
+            if (UnUseUpdateSlotPool.TryDequeue(out var index))
             {
-                GameUpdateList[index.UpdateIndex].NewGame(index.ElementIndex, game);
+                GameUpdaterList[index.UpdaterIndex].NewGame(index.ElementIndex, game);
                 return true;
             }
 
@@ -44,23 +44,23 @@ namespace GameServer
 
         public void AllStop()
         {
-            foreach(var gameUpdate in GameUpdateList)
+            foreach(var gameUpdate in GameUpdaterList)
             {
                 gameUpdate.Stop();
             }
         }
-       
+               
     }
 
     struct GameUpdateIndexInfo
     {
-        public GameUpdateIndexInfo(UInt16 updateIndex, UInt16 elementIndex)
+        public GameUpdateIndexInfo(UInt16 updaterIndex, UInt16 elementIndex)
         {
-            UpdateIndex = updateIndex;
+            UpdaterIndex = updaterIndex;
             ElementIndex = elementIndex;
         }
 
-        public UInt16 UpdateIndex;
+        public UInt16 UpdaterIndex;
         public UInt16 ElementIndex;
 
     }
