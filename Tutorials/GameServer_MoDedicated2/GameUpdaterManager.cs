@@ -8,7 +8,7 @@ namespace GameServer
 {
     public class GameUpdaterManager
     {
-        ConcurrentQueue<GameUpdateIndexInfo> UnUseUpdateSlotPool = new ConcurrentQueue<GameUpdateIndexInfo>();
+        ConcurrentQueue<UnUseUpdateSlot> UnUseUpdateSlotPool = new ConcurrentQueue<UnUseUpdateSlot>();
 
         List<GameUpdater> GameUpdaterList = new List<GameUpdater>();
 
@@ -16,7 +16,7 @@ namespace GameServer
         {
             for (var i = 0; i < threadCount; ++i)
             {
-                GameUpdaterList.Add(new GameUpdate());
+                GameUpdaterList.Add(new GameUpdater());
                 GameUpdaterList[i].Init(maxGameCountPerThread);
             }
 
@@ -24,7 +24,7 @@ namespace GameServer
             {
                 for (var j = 0; j < threadCount; ++j)
                 {
-                    UnUseUpdateSlotPool.Enqueue(new GameUpdateIndexInfo((UInt16)j, (UInt16)i));
+                    UnUseUpdateSlotPool.Enqueue(new UnUseUpdateSlot((UInt16)j, (UInt16)i));
                 }
             }
         }
@@ -52,9 +52,9 @@ namespace GameServer
                
     }
 
-    struct GameUpdateIndexInfo
+    struct UnUseUpdateSlot
     {
-        public GameUpdateIndexInfo(UInt16 updaterIndex, UInt16 elementIndex)
+        public UnUseUpdateSlot(UInt16 updaterIndex, UInt16 elementIndex)
         {
             UpdaterIndex = updaterIndex;
             ElementIndex = elementIndex;
