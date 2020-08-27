@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
+// asyn-await를 사용한 대량의 게임 업데이트 처리
+/*
+- 멀티스레드로 update가 호출 되고 있나? sleep 걸어보면 될듯. => 멀티 스레드로 동작
+- 일반적인 스레드풀 방식보다 CPU를 덜 사용. 50% 정도
+- 간격을 짧게 주면 맞지 않음.간격을 크게 주면 거의 맞음
+ - 16ms 하면 16~30 사이
+ - 200ms 하면 20~208 정도로 거의 맞음(1000개 실행)
+ - 100ms 하면 110~120 정도(1000개 실행)
+*/
 namespace GameServer
 {
     public class GameLogic
@@ -56,8 +65,10 @@ namespace GameServer
                     }
                 }
 
-                MainServer.MainLogger.Debug($"[GameLogic-Update] Next Frame... Index:{Index}");
-                await Task.Delay(16); // 16~30사이가 된다
+                //System.Threading.Thread.Sleep(3000);
+
+                //MainServer.MainLogger.Debug($"[GameLogic-Update] Next Frame... Index:{Index}");
+                await Task.Delay(100); // 
             }
 
             MainServer.MainLogger.Debug($"[GameLogic-Update] End. Index:{Index}");
