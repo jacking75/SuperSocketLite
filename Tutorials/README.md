@@ -3,6 +3,11 @@
 각 서버 프로젝트를 빌드하면 00_server_bins 디렉토리에 출력한다.  
     
   
+## 중요
+- 네트워크 이벤트 중 동일 세션이라도 `NewSessionConnected` 와 `NewRequestReceived` 다른 스레드에서 동시에 발생할 수 있다. 즉 클라이언트에서 접속하자말자 바로 패킷을 보내면 `NewSessionConnected`을 처리하는 중에 `NewRequestReceived`이 호출될 수 있다.
+  
+  
+  
 ## EchoServer
 - 가장 간단한 서버이다.
 - 클라이언트가 보낸 것을 그대로 클라이언트에게 보낸다.

@@ -11,6 +11,7 @@ using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketBase.Config;
+using System.Threading;
 
 namespace EchoServer
 {
@@ -88,7 +89,9 @@ namespace EchoServer
 
         void OnConnected(NetworkSession session)
         {
-            MainLogger.Info(string.Format("세션 번호 {0} 접속", session.SessionID));
+            MainLogger.Info($"세션 번호 {session.SessionID} 접속 start, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+            //Thread.Sleep(3000);
+            //MainLogger.Info($"세션 번호 {session.SessionID} 접속 end, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
         }
 
         void OnClosed(NetworkSession session, CloseReason reason)
