@@ -12,6 +12,7 @@ namespace EchoServerEx
 {
     public class EFBinaryRequestInfo : BinaryRequestInfo
     {
+		// 패킷 헤더용 변수
         public Int16 TotalSize { get; private set; }
         public Int16 PacketID { get; private set; }
         public SByte Value1 { get; private set; }
@@ -39,8 +40,8 @@ namespace EchoServerEx
             if (!BitConverter.IsLittleEndian)
                 Array.Reverse(header, offset, 2);
 
-            var nBodySize = BitConverter.ToInt16(header, offset);
-            return nBodySize - EFBinaryRequestInfo.HEADERE_SIZE;
+            var packetTotalSize = BitConverter.ToInt16(header, offset);
+            return packetTotalSize - EFBinaryRequestInfo.HEADERE_SIZE;
         }
 
         protected override EFBinaryRequestInfo ResolveRequestInfo(ArraySegment<byte> header, byte[] bodyBuffer, int offset, int length)
