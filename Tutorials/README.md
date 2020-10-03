@@ -18,6 +18,7 @@
   
   
 ## EchoServerEx
+- [유튜브 영상](https://youtu.be/ZgzMuHE43hU )
 - EchoServer를 좀 더 고도화 한 것이다.
 - 서버 옵션을 프로그램 실행 시 인자로 받는다.
 - NLog를 사용한다.
