@@ -42,6 +42,7 @@
   
   
 ## ChatServer
+- [유튜브 영상](https://youtu.be/eiwvQ8NV2h8 )
 - 채팅 서버
 - 패킷 처리는 1개의 스레드만으로 처리한다.
   
