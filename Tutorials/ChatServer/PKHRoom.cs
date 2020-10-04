@@ -238,7 +238,7 @@ namespace ChatServer
                 var Body = MessagePackSerializer.Serialize(notifyPacket);
                 var sendData = PacketToBytes.Make(PACKETID.NTF_ROOM_CHAT, Body);
 
-                roomObject.Item2.Broadcast(sessionID, sendData);
+                roomObject.Item2.Broadcast("", sendData);
 
                 MainServer.MainLogger.Debug("Room RequestChat - Success");
             }
