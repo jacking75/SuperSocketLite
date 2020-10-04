@@ -29,8 +29,8 @@ namespace ChatServer
 
         public void NotifyInDisConnectClient(ServerPacketData requestData)
         {
-            var sessionIndex = requestData.SessionIndex;
-            var user = UserMgr.GetUser(sessionIndex);
+            var sessionID = requestData.SessionID;
+            var user = UserMgr.GetUser(sessionID);
             
             if (user != null)
             {
@@ -46,12 +46,12 @@ namespace ChatServer
 
                     var packetBodyData = MessagePackSerializer.Serialize(packet);
                     var internalPacket = new ServerPacketData();
-                    internalPacket.Assign("", sessionIndex, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
+                    internalPacket.Assign(sessionID, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
 
                     ServerNetwork.Distribute(internalPacket);
                 }
 
-                UserMgr.RemoveUser(sessionIndex);
+                UserMgr.RemoveUser(sessionID);
             }
                         
             MainServer.MainLogger.Debug($"Current Connected Session Count: {ServerNetwork.SessionCount}");
@@ -61,19 +61,18 @@ namespace ChatServer
         public void RequestLogin(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;
-            var sessionIndex = packetData.SessionIndex;
             MainServer.MainLogger.Debug("로그인 요청 받음");
 
             try
             {
-                if(UserMgr.GetUser(sessionIndex) != null)
+                if(UserMgr.GetUser(sessionID) != null)
                 {
                     ResponseLoginToClient(ERROR_CODE.LOGIN_ALREADY_WORKING, packetData.SessionID);
                     return;
                 }
                                 
                 var reqData = MessagePackSerializer.Deserialize< PKTReqLogin>(packetData.BodyData);
-                var errorCode = UserMgr.AddUser(reqData.UserID, packetData.SessionID, packetData.SessionIndex);
+                var errorCode = UserMgr.AddUser(reqData.UserID, sessionID);
                 if (errorCode != ERROR_CODE.NONE)
                 {
                     ResponseLoginToClient(errorCode, packetData.SessionID);

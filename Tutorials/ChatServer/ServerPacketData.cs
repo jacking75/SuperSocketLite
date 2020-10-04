@@ -13,17 +13,14 @@ namespace ChatServer
     {
         public Int16 PacketSize;
         public string SessionID; 
-        public int SessionIndex;
         public Int16 PacketID;        
         public SByte Type;
         public byte[] BodyData;
                 
         
-        public void Assign(string sessionID, int sessionIndex, Int16 packetID, byte[] packetBodyData)
+        public void Assign(string sessionID, Int16 packetID, byte[] packetBodyData)
         {
-            SessionIndex = sessionIndex;
             SessionID = sessionID;
-
             PacketID = packetID;
             
             if (packetBodyData.Length > 0)
@@ -32,7 +29,7 @@ namespace ChatServer
             }
         }
                 
-        public static ServerPacketData MakeNTFInConnectOrDisConnectClientPacket(bool isConnect, string sessionID, int sessionIndex)
+        public static ServerPacketData MakeNTFInConnectOrDisConnectClientPacket(bool isConnect, string sessionID)
         {
             var packet = new ServerPacketData();
             
@@ -45,7 +42,6 @@ namespace ChatServer
                 packet.PacketID = (Int32)PACKETID.NTF_IN_DISCONNECT_CLIENT;
             }
 
-            packet.SessionIndex = sessionIndex;
             packet.SessionID = sessionID;
             return packet;
         }               

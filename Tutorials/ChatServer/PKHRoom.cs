@@ -43,9 +43,9 @@ namespace ChatServer
             return RoomList[index];
         }
                 
-        (bool, Room, RoomUser) CheckRoomAndRoomUser(int userNetSessionIndex)
+        (bool, Room, RoomUser) CheckRoomAndRoomUser(string userNetSessionID)
         {
-            var user = UserMgr.GetUser(userNetSessionIndex);
+            var user = UserMgr.GetUser(userNetSessionID);
             if (user == null)
             {
                 return (false, null, null);
@@ -59,7 +59,7 @@ namespace ChatServer
                 return (false, null, null);
             }
 
-            var roomUser = room.GetUser(userNetSessionIndex);
+            var roomUser = room.GetUserByNetSessionId(userNetSessionID);
 
             if (roomUser == null)
             {
@@ -74,12 +74,11 @@ namespace ChatServer
         public void RequestRoomEnter(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;
-            var sessionIndex = packetData.SessionIndex;
             MainServer.MainLogger.Debug("RequestRoomEnter");
 
             try
             {
-                var user = UserMgr.GetUser(sessionIndex);
+                var user = UserMgr.GetUser(sessionID);
 
                 if (user == null || user.IsConfirm(sessionID) == false)
                 {
@@ -103,7 +102,7 @@ namespace ChatServer
                     return;
                 }
 
-                if (room.AddUser(user.ID(), sessionIndex, sessionID) == false)
+                if (room.AddUser(user.ID(), sessionID) == false)
                 {
                     ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_FAIL_ADD_USER, sessionID);
                     return;
@@ -113,7 +112,7 @@ namespace ChatServer
                 user.EnteredRoom(reqData.RoomNumber);
 
                 room.NotifyPacketUserList(sessionID);
-                room.NofifyPacketNewUser(sessionIndex, user.ID());
+                room.NofifyPacketNewUser(sessionID, user.ID());
 
                 ResponseEnterRoomToClient(ERROR_CODE.NONE, sessionID);
 
@@ -141,18 +140,17 @@ namespace ChatServer
         public void RequestLeave(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;
-            var sessionIndex = packetData.SessionIndex;
             MainServer.MainLogger.Debug("로그인 요청 받음");
 
             try
             {
-                var user = UserMgr.GetUser(sessionIndex);
+                var user = UserMgr.GetUser(sessionID);
                 if(user == null)
                 {
                     return;
                 }
 
-                if(LeaveRoomUser(sessionIndex, user.RoomNumber) == false)
+                if(LeaveRoomUser(sessionID, user.RoomNumber) == false)
                 {
                     return;
                 }
@@ -169,9 +167,9 @@ namespace ChatServer
             }
         }
 
-        bool LeaveRoomUser(int sessionIndex, int roomNumber)
+        bool LeaveRoomUser(string sessionID, int roomNumber)
         {
-            MainServer.MainLogger.Debug($"LeaveRoomUser. SessionIndex:{sessionIndex}");
+            MainServer.MainLogger.Debug($"LeaveRoomUser. SessionID:{sessionID}");
 
             var room = GetRoom(roomNumber);
             if (room == null)
@@ -179,7 +177,7 @@ namespace ChatServer
                 return false;
             }
 
-            var roomUser = room.GetUser(sessionIndex);
+            var roomUser = room.GetUserByNetSessionId(sessionID);
             if (roomUser == null)
             {
                 return false;
@@ -207,22 +205,21 @@ namespace ChatServer
 
         public void NotifyLeaveInternal(ServerPacketData packetData)
         {
-            var sessionIndex = packetData.SessionIndex;
-            MainServer.MainLogger.Debug($"NotifyLeaveInternal. SessionIndex: {sessionIndex}");
+            var sessionID = packetData.SessionID;
+            MainServer.MainLogger.Debug($"NotifyLeaveInternal. SessionID: {sessionID}");
 
             var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfRoomLeave>(packetData.BodyData);            
-            LeaveRoomUser(sessionIndex, reqData.RoomNumber);
+            LeaveRoomUser(sessionID, reqData.RoomNumber);
         }
                 
         public void RequestChat(ServerPacketData packetData)
         {
             var sessionID = packetData.SessionID;
-            var sessionIndex = packetData.SessionIndex;
             MainServer.MainLogger.Debug("Room RequestChat");
 
             try
             {
-                var roomObject = CheckRoomAndRoomUser(sessionIndex);
+                var roomObject = CheckRoomAndRoomUser(sessionID);
 
                 if(roomObject.Item1 == false)
                 {
@@ -241,7 +238,7 @@ namespace ChatServer
                 var Body = MessagePackSerializer.Serialize(notifyPacket);
                 var sendData = PacketToBytes.Make(PACKETID.NTF_ROOM_CHAT, Body);
 
-                roomObject.Item2.Broadcast(-1, sendData);
+                roomObject.Item2.Broadcast(sessionID, sendData);
 
                 MainServer.MainLogger.Debug("Room RequestChat - Success");
             }

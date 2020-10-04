@@ -27,7 +27,7 @@ namespace ChatServer
             MaxUserCount = maxUserCount;
         }
 
-        public bool AddUser(string userID, int netSessionIndex, string netSessionID)
+        public bool AddUser(string userID, string netSessionID)
         {
             if(GetUser(userID) != null)
             {
@@ -35,15 +35,15 @@ namespace ChatServer
             }
 
             var roomUser = new RoomUser();
-            roomUser.Set(userID, netSessionIndex, netSessionID);
+            roomUser.Set(userID, netSessionID);
             UserList.Add(roomUser);
 
             return true;
         }
 
-        public void RemoveUser(int netSessionIndex)
+        public void RemoveUser(string netSessionID)
         {
-            var index = UserList.FindIndex(x => x.NetSessionIndex == netSessionIndex);
+            var index = UserList.FindIndex(x => x.NetSessionID == netSessionID);
             UserList.RemoveAt(index);
         }
 
@@ -57,9 +57,9 @@ namespace ChatServer
             return UserList.Find(x => x.UserID == userID);
         }
 
-        public RoomUser GetUser(int netSessionIndex)
+        public RoomUser GetUserByNetSessionId(string netSessionID)
         {
-            return UserList.Find(x => x.NetSessionIndex == netSessionIndex);
+            return UserList.Find(x => x.NetSessionID == netSessionID);
         }
 
         public int CurrentUserCount()
@@ -81,7 +81,7 @@ namespace ChatServer
             NetSendFunc(userNetSessionID, sendPacket);
         }
 
-        public void NofifyPacketNewUser(int newUserNetSessionIndex, string newUserID)
+        public void NofifyPacketNewUser(string newUserNetSessionID, string newUserID)
         {
             var packet = new PKTNtfRoomNewUser();
             packet.UserID = newUserID;
@@ -89,7 +89,7 @@ namespace ChatServer
             var bodyData = MessagePackSerializer.Serialize(packet);
             var sendPacket = PacketToBytes.Make(PACKETID.NTF_ROOM_NEW_USER, bodyData);
 
-            Broadcast(newUserNetSessionIndex, sendPacket);
+            Broadcast(newUserNetSessionID, sendPacket);
         }
 
         public void NotifyPacketLeaveUser(string userID)
@@ -105,14 +105,14 @@ namespace ChatServer
             var bodyData = MessagePackSerializer.Serialize(packet);
             var sendPacket = PacketToBytes.Make(PACKETID.NTF_ROOM_LEAVE_USER, bodyData);
 
-            Broadcast(-1, sendPacket);
+            Broadcast("", sendPacket);
         }
 
-        public void Broadcast(int excludeNetSessionIndex, byte[] sendPacket)
+        public void Broadcast(string excludeNetSessionID, byte[] sendPacket)
         {
             foreach(var user in UserList)
             {
-                if(user.NetSessionIndex == excludeNetSessionIndex)
+                if(user.NetSessionID == excludeNetSessionID)
                 {
                     continue;
                 }
@@ -126,13 +126,11 @@ namespace ChatServer
     public class RoomUser
     {
         public string UserID { get; private set; }
-        public int NetSessionIndex { get; private set; }
         public string NetSessionID { get; private set; }
 
-        public void Set(string userID, int netSessionIndex, string netSessionID)
+        public void Set(string userID, string netSessionID)
         {
             UserID = userID;
-            NetSessionIndex = netSessionIndex;
             NetSessionID = netSessionID;
         }
     }

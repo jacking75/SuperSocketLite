@@ -93,8 +93,6 @@ namespace ChatServer
 
         public ERROR_CODE CreateComponent()
         {
-            ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
-
             Room.NetSendFunc = this.SendData;
             RoomMgr.CreateRooms();
 
@@ -137,11 +135,9 @@ namespace ChatServer
         void OnConnected(ClientSession session)
         {
             //옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
-
-            session.AllocSessionIndex();
             MainLogger.Info(string.Format("세션 번호 {0} 접속", session.SessionID));
                         
-            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID, session.SessionIndex);            
+            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID);            
             Distribute(packet);
         }
 
@@ -149,11 +145,8 @@ namespace ChatServer
         {
             MainLogger.Info(string.Format("세션 번호 {0} 접속해제: {1}", session.SessionID, reason.ToString()));
 
-
-            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID, session.SessionIndex);
+            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID);
             Distribute(packet);
-
-            session.FreeSessionIndex(session.SessionIndex);
         }
 
         void OnPacketReceived(ClientSession session, EFBinaryRequestInfo reqInfo)
@@ -162,7 +155,6 @@ namespace ChatServer
 
             var packet = new ServerPacketData();
             packet.SessionID = session.SessionID;
-            packet.SessionIndex = session.SessionIndex;
             packet.PacketSize = reqInfo.Size;            
             packet.PacketID = reqInfo.PacketID;
             packet.Type = reqInfo.Type;
@@ -172,8 +164,11 @@ namespace ChatServer
         }
     }
 
-    class ConfigTemp
+    public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
     {
-        static public List<string> RemoteServers = new List<string>();
     }
-}
+        /*class ConfigTemp
+        {
+            static public List<string> RemoteServers = new List<string>();
+        }*/
+ }
