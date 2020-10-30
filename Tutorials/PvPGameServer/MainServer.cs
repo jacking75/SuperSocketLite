@@ -16,10 +16,8 @@ namespace PvPGameServer
 {
     public class MainServer : AppServer<NetworkSession, EFBinaryRequestInfo>, IHostedService
     {
-        public static SuperSocket.SocketBase.Logging.ILog MainLogger;
-
-        Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
-        
+        public static ILog MainLogger;
+                
         PacketProcessor MainPacketProcessor = new PacketProcessor();
         RoomManager RoomMgr = new RoomManager();
 
@@ -208,22 +206,7 @@ namespace PvPGameServer
             MainLogger.Debug(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId));
 
             reqInfo.SessionID = session.SessionID;       
-            Distribute(reqInfo);
-
-
-
-            //_logger.LogInformation($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
-
-            var PacketID = reqInfo.PacketID;
-            
-            if (HandlerMap.ContainsKey(PacketID))
-            {
-                HandlerMap[PacketID](session, reqInfo);
-            }
-            else
-            {
-                AppLogger.LogInformation($"세션 번호 {session.SessionID}, 받은 데이터 크기: {reqInfo.Body.Length}");
-            }
+            Distribute(reqInfo);         
         }
     }
 

@@ -13,24 +13,23 @@ namespace PvPGameServer
     //TODO msgpack 일체형으로 예제 코드 추가
     public class EFBinaryRequestInfo : BinaryRequestInfo
     {
-        public UInt16 TotalSize;
-
-        public UInt16 PacketID;
-        public Byte Type;
+        //public UInt16 TotalSize;
+        //public UInt16 PacketID;
+        //public Byte Type;
 
         public string SessionID;
-        public byte[] Data { get; private set; }
+        public byte[] Data;
 
         public const int PACKET_HEADER_MSGPACK_START_POS = 3;
         public const int HEADERE_SIZE = 5 + PACKET_HEADER_MSGPACK_START_POS;
                 
-        public EFBinaryRequestInfo(UInt16 totalSize, UInt16 packetID, Byte type, byte[] body)
+        /*public EFBinaryRequestInfo(UInt16 totalSize, UInt16 packetID, Byte type, byte[] body)
             : base(null, body)
         {
             this.TotalSize = totalSize;
             this.PacketID = packetID;
             this.Type = type;
-        }
+        }*/
         public EFBinaryRequestInfo(byte[] packetData)
             : base(null, packetData)
         {

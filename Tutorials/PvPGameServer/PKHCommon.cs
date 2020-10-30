@@ -82,7 +82,7 @@ namespace PvPGameServer
 
                 ResponseLoginToClient(errorCode, packetData.SessionID);
 
-                MainServer.MainLogger.Debug("로그인 요청 답변 보냄");
+                MainServer.MainLogger.Debug($"로그인 결과. UserID:{reqData.UserID}, {errorCode}");
 
             }
             catch(Exception ex)
@@ -99,9 +99,9 @@ namespace PvPGameServer
                 Result = (short)errorCode
             };
 
-            var bodyData = MessagePackSerializer.Serialize(resLogin);
-            var sendData = PacketToBytes.Make(PACKETID.RES_LOGIN, bodyData);
-
+            var sendData = MessagePackSerializer.Serialize(resLogin);
+            WriteHeaderInfo(PACKETID.RES_LOGIN, sendData);
+  
             NetSendFunc(sessionID, sendData);
         }
 

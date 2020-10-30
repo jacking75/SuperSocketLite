@@ -31,14 +31,15 @@ namespace PvPGameServer
         public static EFBinaryRequestInfo MakeNTFInConnectOrDisConnectClientPacket(bool isConnect, string sessionID)
         {
             var packet = new EFBinaryRequestInfo(null);
+            packet.Data = new byte[MsgPackPacketHeadInfo.HeadSize];
             
             if (isConnect)
             {
-                packet.PacketID = (Int32)PACKETID.NTF_IN_CONNECT_CLIENT;
+                MsgPackPacketHeadInfo.WritePacketId(packet.Data, (UInt16)PACKETID.NTF_IN_CONNECT_CLIENT);
             }
             else
             {
-                packet.PacketID = (Int32)PACKETID.NTF_IN_DISCONNECT_CLIENT;
+                MsgPackPacketHeadInfo.WritePacketId(packet.Data, (UInt16)PACKETID.NTF_IN_DISCONNECT_CLIENT);
             }
 
             packet.SessionID = sessionID;

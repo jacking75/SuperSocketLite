@@ -86,9 +86,12 @@ namespace PvPGameServer
                 {
                     var packet = MsgBuffer.Receive();
 
-                    if (PacketHandlerMap.ContainsKey(packet.PacketID))
+                    var header = new MsgPackPacketHeadInfo();
+                    header.Read(packet.Data);
+
+                    if (PacketHandlerMap.ContainsKey(header.Id))
                     {
-                        PacketHandlerMap[packet.PacketID](packet);
+                        PacketHandlerMap[header.Id](packet);
                     }
                     else
                     {

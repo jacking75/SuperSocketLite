@@ -19,5 +19,13 @@ namespace PvPGameServer
             UserMgr = userMgr;
         }            
                 
+        public void WriteHeaderInfo(PACKETID packetId, byte[] packetData)
+        {
+            var header = new MsgPackPacketHeadInfo();
+            header.TotalSize = (UInt16)packetData.Length;
+            header.Id = (UInt16)packetId;
+            header.Type = 0;
+            header.Write(packetData);
+        }
     }
 }
