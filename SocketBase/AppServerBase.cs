@@ -290,23 +290,7 @@ namespace SuperSocket.SocketBase
 
                 Config = plainConfig;
             }
-
-            try
-            {
-                m_ServerStatus = new StatusInfoCollection();
-                m_ServerStatus.Name = Name;
-                m_ServerStatus.Tag = Name;
-                m_ServerStatus[StatusInfoKeys.MaxConnectionNumber] = Config.MaxConnectionNumber;
-                m_ServerStatus[StatusInfoKeys.Listeners] = m_Listeners;
-            }
-            catch (Exception e)
-            {
-                if (Logger.IsErrorEnabled)
-                    Logger.Error("Failed to create ServerSummary instance!", e);
-
-                return false;
-            }
-
+            
             return SetupSocketServer();
         }
 
@@ -708,10 +692,7 @@ namespace SuperSocket.SocketBase
 
             StartedTime = DateTime.Now;
             m_StateCode = ServerStateConst.Running;
-
-            m_ServerStatus[StatusInfoKeys.IsRunning] = true;
-            m_ServerStatus[StatusInfoKeys.StartedTime] = StartedTime;
-
+                        
             try
             {
                 //Will be removed in the next version
@@ -778,10 +759,7 @@ namespace SuperSocket.SocketBase
             m_StateCode = ServerStateConst.NotStarted;
 
             OnStopped();
-
-            m_ServerStatus[StatusInfoKeys.IsRunning] = false;
-            m_ServerStatus[StatusInfoKeys.StartedTime] = null;
-
+                        
             if (Logger.IsInfoEnabled)
                 Logger.Info(string.Format("The server instance {0} has been stopped!", Name));
         }
@@ -1197,9 +1175,7 @@ namespace SuperSocket.SocketBase
         {
         }
 
-        
-        private StatusInfoCollection m_ServerStatus;
-               
+                       
         /// <summary>
         /// Updates the summary of the server.
         /// </summary>

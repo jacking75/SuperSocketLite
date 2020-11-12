@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Config\ConfigurationSource.cs" />
     <Compile Remove="NodeStatus.cs" />
   </ItemGroup>
   
