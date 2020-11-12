@@ -55,9 +55,15 @@ namespace SuperSocket.SocketEngine
                 client.SendBufferSize = m_SendBufferSize;
 
             if (!Platform.SupportSocketIOControlByCodeEnum)
+            {
                 client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, m_KeepAliveOptionValues);
+            }
             else
+            {
+#if WINDOWS
                 client.IOControl(IOControlCode.KeepAliveValues, m_KeepAliveOptionValues, m_KeepAliveOptionOutValues);
+#endif
+            }
 
             client.NoDelay = m_NoDelay;
             client.LingerState = new LingerOption(enable:false, seconds:0); // socket 종료하면 즉시 제거한다.

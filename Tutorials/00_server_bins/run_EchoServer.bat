@@ -1,1 +1,1 @@
-dotnet netcoreapp3.1\EchoServer.dll
+dotnet net5.0\EchoServer.dll

@@ -17,7 +17,9 @@ namespace SuperSocket.Common
             try
             {
                 var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+#if WINDOWS
                 socket.IOControl(IOControlCode.KeepAliveValues, null, null);
+#endif
                 SupportSocketIOControlByCodeEnum = true;
             }
             catch (NotSupportedException)

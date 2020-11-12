@@ -47,6 +47,7 @@ namespace SuperSocket.Common
             return result;
         }
 
+        //TODO 삭제 예정
         /// <summary>
         /// Gets the type by the full name, also return matched generic type without checking generic type parameters in the name.
         /// </summary>
@@ -54,7 +55,7 @@ namespace SuperSocket.Common
         /// <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
         /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
         /// <returns></returns>
-        public static Type GetType(string fullTypeName, bool throwOnError, bool ignoreCase)
+        /*public static Type GetType(string fullTypeName, bool throwOnError, bool ignoreCase)
         {
             var targetType = Type.GetType(fullTypeName, false, ignoreCase);
 
@@ -85,7 +86,7 @@ namespace SuperSocket.Common
 
                 return null;
             }
-        }
+        }*/
 
 
         /// <summary>
@@ -142,13 +143,14 @@ namespace SuperSocket.Common
             return result;
         }
 
+        //TODO 삭제 예정
         /// <summary>
         /// Clone object in binary format.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="target">The target.</param>
         /// <returns></returns>
-        public static T BinaryClone<T>(this T target)
+        /*public static T BinaryClone<T>(this T target)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream ms = new MemoryStream())
@@ -157,7 +159,7 @@ namespace SuperSocket.Common
                 ms.Position = 0;
                 return (T)formatter.Deserialize(ms);
             }
-        }
+        }*/
 
 
         /// <summary>

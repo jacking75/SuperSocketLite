@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SuperSocket.Common;
-
+//TODO 삭제 예정
+/*
 namespace SuperSocket.SocketBase.Provider
 {
     /// <summary>
@@ -102,3 +103,4 @@ namespace SuperSocket.SocketBase.Provider
         }
     }
 }
+*/

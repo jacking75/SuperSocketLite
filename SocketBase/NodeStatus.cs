@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//TODO 삭제 예정
 namespace SuperSocket.SocketBase
 {
     /// <summary>
@@ -30,11 +31,12 @@ namespace SuperSocket.SocketBase
         /// </value>
         public StatusInfoCollection[] InstancesStatus { get; set; }
 
+        //TODO 삭제 예정
         /// <summary>
         /// Saves the specified file path.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        public void Save(string filePath)
+        /*public void Save(string filePath)
         {
             var serializer = new BinaryFormatter();
 
@@ -44,14 +46,15 @@ namespace SuperSocket.SocketBase
                 stream.Flush();
                 stream.Close();
             }
-        }
+        }*/
 
+        //TODO 삭제 예정
         /// <summary>
         /// Loads a NodeStatus instance from a file.
         /// </summary>
         /// <param name="filePath">The file path.</param>
         /// <returns></returns>
-        public static NodeStatus LoadFrom(string filePath)
+        /*public static NodeStatus LoadFrom(string filePath)
         {
             var serializer = new BinaryFormatter();
 
@@ -61,6 +64,6 @@ namespace SuperSocket.SocketBase
                 stream.Close();
                 return status;
             }
-        }
+        }*/
     }
 }
