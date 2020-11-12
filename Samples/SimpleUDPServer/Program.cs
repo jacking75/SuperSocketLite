@@ -1,5 +1,4 @@
 ﻿using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Command;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
 using System;
@@ -85,16 +84,7 @@ namespace SimpleUDPServer
 
     }
 
-
-    public class SESS : CommandBase<UdpTestSession, MyUdpRequestInfo>
-    {
-        public override void ExecuteCommand(UdpTestSession session, MyUdpRequestInfo requestInfo)
-        {
-            session.Send(session.SessionID + " " + requestInfo.Value);
-        }
-    }
-
-
+        
 
     class MyUdpProtocol : IReceiveFilterFactory<MyUdpRequestInfo>
     {
