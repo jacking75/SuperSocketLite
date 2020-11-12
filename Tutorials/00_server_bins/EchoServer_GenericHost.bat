@@ -1,1 +1,1 @@
-dotnet netcoreapp3.1\EchoServer_GenericHost.dll
+dotnet net5.0\EchoServer_GenericHost.dll
