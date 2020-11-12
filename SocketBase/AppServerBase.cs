@@ -14,7 +14,6 @@ using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Metadata;
 using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Provider;
 using SuperSocket.SocketBase.Security;
 
 namespace SuperSocket.SocketBase
@@ -405,63 +404,7 @@ namespace SuperSocket.SocketBase
                           logFactory,
                           connectionFilters);
         }
-
-        //TODO 삭제 예정
-        /*private TProvider GetSingleProviderInstance<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key)
-        {
-            var factory = factories.FirstOrDefault(p => p.Key.Name == key.Name);
-
-            if (factory == null)
-                return default(TProvider);
-
-            return factory.ExportFactory.CreateExport<TProvider>();
-        }*/
-
-        //TODO 삭제 예정
-        /*private bool TryGetProviderInstances<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key, Func<Type, object> creator, Func<TProvider, ProviderFactoryInfo, bool> initializer, out IEnumerable<TProvider> providers)
-            where TProvider : class
-        {
-            IEnumerable<ProviderFactoryInfo> selectedFactories = factories.Where(p => p.Key.Name == key.Name);
-
-            if (!selectedFactories.Any())
-            {
-                providers = null;
-                return true;
-            }
-
-            providers = new List<TProvider>();
-
-            var list = (List<TProvider>)providers;
-
-            foreach (var f in selectedFactories)
-            {
-                var provider = creator == null ? f.ExportFactory.CreateExport<TProvider>() : f.ExportFactory.CreateExport<TProvider>(creator);
-
-                if (!initializer(provider, f))
-                    return false;
-
-                list.Add(provider);
-            }
-
-            return true;
-        }*/
-
-        //TODO 삭제 예정
-        /*private IEnumerable<TProvider> GetProviderInstances<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key)
-            where TProvider : class
-        {
-            return GetProviderInstances<TProvider>(factories, key, null);
-        }*/
-
-        //TODO 삭제 예정
-        /*private IEnumerable<TProvider> GetProviderInstances<TProvider>(ProviderFactoryInfo[] factories, ProviderKey key, Func<Type, object> creator)
-            where TProvider : class
-        {
-            IEnumerable<TProvider> providers;
-            TryGetProviderInstances<TProvider>(factories, key, creator, (p, f) => true, out providers);
-            return providers;
-        }*/
-
+               
         private bool SetupLogFactory(ILogFactory logFactory)
         {
             if (logFactory != null)

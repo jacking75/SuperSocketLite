@@ -47,46 +47,7 @@ namespace SuperSocket.Common
             return result;
         }
 
-        //TODO 삭제 예정
-        /// <summary>
-        /// Gets the type by the full name, also return matched generic type without checking generic type parameters in the name.
-        /// </summary>
-        /// <param name="fullTypeName">Full name of the type.</param>
-        /// <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
-        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-        /// <returns></returns>
-        /*public static Type GetType(string fullTypeName, bool throwOnError, bool ignoreCase)
-        {
-            var targetType = Type.GetType(fullTypeName, false, ignoreCase);
-
-            if (targetType != null)
-                return targetType;
-
-            var names = fullTypeName.Split(',');
-            var assemblyName = names[1].Trim();
-
-            try
-            {
-                var assembly = Assembly.Load(assemblyName);
-
-                var typeNamePrefix = names[0].Trim() + "`";
-
-                var matchedTypes = assembly.GetExportedTypes().Where(t => t.IsGenericType
-                        && t.FullName.StartsWith(typeNamePrefix, ignoreCase, CultureInfo.InvariantCulture)).ToArray();
-
-                if (matchedTypes.Length != 1)
-                    return null;
-
-                return matchedTypes[0];
-            }
-            catch (Exception e)
-            {
-                if (throwOnError)
-                    throw e;
-
-                return null;
-            }
-        }*/
+        
 
 
         /// <summary>
@@ -143,24 +104,7 @@ namespace SuperSocket.Common
             return result;
         }
 
-        //TODO 삭제 예정
-        /// <summary>
-        /// Clone object in binary format.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="target">The target.</param>
-        /// <returns></returns>
-        /*public static T BinaryClone<T>(this T target)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, target);
-                ms.Position = 0;
-                return (T)formatter.Deserialize(ms);
-            }
-        }*/
-
+      
 
         /// <summary>
         /// Copies the properties of one object to another object.
@@ -213,31 +157,6 @@ namespace SuperSocket.Common
             return target;
         }
 
-        /// <summary>
-        /// Gets the assemblies from string.
-        /// </summary>
-        /// <param name="assemblyDef">The assembly def.</param>
-        /// <returns></returns>
-        public static IEnumerable<Assembly> GetAssembliesFromString(string assemblyDef)
-        {
-            return GetAssembliesFromStrings(assemblyDef.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries));
-        }
-
-        /// <summary>
-        /// Gets the assemblies from strings.
-        /// </summary>
-        /// <param name="assemblies">The assemblies.</param>
-        /// <returns></returns>
-        public static IEnumerable<Assembly> GetAssembliesFromStrings(string[] assemblies)
-        {
-            List<Assembly> result = new List<Assembly>(assemblies.Length);
-
-            foreach (var a in assemblies)
-            {
-                result.Add(Assembly.Load(a));
-            }
-
-            return result;
-        }
+        
     }
 }
