@@ -2,9 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <PackageVersion>1.0.2</PackageVersion>
-    <Version>1.0.2</Version>
+    <PackageVersion>0.14</PackageVersion>
+    <Version>0.14</Version>	
+	<PackageId>SuperSocketLite</PackageId>
+	<Authors>jacking75</Authors>
+	<Company>com2us</Company>	
+    <Description>SuperSocket 1.16버전을 토대로 .NET Core로 포팅한 것. 불 필요한 기능은 제거</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageProjectUrl>https://github.com/jacking75/SuperSocketLite</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jacking75/SuperSocketLite</RepositoryUrl>
+    <PackageTags>SuperSocket;socket;GameServer</PackageTags>
   </PropertyGroup>
+  </references>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin</OutputPath>
