@@ -17,10 +17,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin</OutputPath>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
-    <ProjectReference Include="..\SocketBase\SuperSocket.SocketBase.csproj" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
