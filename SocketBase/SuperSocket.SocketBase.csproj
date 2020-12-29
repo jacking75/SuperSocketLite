@@ -20,8 +20,4 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Common\SuperSocket.Common.csproj" />
-  </ItemGroup>
-
 </Project>
