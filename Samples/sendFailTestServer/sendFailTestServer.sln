@@ -7,11 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sendFailTestServer", "sendF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperSocket", "SuperSocket", "{E3F091C0-35D4-408D-8247-9F5B71B89AFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Common", "..\..\Common\SuperSocket.Common.csproj", "{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketBase", "..\..\SocketBase\SuperSocket.SocketBase.csproj", "{6F2C5924-6082-4EDE-957C-5FD4D701C7AC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketEngine", "..\..\SocketEngine\SuperSocket.SocketEngine.csproj", "{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketLite", "..\..\SuperSocketLite\SuperSocketLite.csproj", "{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

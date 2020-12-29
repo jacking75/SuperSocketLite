@@ -7,14 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="NLog" Version="4.7.5" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="NLog" Version="4.7.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\SuperSocket.Common.csproj" />
-    <ProjectReference Include="..\..\SocketBase\SuperSocket.SocketBase.csproj" />
-    <ProjectReference Include="..\..\SocketEngine\SuperSocket.SocketEngine.csproj" />
+    <ProjectReference Include="..\..\SuperSocketLite\SuperSocketLite.csproj" />
   </ItemGroup>
 
   <ItemGroup>

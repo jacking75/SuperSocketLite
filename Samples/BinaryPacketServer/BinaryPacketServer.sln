@@ -5,11 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryPacketServer", "BinaryPacketServer.csproj", "{191FCBF6-F42D-401C-9173-F8E096775177}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Common", "..\..\Common\SuperSocket.Common.csproj", "{5140B103-0EB4-43CA-A908-5C1AB5206402}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketBase", "..\..\SocketBase\SuperSocket.SocketBase.csproj", "{EE696A53-35DA-44CB-BA76-1BA5E47DFE4D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketEngine", "..\..\SocketEngine\SuperSocket.SocketEngine.csproj", "{BA9C7AB0-21EE-4C15-8209-96C39EC2ED54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketLite", "..\..\SuperSocketLite\SuperSocketLite.csproj", "{E4D5012F-7BBF-4CBB-B6C8-DD0FFD78BB9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +17,10 @@ Global
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5140B103-0EB4-43CA-A908-5C1AB5206402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5140B103-0EB4-43CA-A908-5C1AB5206402}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5140B103-0EB4-43CA-A908-5C1AB5206402}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5140B103-0EB4-43CA-A908-5C1AB5206402}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE696A53-35DA-44CB-BA76-1BA5E47DFE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE696A53-35DA-44CB-BA76-1BA5E47DFE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE696A53-35DA-44CB-BA76-1BA5E47DFE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE696A53-35DA-44CB-BA76-1BA5E47DFE4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA9C7AB0-21EE-4C15-8209-96C39EC2ED54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA9C7AB0-21EE-4C15-8209-96C39EC2ED54}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA9C7AB0-21EE-4C15-8209-96C39EC2ED54}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA9C7AB0-21EE-4C15-8209-96C39EC2ED54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4D5012F-7BBF-4CBB-B6C8-DD0FFD78BB9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4D5012F-7BBF-4CBB-B6C8-DD0FFD78BB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4D5012F-7BBF-4CBB-B6C8-DD0FFD78BB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4D5012F-7BBF-4CBB-B6C8-DD0FFD78BB9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
