@@ -18,7 +18,6 @@
     <PackageReference Include="MessagePack" Version="2.2.60" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
     <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
   </ItemGroup>
 
@@ -27,15 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SuperSocket.Common">
-      <HintPath>..\00_superSocketLite_libs\net5.0\SuperSocket.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketBase">
-      <HintPath>..\00_superSocketLite_libs\net5.0\SuperSocket.SocketBase.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketEngine">
-      <HintPath>..\00_superSocketLite_libs\net5.0\SuperSocket.SocketEngine.dll</HintPath>
-    </Reference>
+    <Reference Include="SuperSocketLite">
+      <HintPath>..\00_superSocketLite_libs\net5.0\SuperSocketLite.dll</HintPath>
+    </Reference>    
   </ItemGroup>
 
   <ItemGroup>

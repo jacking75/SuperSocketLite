@@ -7,11 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EchoServer", "EchoServer.cs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperSocket", "SuperSocket", "{6AEC95C6-4EA4-46B7-AB13-8EC7E450D553}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketBase", "..\..\SocketBase\SuperSocket.SocketBase.csproj", "{8D9067B6-F697-455F-8AC4-B4AB90B21E3C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.SocketEngine", "..\..\SocketEngine\SuperSocket.SocketEngine.csproj", "{B022F01F-F00C-4D7C-985B-E11590BE0735}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocket.Common", "..\..\Common\SuperSocket.Common.csproj", "{BFABCD5D-8A59-4EEA-B8BC-BFC9988C5FD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketLite", "..\..\SuperSocketLite\SuperSocketLite.csproj", "{B022F01F-F00C-4D7C-985B-E11590BE0735}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
