@@ -2,6 +2,12 @@
 SuperSocket 1.6 버전의 .NET Core 포팅
   
   
+## 2020.12 
+SuperSocket 프로젝트가 이전에는 Common, SocketBase, SocketEngine 3개로 나누어져 이었음.  
+이것을 SuperSocketLite 프로젝트 하나로 통합.    
+0.15 버전.
+   
+    
 ## 2020.05 
 리팩토링을 해서 마스터 브랜치의 코드에 문제가 있을 수도 있습니다.  
 크게 구조를 바꾼 것은 아니라서 테스트를 많이 해 보지 않았습니다. 조만간에 테스트 계획은 있습니다.  

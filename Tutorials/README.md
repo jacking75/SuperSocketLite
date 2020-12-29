@@ -29,8 +29,7 @@
 - Nuget 추가 
     - CommandLineParser
 	- NLog.Extensions.Logging
-	- System.Configuration.ConfigurationManager
-  
+    
 빌드 후 run_EchoServerEx.bat 배치 파일로 실행한다. 
   
   
