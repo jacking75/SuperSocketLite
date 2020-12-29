@@ -13,8 +13,7 @@
     <RepositoryUrl>https://github.com/jacking75/SuperSocketLite</RepositoryUrl>
     <PackageTags>SuperSocket;socket;GameServer</PackageTags>
   </PropertyGroup>
-  </references>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin</OutputPath>
   </PropertyGroup>
