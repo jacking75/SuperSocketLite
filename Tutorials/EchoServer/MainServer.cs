@@ -24,6 +24,8 @@ namespace EchoServer
 
         IServerConfig m_Config;
 
+        Thread CounterTh;
+
 
         public MainServer()
             : base(new DefaultReceiveFilterFactory<ReceiveFilter, EFBinaryRequestInfo>())
@@ -69,11 +71,26 @@ namespace EchoServer
 
                 RegistHandler();
 
+                CounterTh = new Thread(EchoCounter);
+                CounterTh.Start();
+
                 MainLogger.Info("서버 생성 성공");
             }
             catch(Exception ex)
             {
                 MainLogger.Error($"서버 생성 실패: {ex.ToString()}");
+            }
+        }
+
+        Int64 Count = 0;
+        void EchoCounter()
+        {
+            while(true)
+            {
+                Thread.Sleep(1000);
+
+                var value = Interlocked.Exchange(ref Count, 0);
+                Console.WriteLine($"{DateTime.Now} : {value}");
             }
         }
 
@@ -103,6 +120,8 @@ namespace EchoServer
         void RequestReceived(NetworkSession session, EFBinaryRequestInfo reqInfo)
         {
             //MainLogger.Debug($"세션 번호 {session.SessionID},  받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+
+            Interlocked.Increment(ref Count);
 
             session.Send(reqInfo.Body);
             /*var PacketID = reqInfo.PacketID;
