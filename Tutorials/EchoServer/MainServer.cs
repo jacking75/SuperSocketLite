@@ -89,21 +89,23 @@ namespace EchoServer
 
         void OnConnected(NetworkSession session)
         {
-            MainLogger.Info($"세션 번호 {session.SessionID} 접속 start, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+            //MainLogger.Info($"세션 번호 {session.SessionID} 접속 start, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+
             //Thread.Sleep(3000);
             //MainLogger.Info($"세션 번호 {session.SessionID} 접속 end, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
         }
 
         void OnClosed(NetworkSession session, CloseReason reason)
         {
-            MainLogger.Info($"세션 번호 {session.SessionID},  접속해제: {reason.ToString()}");
+            //MainLogger.Info($"세션 번호 {session.SessionID},  접속해제: {reason.ToString()}");
         }
 
         void RequestReceived(NetworkSession session, EFBinaryRequestInfo reqInfo)
         {
-            MainLogger.Debug($"세션 번호 {session.SessionID},  받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
-            
-            var PacketID = reqInfo.PacketID;
+            //MainLogger.Debug($"세션 번호 {session.SessionID},  받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+
+            session.Send(reqInfo.Body);
+            /*var PacketID = reqInfo.PacketID;
             
             if (HandlerMap.ContainsKey(PacketID))
             {
@@ -112,7 +114,7 @@ namespace EchoServer
             else
             {
                 MainLogger.Info($"세션 번호 {session.SessionID} 받은 데이터 크기: {reqInfo.Body.Length}");
-            }
+            }*/
         }
     }
 
