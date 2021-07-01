@@ -43,4 +43,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="F:\Github\00_SuperSocketLite\Tutorials\ChatServer\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="F:\Github\00_SuperSocketLite\Tutorials\ChatServer\.editorconfig" />
+  </ItemGroup>
+
 </Project>

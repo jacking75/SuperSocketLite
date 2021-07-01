@@ -52,7 +52,7 @@ namespace ChatServer
                 SendBufferSize = option.SendBufferSize
             };
         }
-
+        
         public void CreateStartServer()
         {
             try
@@ -63,8 +63,8 @@ namespace ChatServer
                 {
                     Console.WriteLine("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
                     return;
-                }
-                else
+                } 
+                else 
                 {
                     MainLogger = base.Logger;
                     MainLogger.Info("서버 초기화 성공");
