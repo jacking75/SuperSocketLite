@@ -1,14 +1,9 @@
 # SuperSocketLite
-SuperSocket 1.6 버전의 .NET Core 포팅
-  
-  
-## 2020.12 
-SuperSocket 프로젝트가 이전에는 Common, SocketBase, SocketEngine 3개로 나누어져 이었음.  
-이것을 SuperSocketLite 프로젝트 하나로 통합.    
-0.15 버전.
-   
-    
-## 2020.05 
-리팩토링을 해서 마스터 브랜치의 코드에 문제가 있을 수도 있습니다.  
-크게 구조를 바꾼 것은 아니라서 테스트를 많이 해 보지 않았습니다. 조만간에 테스트 계획은 있습니다.  
-안정된 버전을 원한다면 [releases](https://github.com/jacking75/SuperSocketLite/releases )에서 0.12 버전을 받아서 사용하는 것을 추천합니다.  
+- SuperSocket 1.6 버전의 .NET Core 포팅
+- .NET 5 지원  
+      
+	  
+# 사용 사례
+SuperSocket은 .NET 플랫폼에서 인기 있는 오픈 소스 네트워크 라이브러리이지만, SuperSocket을 수정한 SuperSocketLite는 실 사용 사례가 많지는 않습니다.  
+현재 SuperSocketLite를 사용한 게임은 제가 아는한은 제가 근무 중인 게임 회사에서 몇개의 모바일 게임에 사용되고 있습니다. 
+혹시 SuperSocketLite을 사용하고 있다면 [여기](https://github.com/jacking75/SuperSocketLite/discussions/19)에 언제라도 알려주시기 부탁합니다^^  
