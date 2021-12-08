@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Compile Remove="DevLog.cs" />
+    <Compile Remove="PacketHandlers.cs" />
   </ItemGroup>
 
   <ItemGroup>

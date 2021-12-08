@@ -19,8 +19,8 @@ namespace EchoServer
     {
         public static SuperSocket.SocketBase.Logging.ILog MainLogger;
 
-        Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
-        CommonHandler CommonHan = new CommonHandler();
+        //Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
+        //CommonHandler CommonHan = new CommonHandler();
 
         IServerConfig m_Config;
 
@@ -38,7 +38,7 @@ namespace EchoServer
 
         void RegistHandler()
         {
-            HandlerMap.Add((int)PACKETID.REQ_ECHO, CommonHan.RequestEcho);
+            //HandlerMap.Add((int)PACKETID.REQ_ECHO, CommonHan.RequestEcho);
 
             MainLogger.Info("핸들러 등록 완료");
         }
@@ -74,7 +74,7 @@ namespace EchoServer
                 CounterTh = new Thread(EchoCounter);
                 CounterTh.Start();
 
-                MainLogger.Info("서버 생성 성공");
+                MainLogger.Info($"[{DateTime.Now}] 서버 생성 성공");
             }
             catch(Exception ex)
             {
@@ -90,7 +90,7 @@ namespace EchoServer
                 Thread.Sleep(1000);
 
                 var value = Interlocked.Exchange(ref Count, 0);
-                Console.WriteLine($"{DateTime.Now} : {value}");
+                //Console.WriteLine($"{DateTime.Now} : {value}");
             }
         }
 
@@ -106,7 +106,7 @@ namespace EchoServer
 
         void OnConnected(NetworkSession session)
         {
-            //MainLogger.Info($"세션 번호 {session.SessionID} 접속 start, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+            MainLogger.Debug($"[{DateTime.Now}] 세션 번호 {session.SessionID} 접속 start, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
 
             //Thread.Sleep(3000);
             //MainLogger.Info($"세션 번호 {session.SessionID} 접속 end, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
@@ -114,26 +114,25 @@ namespace EchoServer
 
         void OnClosed(NetworkSession session, CloseReason reason)
         {
-            //MainLogger.Info($"세션 번호 {session.SessionID},  접속해제: {reason.ToString()}");
+            MainLogger.Info($"[{DateTime.Now}] 세션 번호 {session.SessionID},  접속해제: {reason.ToString()}");
         }
 
         void RequestReceived(NetworkSession session, EFBinaryRequestInfo reqInfo)
         {
-            //MainLogger.Debug($"세션 번호 {session.SessionID},  받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+            MainLogger.Debug($"[{DateTime.Now}] 세션 번호 {session.SessionID},  받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
 
             Interlocked.Increment(ref Count);
-
-            session.Send(reqInfo.Body);
-            /*var PacketID = reqInfo.PacketID;
+              
             
-            if (HandlerMap.ContainsKey(PacketID))
-            {
-                HandlerMap[PacketID](session, reqInfo);
-            }
-            else
-            {
-                MainLogger.Info($"세션 번호 {session.SessionID} 받은 데이터 크기: {reqInfo.Body.Length}");
-            }*/
+            var totalSize = (Int16)(reqInfo.Body.Length + EFBinaryRequestInfo.HEADERE_SIZE);
+
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(BitConverter.GetBytes(totalSize));
+            dataSource.AddRange(BitConverter.GetBytes((Int16)reqInfo.PacketID));
+            dataSource.AddRange(new byte[1]);
+            dataSource.AddRange(reqInfo.Body);
+
+            session.Send(dataSource.ToArray(), 0, dataSource.Count);
         }
     }
 
