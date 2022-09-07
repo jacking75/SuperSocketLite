@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <PackageVersion>0.15</PackageVersion>
-    <Version>0.15</Version>	
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageVersion>0.16</PackageVersion>
+    <Version>0.16</Version>	
 	<PackageId>SuperSocketLite</PackageId>
 	<Authors>jacking75</Authors>
 	<Company>com2us</Company>	
@@ -12,6 +12,11 @@
 	<PackageProjectUrl>https://github.com/jacking75/SuperSocketLite</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jacking75/SuperSocketLite</RepositoryUrl>
     <PackageTags>SuperSocket;socket;GameServer</PackageTags>
+	
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,5 +31,8 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
 </Project>
