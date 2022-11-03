@@ -238,7 +238,7 @@ namespace SuperSocket.SocketBase
         /// <param name="e">The exception.</param>
         protected virtual void HandleException(Exception e)
         {
-            Logger.Error(this, e);
+            Logger.Error(this.ToString(), e);
             this.Close(CloseReason.ApplicationError);
         }
 

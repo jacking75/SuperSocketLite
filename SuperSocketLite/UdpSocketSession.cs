@@ -81,7 +81,7 @@ namespace SuperSocket.SocketEngine
                 var log = AppSession.Logger;
 
                 if (log.IsErrorEnabled)
-                    log.Error(new SocketException((int)e.SocketError));
+                    log.Error(new SocketException((int)e.SocketError).ToString());
 
                 CleanSocketAsyncEventArgs(e);
                 OnSendError(queue, CloseReason.SocketError);

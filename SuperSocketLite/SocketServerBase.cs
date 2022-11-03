@@ -81,14 +81,14 @@ namespace SuperSocket.SocketEngine
 
                     if (log.IsDebugEnabled)
                     {
-                        log.DebugFormat("Listener ({0}) was started", listener.EndPoint);
+                        log.Debug($"Listener ({listener.EndPoint}) was started");
                     }
                 }
                 else //If one listener failed to start, stop started listeners
                 {
                     if (log.IsDebugEnabled)
                     {
-                        log.DebugFormat("Listener ({0}) failed to start", listener.EndPoint);
+                        log.Debug($"Listener ({listener.EndPoint}) failed to start");
                     }
 
                     for (var j = 0; j < Listeners.Count; j++)
@@ -124,7 +124,7 @@ namespace SuperSocket.SocketEngine
             ILog log = AppServer.Logger;
 
             if (log.IsDebugEnabled)
-                log.DebugFormat("Listener ({0}) was stoppped", listener.EndPoint);
+                log.Debug($"Listener ({listener.EndPoint}) was stoppped");
         }
 
         protected abstract ISocketListener CreateListener(ListenerInfo listenerInfo);

@@ -94,7 +94,7 @@ namespace SuperSocket.SocketEngine
             if (count != e.BytesTransferred)
             {
                 queue.InternalTrim(e.BytesTransferred);
-                AppSession.Logger.InfoFormat("{0} of {1} were transferred, send the rest {2} bytes right now.", e.BytesTransferred, count, queue.Sum(q => q.Count));
+                AppSession.Logger.Info($"{e.BytesTransferred} of {count} were transferred, send the rest {queue.Sum(q => q.Count)} bytes right now.");
                 ClearPrevSendState(e);
                 SendAsync(queue);
                 return;

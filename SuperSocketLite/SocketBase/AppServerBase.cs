@@ -429,7 +429,7 @@ namespace SuperSocket.SocketBase
                 if (!config.Security.TryParseEnum<SslProtocols>(true, out configProtocol))
                 {
                     if (Logger.IsErrorEnabled)
-                        Logger.ErrorFormat("Failed to parse '{0}' to SslProtocol!", config.Security);
+                        Logger.Error($"Failed to parse '{config.Security}' to SslProtocol!");
 
                     return false;
                 }
@@ -527,7 +527,7 @@ namespace SuperSocket.SocketBase
             catch (Exception e)
             {
                 if (Logger.IsErrorEnabled)
-                    Logger.Error(e);
+                    Logger.Error(e.ToString());
 
                 return false;
             }
@@ -599,7 +599,7 @@ namespace SuperSocket.SocketBase
                         else if (!l.Security.TryParseEnum<SslProtocols>(true, out configProtocol))
                         {
                             if (Logger.IsErrorEnabled)
-                                Logger.ErrorFormat("Failed to parse '{0}' to SslProtocol!", config.Security);
+                                Logger.Error($"Failed to parse '{config.Security}' to SslProtocol!");
 
                             return false;
                         }
@@ -635,7 +635,7 @@ namespace SuperSocket.SocketBase
             catch (Exception e)
             {
                 if (Logger.IsErrorEnabled)
-                    Logger.Error(e);
+                    Logger.Error(e.ToString());
 
                 return false;
             }
@@ -678,7 +678,7 @@ namespace SuperSocket.SocketBase
                     throw new Exception("You cannot start a server instance which has not been setup yet.");
 
                 if (Logger.IsErrorEnabled)
-                    Logger.ErrorFormat("This server instance is in the state {0}, you cannot start it now.", (ServerState)origStateCode);
+                    Logger.Error($"This server instance is in the state {(ServerState)origStateCode}, you cannot start it now.");
 
                 return false;
             }
@@ -887,7 +887,7 @@ namespace SuperSocket.SocketBase
                 if (!currentFilter.AllowConnect(remoteAddress))
                 {
                     if (Logger.IsInfoEnabled)
-                        Logger.InfoFormat("A connection from {0} has been refused by filter {1}!", remoteAddress, currentFilter.Name);
+                        Logger.Info($"A connection from {remoteAddress} has been refused by filter {currentFilter.Name}!");
                     return false;
                 }
             }
@@ -995,7 +995,7 @@ namespace SuperSocket.SocketBase
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Error(e.ToString());
             }
         }
 
@@ -1069,7 +1069,7 @@ namespace SuperSocket.SocketBase
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Error(e.ToString());
             }
         }
 
@@ -1230,7 +1230,7 @@ namespace SuperSocket.SocketBase
             //default culture has been set for this server instance
             if (!string.IsNullOrEmpty(defaultCulture))
             {
-                Logger.WarnFormat("The default culture '{0}' cannot be set, because you cannot set default culture for one server instance if the Isolation is None!");
+                Logger.Warn($"The default culture cannot be set, because you cannot set default culture for one server instance if the Isolation is None!");
                 return;
             }
             else if (!string.IsNullOrEmpty(rootConfig.DefaultCulture))

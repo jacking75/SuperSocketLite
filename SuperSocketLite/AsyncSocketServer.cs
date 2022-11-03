@@ -73,7 +73,7 @@ namespace SuperSocket.SocketEngine
             }
             catch (Exception e)
             {
-                AppServer.Logger.Error(e);
+                AppServer.Logger.Error(e.ToString());
                 return false;
             }
         }
@@ -95,7 +95,7 @@ namespace SuperSocket.SocketEngine
             {
                 AppServer.AsyncRun(client.SafeClose);
                 if (AppServer.Logger.IsErrorEnabled)
-                    AppServer.Logger.ErrorFormat("Max connection number {0} was reached!", AppServer.Config.MaxConnectionNumber);
+                    AppServer.Logger.Error($"Max connection number {AppServer.Config.MaxConnectionNumber} was reached!");
 
                 return null;
             }

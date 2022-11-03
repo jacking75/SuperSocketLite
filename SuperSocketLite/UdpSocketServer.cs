@@ -199,8 +199,7 @@ namespace SuperSocket.SocketEngine
             if (m_ConnectionCount >= AppServer.Config.MaxConnectionNumber)
             {
                 if (AppServer.Logger.IsErrorEnabled)
-                    AppServer.Logger.ErrorFormat("Cannot accept a new UDP connection from {0}, the max connection number {1} has been exceed!",
-                        remoteEndPoint.ToString(), AppServer.Config.MaxConnectionNumber);
+                    AppServer.Logger.Error($"Cannot accept a new UDP connection from {remoteEndPoint.ToString()}, the max connection number {AppServer.Config.MaxConnectionNumber} has been exceed!");
 
                 return false;
             }

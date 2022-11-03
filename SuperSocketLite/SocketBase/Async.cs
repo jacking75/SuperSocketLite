@@ -67,7 +67,7 @@ namespace SuperSocket.SocketBase
                         {
                             for (var i = 0; i < t.Exception.InnerExceptions.Count; i++)
                             {
-                                logProvider.Logger.Error(t.Exception.InnerExceptions[i]);
+                                logProvider.Logger.Error(t.Exception.InnerExceptions[i].ToString());
                             }
                         }
                     }
@@ -133,7 +133,7 @@ namespace SuperSocket.SocketBase
                     {
                         for (var i = 0; i < t.Exception.InnerExceptions.Count; i++)
                         {
-                            logProvider.Logger.Error(t.Exception.InnerExceptions[i]);
+                            logProvider.Logger.Error(t.Exception.InnerExceptions[i].ToString());
                         }
                     }
                 }
