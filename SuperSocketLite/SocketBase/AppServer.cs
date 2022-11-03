@@ -81,6 +81,8 @@ namespace SuperSocket.SocketBase
         where TRequestInfo : class, IRequestInfo
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
     {
+        string m_SessionInfoTemplate = "Session: {0}/{1}";
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="AppServer&lt;TAppSession, TRequestInfo&gt;"/> class.
         /// </summary>
@@ -142,8 +144,12 @@ namespace SuperSocket.SocketBase
                 return true;
 
             if (Logger.IsErrorEnabled)
-                Logger.Error(appSession, "The session is refused because the it's ID already exists!");
-
+            {
+                //Logger.Error(appSession, "The session is refused because the it's ID already exists!");
+                var message = "The session is refused because the it's ID already exists!";
+                Logger.Error(string.Format(m_SessionInfoTemplate, appSession.SessionID, appSession.RemoteEndPoint) + Environment.NewLine + message);
+            }
+            
             return false;
         }
 
@@ -188,7 +194,11 @@ namespace SuperSocket.SocketBase
                 if (!m_SessionDict.TryRemove(sessionID, out removedSession))
                 {
                     if (Logger.IsErrorEnabled)
-                        Logger.Error(session, "Failed to remove this session, Because it has't been in session container!");
+                    {
+                        //Logger.Error(session, "Failed to remove this session, Because it has't been in session container!");
+                        var message = "Failed to remove this session, Because it has't been in session container!"; 
+                        Logger.Error(string.Format(m_SessionInfoTemplate, session.SessionID, session.RemoteEndPoint) + Environment.NewLine + message);
+                    }
                 }
             }
 
@@ -297,8 +307,14 @@ namespace SuperSocket.SocketBase
                     System.Threading.Tasks.Parallel.ForEach(timeOutSessions, s =>
                         {
                             if (Logger.IsInfoEnabled)
-                                Logger.Info(s, string.Format("The session will be closed for {0} timeout, the session start time: {1}, last active time: {2}!", now.Subtract(s.LastActiveTime).TotalSeconds, s.StartTime, s.LastActiveTime));
-                            s.Close(CloseReason.TimeOut);
+                            {
+                                //Logger.Info(s, string.Format("The session will be closed for {0} timeout, the session start time: {1}, last active time: {2}!", now.Subtract(s.LastActiveTime).TotalSeconds, s.StartTime, s.LastActiveTime));
+                                var message = string.Format("The session will be closed for {0} timeout, the session start time: {1}, last active time: {2}!", now.Subtract(s.LastActiveTime).TotalSeconds, s.StartTime, s.LastActiveTime);
+                                string info = string.Format(m_SessionInfoTemplate, s.SessionID, s.RemoteEndPoint) + Environment.NewLine + message;
+                                Logger.Info(info);
+
+                                s.Close(CloseReason.TimeOut);                                
+                            }
                         });
                 }
                 catch (Exception e)

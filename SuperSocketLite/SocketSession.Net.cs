@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using SuperSocket.SocketBase;
+using static System.Collections.Specialized.BitVector32;
 
 
 namespace SuperSocket.SocketEngine
@@ -15,6 +16,8 @@ namespace SuperSocket.SocketEngine
         private const string m_GeneralSocketErrorMessage = "Unexpected socket error: {0}";
         private const string m_CallerInformation = "Caller: {0}, file path: {1}, line number: {2}";
 
+        string m_SessionInfoTemplate = "Session: {0}/{1}";
+        
         /// <summary>
         /// Logs the error, skip the ignored exception
         /// </summary>
@@ -32,9 +35,11 @@ namespace SuperSocket.SocketEngine
 
             var message = socketErrorCode > 0 ? string.Format(m_GeneralSocketErrorMessage, socketErrorCode) : m_GeneralErrorMessage;
 
-            AppSession.Logger.Error(this
+            /*AppSession.Logger.Error(this
                 , message + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber)
-                , exception);
+                , exception);*/
+            var title = message + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber);
+            AppSession.Logger.Error(string.Format(m_SessionInfoTemplate, SessionID, RemoteEndPoint) + Environment.NewLine + title, exception);            
         }
 
         /// <summary>
@@ -53,9 +58,11 @@ namespace SuperSocket.SocketEngine
             if (IsIgnorableException(exception, out socketErrorCode))
                 return;
 
-            AppSession.Logger.Error(this
+            /*AppSession.Logger.Error(this
                 , message + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber)
-                , exception);
+                , exception);*/
+            var title = message + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber);
+            AppSession.Logger.Error(string.Format(m_SessionInfoTemplate, SessionID, RemoteEndPoint) + Environment.NewLine + title, exception);
         }
 
         /// <summary>
@@ -74,9 +81,11 @@ namespace SuperSocket.SocketEngine
                     return;
             }
 
-            AppSession.Logger.Error(this
+            /*AppSession.Logger.Error(this
                 , string.Format(m_GeneralSocketErrorMessage, socketErrorCode) + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber)
-                , new SocketException(socketErrorCode));
+                , new SocketException(socketErrorCode));*/
+            var title = string.Format(m_GeneralSocketErrorMessage, socketErrorCode) + Environment.NewLine + string.Format(m_CallerInformation, caller, callerFilePath, callerLineNumber);
+            AppSession.Logger.Error(string.Format(m_SessionInfoTemplate, SessionID, RemoteEndPoint) + Environment.NewLine + title, new SocketException(socketErrorCode));
         }
     }
 }

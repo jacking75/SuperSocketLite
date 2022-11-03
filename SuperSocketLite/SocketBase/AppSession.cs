@@ -21,7 +21,9 @@ namespace SuperSocket.SocketBase
     public abstract class AppSession<TAppSession, TRequestInfo> : IAppSession, IAppSession<TAppSession, TRequestInfo>
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
         where TRequestInfo : class, IRequestInfo
-    {        
+    {
+        string m_SessionInfoTemplate = "Session: {0}/{1}";
+
         /// <summary>
         /// Gets the app server instance assosiated with the session.
         /// </summary>
@@ -556,7 +558,11 @@ namespace SuperSocket.SocketBase
             if (currentRequestLength >= maxRequestLength)
             {
                 if (Logger.IsErrorEnabled)
-                    Logger.Error(this, string.Format("Max request length: {0}, current processed length: {1}", maxRequestLength, currentRequestLength));
+                {
+                    //Logger.Error(this, string.Format("Max request length: {0}, current processed length: {1}", maxRequestLength, currentRequestLength));
+                    var message = string.Format("Max request length: {0}, current processed length: {1}", maxRequestLength, currentRequestLength);
+                    Logger.Error(string.Format(m_SessionInfoTemplate, SessionID, RemoteEndPoint) + Environment.NewLine + message);
+                }
 
                 Close(CloseReason.ProtocolError);
                 return null;
