@@ -18,10 +18,7 @@ namespace EchoServer
     class MainServer : AppServer<NetworkSession, EFBinaryRequestInfo>
     {
         public static SuperSocket.SocketBase.Logging.ILog MainLogger;
-
-        //Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
-        //CommonHandler CommonHan = new CommonHandler();
-
+                
         IServerConfig m_Config;
 
         Thread CounterTh;
