@@ -14,10 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="MessagePack" Version="2.2.60" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
-    <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="MessagePack" Version="2.4.35" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.70" />
     <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
   </ItemGroup>
 
@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Reference Include="SuperSocketLite">
-      <HintPath>..\00_superSocketLite_libs\net5.0\SuperSocketLite.dll</HintPath>
+      <HintPath>..\00_superSocketLite_libs\net6.0\SuperSocketLite.dll</HintPath>
     </Reference>    
   </ItemGroup>
 
