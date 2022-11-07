@@ -57,7 +57,7 @@ namespace GateServer
         {
             try
             {
-                bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), m_Config, logFactory: new SuperSocket.SocketBase.Logging.NLogLogFactory());
+                bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), m_Config, logFactory: new NLogLogFactory());
 
                 if (bResult == false)
                 {

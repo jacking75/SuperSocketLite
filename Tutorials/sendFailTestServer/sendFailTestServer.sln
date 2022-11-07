@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sendFailTestServer", "sendFailTestServer.csproj", "{7FF8BFE2-F269-4071-8D31-A4C5F11DBD3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SuperSocket", "SuperSocket", "{E3F091C0-35D4-408D-8247-9F5B71B89AFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketLite", "..\..\SuperSocketLite\SuperSocketLite.csproj", "{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FF8BFE2-F269-4071-8D31-A4C5F11DBD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FF8BFE2-F269-4071-8D31-A4C5F11DBD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FF8BFE2-F269-4071-8D31-A4C5F11DBD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FF8BFE2-F269-4071-8D31-A4C5F11DBD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2C5924-6082-4EDE-957C-5FD4D701C7AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2C5924-6082-4EDE-957C-5FD4D701C7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2C5924-6082-4EDE-957C-5FD4D701C7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2C5924-6082-4EDE-957C-5FD4D701C7AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00FA1F26-10B7-4B5F-B2C2-A91676A1B8A5} = {E3F091C0-35D4-408D-8247-9F5B71B89AFF}
+		{6F2C5924-6082-4EDE-957C-5FD4D701C7AC} = {E3F091C0-35D4-408D-8247-9F5B71B89AFF}
+		{DACF0C44-FCF4-4246-ABC9-91AFF5BC26E2} = {E3F091C0-35D4-408D-8247-9F5B71B89AFF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D245632-A2A1-4C3F-B611-BE2FCD63E7EB}
+	EndGlobalSection
+EndGlobal
