@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using SuperSocket.Common;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Metadata;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketBase.Security;
 
@@ -23,8 +22,7 @@ namespace SuperSocket.SocketBase
     /// </summary>
     /// <typeparam name="TAppSession">The type of the app session.</typeparam>
     /// <typeparam name="TRequestInfo">The type of the request info.</typeparam>
-    [AppServerMetadataType(typeof(DefaultAppServerMetadata))]
-	public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
+    public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppServer<TAppSession, TRequestInfo>, IRawDataProcessor<TAppSession>, IRequestHandler<TRequestInfo>, ISocketServerAccessor, IRemoteCertificateValidator, IActiveConnector, ISystemEndPoint, IDisposable
         where TRequestInfo : class, IRequestInfo
         where TAppSession : AppSession<TAppSession, TRequestInfo>, IAppSession, new()
     {
@@ -1175,42 +1173,7 @@ namespace SuperSocket.SocketBase
         protected virtual void OnSystemMessageReceived(string messageType, object messageData)
         {
         }
-
-                       
-        /// <summary>
-        /// Updates the summary of the server.
-        /// </summary>
-        /// <param name="serverStatus">The server status.</param>
-        protected virtual void UpdateServerStatus(StatusInfoCollection serverStatus)
-        {
-            DateTime now = DateTime.Now;
-
-            serverStatus[StatusInfoKeys.IsRunning] = m_StateCode == ServerStateConst.Running;
-            serverStatus[StatusInfoKeys.TotalConnections] = this.SessionCount;
-
-            var totalHandledRequests0 = serverStatus.GetValue<long>(StatusInfoKeys.TotalHandledRequests, 0);
-
-            var totalHandledRequests = this.TotalHandledRequests;
-
-            serverStatus[StatusInfoKeys.RequestHandlingSpeed] = ((totalHandledRequests - totalHandledRequests0) / now.Subtract(serverStatus.CollectedTime).TotalSeconds);
-            serverStatus[StatusInfoKeys.TotalHandledRequests] = totalHandledRequests;
-
-            if (State == ServerState.Running)
-            {
-                var sendingQueuePool = m_SocketServer.SendingQueuePool;
-                serverStatus[StatusInfoKeys.AvialableSendingQueueItems] = sendingQueuePool.AvialableItemsCount;
-                serverStatus[StatusInfoKeys.TotalSendingQueueItems] = sendingQueuePool.TotalItemsCount;
-            }
-            else
-            {
-                serverStatus[StatusInfoKeys.AvialableSendingQueueItems] = 0;
-                serverStatus[StatusInfoKeys.TotalSendingQueueItems] = 0;
-            }
-
-            serverStatus.CollectedTime = now;
-        }
-                
-
+               
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
         /// </summary>
