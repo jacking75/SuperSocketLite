@@ -1,10 +1,7 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MessagePack;
 
 
 namespace PvPGameServer
@@ -129,10 +126,10 @@ namespace PvPGameServer
                 Result = (short)errorCode
             };
 
-            var bodyData = MessagePackSerializer.Serialize(resRoomEnter);
-            var sendData = PacketToBytes.Make(PACKETID.RES_ROOM_ENTER, bodyData);
-
-            NetSendFunc(sessionID, sendData);
+            var sendPacket = MessagePackSerializer.Serialize(resRoomEnter);
+            WriteHeaderInfo(PACKETID.RES_ROOM_ENTER, sendPacket);
+            
+            NetSendFunc(sessionID, sendPacket);
         }
 
         public void RequestLeave(EFBinaryRequestInfo packetData)
@@ -195,10 +192,10 @@ namespace PvPGameServer
                 Result = (short)ERROR_CODE.NONE
             };
 
-            var bodyData = MessagePackSerializer.Serialize(resRoomLeave);
-            var sendData = PacketToBytes.Make(PACKETID.RES_ROOM_LEAVE, bodyData);
-
-            NetSendFunc(sessionID, sendData);
+            var sendPacket = MessagePackSerializer.Serialize(resRoomLeave);
+            WriteHeaderInfo(PACKETID.RES_ROOM_LEAVE, sendPacket);
+       
+            NetSendFunc(sessionID, sendPacket);
         }
 
         public void NotifyLeaveInternal(EFBinaryRequestInfo packetData)
@@ -233,10 +230,10 @@ namespace PvPGameServer
                     ChatMessage = reqData.ChatMessage
                 };
 
-                var Body = MessagePackSerializer.Serialize(notifyPacket);
-                var sendData = PacketToBytes.Make(PACKETID.NTF_ROOM_CHAT, Body);
-
-                roomObject.Item2.Broadcast("", sendData);
+                var sendPacket = MessagePackSerializer.Serialize(notifyPacket);
+                WriteHeaderInfo(PACKETID.NTF_ROOM_CHAT, sendPacket);
+                
+                roomObject.Item2.Broadcast("", sendPacket);
 
                 MainServer.MainLogger.Debug("Room RequestChat - Success");
             }

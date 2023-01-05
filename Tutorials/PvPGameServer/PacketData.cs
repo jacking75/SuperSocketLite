@@ -133,83 +133,79 @@ namespace PvPGameServer
 
 
 
-
-
-
-
     [MessagePackObject]
-    public class PKNtfMustClose
+    public class PKNtfMustClose : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public short Result;
     }
 
 
 
     [MessagePackObject]
-    public class PKTReqRoomEnter
+    public class PKTReqRoomEnter : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public int RoomNumber;
     }
 
     [MessagePackObject]
-    public class PKTResRoomEnter
+    public class PKTResRoomEnter : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public short Result;
     }
 
     [MessagePackObject]
-    public class PKTNtfRoomUserList
+    public class PKTNtfRoomUserList : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public List<string> UserIDList = new List<string>();
     }
 
     [MessagePackObject]
-    public class PKTNtfRoomNewUser
+    public class PKTNtfRoomNewUser : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public string UserID;
     }
 
 
     [MessagePackObject]
-    public class PKTReqRoomLeave
+    public class PKTReqRoomLeave : MsgPackPacketHead
     {
     }
 
     [MessagePackObject]
-    public class PKTResRoomLeave
+    public class PKTResRoomLeave : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public short Result;
     }
 
     [MessagePackObject]
-    public class PKTNtfRoomLeaveUser
+    public class PKTNtfRoomLeaveUser : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public string UserID;
     }
 
 
     [MessagePackObject]
-    public class PKTReqRoomChat
+    public class PKTReqRoomChat : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public string ChatMessage;
     }
 
     
     [MessagePackObject]
-    public class PKTNtfRoomChat
+    public class PKTNtfRoomChat : MsgPackPacketHead
     {
-        [Key(0)]
+        [Key(1)]
         public string UserID;
 
-        [Key(1)]
+        [Key(2)]
         public string ChatMessage;
     }
 }

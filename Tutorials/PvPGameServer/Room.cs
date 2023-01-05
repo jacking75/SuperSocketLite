@@ -74,9 +74,9 @@ namespace PvPGameServer
                 packet.UserIDList.Add(user.UserID);
             }
 
-            var bodyData = MessagePackSerializer.Serialize(packet);
-            var sendPacket = PacketToBytes.Make(PACKETID.NTF_ROOM_USER_LIST, bodyData);
-
+            var sendPacket = MessagePackSerializer.Serialize(packet);
+            WriteHeaderInfo(PACKETID.NTF_ROOM_USER_LIST, sendPacket);
+            
             NetSendFunc(userNetSessionID, sendPacket);
         }
 
@@ -85,9 +85,9 @@ namespace PvPGameServer
             var packet = new PKTNtfRoomNewUser();
             packet.UserID = newUserID;
             
-            var bodyData = MessagePackSerializer.Serialize(packet);
-            var sendPacket = PacketToBytes.Make(PACKETID.NTF_ROOM_NEW_USER, bodyData);
-
+            var sendPacket = MessagePackSerializer.Serialize(packet);
+            WriteHeaderInfo(PACKETID.NTF_ROOM_NEW_USER, sendPacket);
+            
             Broadcast(newUserNetSessionID, sendPacket);
         }
 
@@ -101,9 +101,9 @@ namespace PvPGameServer
             var packet = new PKTNtfRoomLeaveUser();
             packet.UserID = userID;
             
-            var bodyData = MessagePackSerializer.Serialize(packet);
-            var sendPacket = PacketToBytes.Make(PACKETID.NTF_ROOM_LEAVE_USER, bodyData);
-
+            var sendPacket = MessagePackSerializer.Serialize(packet);
+            WriteHeaderInfo(PACKETID.NTF_ROOM_LEAVE_USER, sendPacket);
+          
             Broadcast("", sendPacket);
         }
 
@@ -118,6 +118,16 @@ namespace PvPGameServer
 
                 NetSendFunc(user.NetSessionID, sendPacket);
             }
+        }
+
+
+        public void WriteHeaderInfo(PACKETID packetId, byte[] packetData)
+        {
+            var header = new MsgPackPacketHeadInfo();
+            header.TotalSize = (UInt16)packetData.Length;
+            header.Id = (UInt16)packetId;
+            header.Type = 0;
+            header.Write(packetData);
         }
     }
 

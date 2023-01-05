@@ -22,9 +22,7 @@ namespace csharp_test_client
         PACKET_ID_PING_REQ = 201,
         PACKET_ID_PING_RES = 202,
 
-        PACKET_ID_ERROR_NTF = 203,
-
-
+        
         REQ_LOGIN = 1002,
         RES_LOGIN = 1003,
         NTF_MUST_CLOSE = 1005,

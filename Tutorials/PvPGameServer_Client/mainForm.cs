@@ -270,20 +270,19 @@ namespace csharp_test_client
             SendPacketQueue.Enqueue(packetData);
         }
 
-        void AddRoomUserList(Int64 userUniqueId, string userID)
+        void AddRoomUserList(string userID)
         {
-            var msg = $"{userUniqueId}: {userID}";
-            listBoxRoomUserList.Items.Add(msg);
+            listBoxRoomUserList.Items.Add(userID);
         }
 
-        void RemoveRoomUserList(Int64 userUniqueId)
+        void RemoveRoomUserList(string userID)
         {
             object removeItem = null;
 
             foreach( var user in listBoxRoomUserList.Items)
             {
-                var items = user.ToString().Split(":");
-                if( items[0].ToInt64() == userUniqueId)
+                var items = user.ToString();
+                if( items == userID)
                 {
                     removeItem = user;
                     return;
@@ -318,10 +317,12 @@ namespace csharp_test_client
 
         private void btn_RoomEnter_Click(object sender, EventArgs e)
         {
-            var requestPkt = new RoomEnterReqPacket();
-            requestPkt.SetValue(textBoxRoomNumber.Text.ToInt32());
+            var requestPkt = new PKTReqRoomEnter();
+            requestPkt.RoomNumber = textBoxRoomNumber.Text.ToInt32();
 
-            PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, requestPkt.ToBytes());
+            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
+
+            PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, sendPacketData);
             DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
         }
 
@@ -339,10 +340,12 @@ namespace csharp_test_client
                 return;
             }
 
-            var requestPkt = new RoomChatReqPacket();
-            requestPkt.SetValue(textBoxRoomSendMsg.Text);
+            var requestPkt = new PKTReqRoomChat();
+            requestPkt.ChatMessage = textBoxRoomSendMsg.Text;
 
-            PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, requestPkt.ToBytes());
+            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
+
+            PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, sendPacketData);
             DevLog.Write($"방 채팅 요청");
         }
 

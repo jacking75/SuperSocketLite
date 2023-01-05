@@ -47,40 +47,15 @@ namespace PvPGameServer
         }               
         
     }
-
-
-
-    [MessagePackObject]
-    public class PKTInternalReqRoomEnter
-    {
-        [Key(0)]
-        public int RoomNumber;
-
-        [Key(1)]
-        public string UserID;        
-    }
+       
 
     [MessagePackObject]
-    public class PKTInternalResRoomEnter
+    public class PKTInternalNtfRoomLeave : MsgPackPacketHead
     {
-        [Key(0)]
-        public ERROR_CODE Result;
-
         [Key(1)]
         public int RoomNumber;
 
         [Key(2)]
-        public string UserID;
-    }
-
-
-    [MessagePackObject]
-    public class PKTInternalNtfRoomLeave
-    {
-        [Key(0)]
-        public int RoomNumber;
-
-        [Key(1)]
         public string UserID;
     }
 
