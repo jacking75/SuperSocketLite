@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
 using System.Linq;
-using System.Security.Authentication;
-using System.Text;
 using SuperSocket.Common;
 
 namespace SuperSocket.SocketBase.Config
