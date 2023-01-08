@@ -21,6 +21,7 @@ namespace EchoServer
                 
         IServerConfig m_Config;
 
+        bool IsRun = false;
         Thread CounterTh;
 
 
@@ -68,6 +69,7 @@ namespace EchoServer
 
                 RegistHandler();
 
+                IsRun = true;
                 CounterTh = new Thread(EchoCounter);
                 CounterTh.Start();
 
@@ -79,10 +81,18 @@ namespace EchoServer
             }
         }
 
+        public void Destory()
+        {
+            base.Stop();
+
+            IsRun = false;
+            CounterTh.Join();
+        }
+
         Int64 Count = 0;
         void EchoCounter()
         {
-            while(true)
+            while(IsRun)
             {
                 Thread.Sleep(1000);
 

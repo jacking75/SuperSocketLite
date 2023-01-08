@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="MessagePack" Version="2.4.35" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+    <PackageReference Include="MessagePack" Version="2.4.59" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
     <PackageReference Include="Z.ExtensionMethods" Version="2.1.1" />
   </ItemGroup>
 
@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <Reference Include="SuperSocketLite">
-      <HintPath>..\00_superSocketLite_libs\net6.0\SuperSocketLite.dll</HintPath>
+      <HintPath>..\00_superSocketLite_libs\net7.0\SuperSocketLite.dll</HintPath>
     </Reference>    
   </ItemGroup>
   
@@ -41,14 +41,6 @@
     <None Update="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="F:\Github\00_SuperSocketLite\Tutorials\ChatServer\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="F:\Github\00_SuperSocketLite\Tutorials\ChatServer\.editorconfig" />
-  </ItemGroup>
+  </ItemGroup> 
 
 </Project>

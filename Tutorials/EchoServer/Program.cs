@@ -34,6 +34,8 @@ namespace EchoServer
 
             Console.WriteLine("key를 누르면 종료한다....");
             Console.ReadKey();
+
+            server.Destory();
         }
 
         static ServerOption ParseCommandLine(string[] args)

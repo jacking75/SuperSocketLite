@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MemoryPack" Version="1.8.12" />
+    <PackageReference Include="MemoryPack" Version="1.9.10" />
   </ItemGroup>
 
 </Project>

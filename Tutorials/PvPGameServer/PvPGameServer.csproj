@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Reference Include="SuperSocketLite">
-      <HintPath>..\00_superSocketLite_libs\net6.0\SuperSocketLite.dll</HintPath>
+      <HintPath>..\00_superSocketLite_libs\net7.0\SuperSocketLite.dll</HintPath>
     </Reference>
   </ItemGroup>
 
