@@ -15,6 +15,9 @@ using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.AsyncSocket;
 
+#pragma warning disable SYSLIB0039
+
+
 namespace SuperSocket.SocketEngine
 {
     /// <summary>
