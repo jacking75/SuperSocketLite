@@ -1,1 +1,1 @@
-dotnet net5.0\EchoServer_GenericHost.dll
+dotnet net7.0\EchoServer_GenericHost.dll
