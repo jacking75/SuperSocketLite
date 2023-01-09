@@ -63,8 +63,8 @@ void Test6()
         TotalSize = 100,
         Id = 22,
         Type = 0,
-        UserID = "heungabe",
-        AuthToken = "dsds",
+        UserID = "jacking75",
+        AuthToken = "jacking75",
     };
     // 직렬화 하면 앞에 1 바이트는 갯수, 이후는 데이터 순서대로 직렬화한다
     var bin = MemoryPackSerializer.Serialize(reqPkt);
