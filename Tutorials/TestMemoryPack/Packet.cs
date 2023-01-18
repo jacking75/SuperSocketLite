@@ -118,15 +118,10 @@ public partial class PkHeader
     public UInt16 Id { get; set; } = 0;
     public byte Type { get; set; } = 0;
 }
-[MemoryPackable]
-public partial class PacketHead
-{
-    public Byte[] Head = new Byte[6];
-}
 
 // 로그인 요청
 [MemoryPackable]
-public partial class PKTReqLogin : PacketHead//PkHeader
+public partial class PKTReqLogin : PkHeader
 {
     public string UserID { get; set; } = default!;
     public string AuthToken { get; set; } = default!;
