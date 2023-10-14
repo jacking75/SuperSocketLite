@@ -6,8 +6,13 @@ using TestMemoryPack;
 Console.WriteLine("Hello, MemoryPack!");
 
 Test1();
+Console.WriteLine("");
+
 Test2();
+Console.WriteLine("");
+
 Test3();
+Console.WriteLine("");
 
 Test6();
 
@@ -15,6 +20,8 @@ Test6();
 
 void Test1()
 {
+    Console.WriteLine("[ Test 1 ] 기능 검증");
+
     // 직렬화 하면 앞에 1 바이트는 갯수, 이후는 데이터 순서대로 직렬화한다
     var bin = MemoryPackSerializer.Serialize(new TestClass
     {
@@ -38,6 +45,8 @@ void Test1()
 
 void Test2()
 {
+    Console.WriteLine("[ Test 2 ] 직렬화 했을 때의 바이너리 크기");
+
     var bin = MemoryPackSerializer.Serialize(new TestClassSize
     {
         Id = 100,
@@ -50,6 +59,8 @@ void Test2()
 
 void Test3()
 {
+    Console.WriteLine("[ Test 3 ] 직렬화 할 클래스의 데이터 멤버 개수");
+
     // 직렬화 할 클래스의 데이터 멤버 개수는 최대 251개까지 이다.
     var bin = MemoryPackSerializer.Serialize(new TestClassTooDataCount());
 
@@ -58,9 +69,11 @@ void Test3()
 
 void Test6()
 {
+    Console.WriteLine("[ Test 6 ] 패킷 데이터 직렬화");
+
     var reqPkt = new PKTReqLogin
     {
-        TotalSize = 100,
+        TotalSize = 0, // 여기에서는 패킷의 전체 크기를 알 수 없다
         Id = 22,
         Type = 0,
         UserID = "jacking75",
@@ -69,9 +82,12 @@ void Test6()
     // 직렬화 하면 앞에 1 바이트는 갯수, 이후는 데이터 순서대로 직렬화한다
     var bin = MemoryPackSerializer.Serialize(reqPkt);
     var totalSize = (UInt16)bin.Length;
-    Console.WriteLine($"[Test6] bin Size: {totalSize}");
+    Console.WriteLine($"[Test6] Packet bin Size: {totalSize}");
+
+    // PKTReqLogin 초기화에서 패킷의 전체 크기를 0으로 했기 때문에 올바르게 수정한다
     FastBinaryWrite.UInt16(bin, 1, totalSize);
     
+
     // 패킷 헤더 정보 읽기
     var headerInfo = new MemoryPackPacketHeadInfo();
     headerInfo.Read(bin);

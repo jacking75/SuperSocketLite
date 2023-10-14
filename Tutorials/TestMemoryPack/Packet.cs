@@ -64,6 +64,7 @@ public struct MemoryPackPacketHeadInfo
     
     public void DebugConsolOutHeaderInfo()
     {
+        Console.WriteLine("DebugConsolOutHeaderInfo");
         Console.WriteLine("TotalSize : " + TotalSize);
         Console.WriteLine("Id : " + Id);
         Console.WriteLine("Type : " + Type);
