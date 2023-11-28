@@ -7,15 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace csharp_test_client
-{
-    struct PacketData
-    {
-        public Int16 DataSize;
-        public Int16 PacketID;
-        public SByte Type;
-        public byte[] BodyData;
-    }
-
+{    
     public struct MsgPackPacketHeadInfo
     {
         const int PacketHeaderMsgPackStartPos = 3;

@@ -1,5 +1,4 @@
-﻿using MessagePack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using System.Windows.Forms;
 
 namespace csharp_test_client
@@ -25,10 +23,10 @@ namespace csharp_test_client
         System.Threading.Thread NetworkSendThread = null;
 
         PacketBufferManager PacketBuffer = new PacketBufferManager();
-        Queue<byte[]> RecvPacketQueue = new Queue<byte[]>();
+        Queue<PacketData> RecvPacketQueue = new Queue<PacketData>();
         Queue<byte[]> SendPacketQueue = new Queue<byte[]>();
 
-        System.Windows.Forms.Timer dispatcherUITimer;
+        System.Windows.Forms.Timer dispatcherUITimer = new();
 
 
         public mainForm()
@@ -38,7 +36,7 @@ namespace csharp_test_client
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            PacketBuffer.Init((8096 * 10), MsgPackPacketHeadInfo.HeadSize, 1024);
+            PacketBuffer.Init((8096 * 10), PacketDef.PACKET_HEADER_SIZE, 1024);
 
             IsNetworkThreadRunning = true;
             NetworkReadThread = new System.Threading.Thread(this.NetworkReadProcess);
@@ -47,7 +45,10 @@ namespace csharp_test_client
             NetworkSendThread.Start();
 
             IsBackGroundProcessRunning = true;
-            dispatcherUITimer = new System.Windows.Forms.Timer();
+            /*dispatcherUITimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherUITimer.Tick += new EventHandler(BackGroundProcess);
+            dispatcherUITimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            dispatcherUITimer.Start();*/
             dispatcherUITimer.Tick += new EventHandler(BackGroundProcess);
             dispatcherUITimer.Interval = 100;
             dispatcherUITimer.Start();
@@ -97,7 +98,6 @@ namespace csharp_test_client
             Network.Close();
         }
 
-        // 에코
         private void button1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textSendText.Text))
@@ -107,10 +107,8 @@ namespace csharp_test_client
             }
 
             var body = Encoding.UTF8.GetBytes(textSendText.Text);
-            var packetData = new byte[body.Length + MsgPackPacketHeadInfo.HeadSize];
-            Buffer.BlockCopy(body, 0, packetData, MsgPackPacketHeadInfo.HeadSize, body.Length);
-           
-            PostSendPacket(PACKET_ID.PACKET_ID_ECHO, packetData);
+
+            PostSendPacket(PACKET_ID.PACKET_ID_ECHO, body);
 
             DevLog.Write($"Echo 요청:  {textSendText.Text}, {body.Length}");
         }
@@ -119,6 +117,8 @@ namespace csharp_test_client
 
         void NetworkReadProcess()
         {
+            const Int16 PacketHeaderSize = PacketDef.PACKET_HEADER_SIZE;
+
             while (IsNetworkThreadRunning)
             {
                 if (Network.IsConnected() == false)
@@ -136,14 +136,20 @@ namespace csharp_test_client
                     while (true)
                     {
                         var data = PacketBuffer.Read();
-                        if (data == null)
+                        if (data.Count < 1)
                         {
                             break;
                         }
 
+                        var packet = new PacketData();
+                        packet.DataSize = (short)(data.Count - PacketHeaderSize);
+                        packet.PacketID = BitConverter.ToInt16(data.Array, data.Offset + 2);
+                        packet.Type = (SByte)data.Array[(data.Offset + 4)];
+                        packet.BodyData = new byte[packet.DataSize];
+                        Buffer.BlockCopy(data.Array, (data.Offset + PacketHeaderSize), packet.BodyData, 0, (data.Count - PacketHeaderSize));
                         lock (((System.Collections.ICollection)RecvPacketQueue).SyncRoot)
                         {
-                            RecvPacketQueue.Enqueue(data);
+                            RecvPacketQueue.Enqueue(packet);
                         }
                     }
                     //DevLog.Write($"받은 데이터: {recvData.Item2}", LOG_LEVEL.INFO);
@@ -186,7 +192,7 @@ namespace csharp_test_client
 
             try
             {
-                byte[] packet = null;
+                var packet = new PacketData();
 
                 lock (((System.Collections.ICollection)RecvPacketQueue).SyncRoot)
                 {
@@ -196,7 +202,7 @@ namespace csharp_test_client
                     }
                 }
 
-                if (packet != null)
+                if (packet.PacketID != 0)
                 {
                     PacketProcess(packet);
                 }
@@ -259,7 +265,7 @@ namespace csharp_test_client
             labelStatus.Text = "서버 접속이 끊어짐";
         }
 
-        public void PostSendPacket(PACKET_ID packetID, byte[] packetData)
+        public void PostSendPacket(PACKET_ID packetID, byte[] bodyData)
         {
             if (Network.IsConnected() == false)
             {
@@ -267,28 +273,40 @@ namespace csharp_test_client
                 return;
             }
 
-            var header = new MsgPackPacketHeadInfo();
-            header.TotalSize = (UInt16)packetData.Length;
-            header.Id = (UInt16)packetID;
-            header.Type = 0;
-            header.Write(packetData);
+            Int16 bodyDataSize = 0;
+            if (bodyData != null)
+            {
+                bodyDataSize = (Int16)bodyData.Length;
+            }
+            var packetSize = bodyDataSize + PacketDef.PACKET_HEADER_SIZE;
 
-            SendPacketQueue.Enqueue(packetData);
+            List<byte> dataSource = new List<byte>();
+            dataSource.AddRange(BitConverter.GetBytes((Int16)packetSize));
+            dataSource.AddRange(BitConverter.GetBytes((Int16)packetID));
+            dataSource.AddRange(new byte[] { (byte)0 });
+            
+            if (bodyData != null)
+            {
+                dataSource.AddRange(bodyData);
+            }
+           
+            SendPacketQueue.Enqueue(dataSource.ToArray());
         }
 
-        void AddRoomUserList(string userID)
+        void AddRoomUserList(Int64 userUniqueId, string userID)
         {
-            listBoxRoomUserList.Items.Add(userID);
+            var msg = $"{userUniqueId}: {userID}";
+            listBoxRoomUserList.Items.Add(msg);
         }
 
-        void RemoveRoomUserList(string userID)
+        void RemoveRoomUserList(Int64 userUniqueId)
         {
             object removeItem = null;
 
             foreach( var user in listBoxRoomUserList.Items)
             {
-                var items = user.ToString();
-                if( items == userID)
+                var items = user.ToString().Split(":");
+                if( items[0].ToInt64() == userUniqueId)
                 {
                     removeItem = user;
                     return;
@@ -301,40 +319,29 @@ namespace csharp_test_client
             }
         }
 
-        static public string ToReadableByteArray(byte[] bytes)
-        {
-            return string.Join(", ", bytes);
-        }
-
 
         // 로그인 요청
         private void button2_Click(object sender, EventArgs e)
         {
-            var loginReq = new PKTReqLogin();
-            loginReq.UserID = textBoxUserID.Text;
-            loginReq.AuthToken = textBoxUserPW.Text;
-
-            var sendPacketData = MessagePackSerializer.Serialize(loginReq);
-                        
-            PostSendPacket(PACKET_ID.REQ_LOGIN, sendPacketData);            
+            var loginReq = new LoginReqPacket();
+            loginReq.SetValue(textBoxUserID.Text, textBoxUserPW.Text);
+                    
+            PostSendPacket(PACKET_ID.PACKET_ID_LOGIN_REQ, loginReq.ToBytes());            
             DevLog.Write($"로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
-            DevLog.Write($"로그인 요청: {ToReadableByteArray(sendPacketData)}");
         }
 
         private void btn_RoomEnter_Click(object sender, EventArgs e)
         {
-            var requestPkt = new PKTReqRoomEnter();
-            requestPkt.RoomNumber = textBoxRoomNumber.Text.ToInt32();
+            var requestPkt = new RoomEnterReqPacket();
+            requestPkt.SetValue(textBoxRoomNumber.Text.ToInt32());
 
-            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
-
-            PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, sendPacketData);
+            PostSendPacket(PACKET_ID.PACKET_ID_ROOM_ENTER_REQ, requestPkt.ToBytes());
             DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
         }
 
         private void btn_RoomLeave_Click(object sender, EventArgs e)
         {
-            PostSendPacket(PACKET_ID.REQ_ROOM_LEAVE,  null);
+            PostSendPacket(PACKET_ID.PACKET_ID_ROOM_LEAVE_REQ,  null);
             DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
         }
 
@@ -346,12 +353,10 @@ namespace csharp_test_client
                 return;
             }
 
-            var requestPkt = new PKTReqRoomChat();
-            requestPkt.ChatMessage = textBoxRoomSendMsg.Text;
+            var requestPkt = new RoomChatReqPacket();
+            requestPkt.SetValue(textBoxRoomSendMsg.Text);
 
-            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
-
-            PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, sendPacketData);
+            PostSendPacket(PACKET_ID.PACKET_ID_ROOM_CHAT_REQ, requestPkt.ToBytes());
             DevLog.Write($"방 채팅 요청");
         }
 
@@ -363,9 +368,9 @@ namespace csharp_test_client
                 return;
             }
             
-            /*var bodyData = Encoding.UTF8.GetBytes(textBoxRelay.Text);
+            var bodyData = Encoding.UTF8.GetBytes(textBoxRelay.Text);
             PostSendPacket(PACKET_ID.PACKET_ID_ROOM_RELAY_REQ, bodyData);
-            DevLog.Write($"방 릴레이 요청");*/
+            DevLog.Write($"방 릴레이 요청");
         }
     }
 }
