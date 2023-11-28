@@ -1,1 +1,1 @@
-dotnet net7.0\PvPGameServer.dll
+dotnet net8.0\PvPGameServer.dll

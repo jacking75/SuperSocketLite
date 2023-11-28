@@ -1,1 +1,1 @@
-dotnet net7.0\EchoServer.dll
+dotnet net8.0\EchoServer.dll

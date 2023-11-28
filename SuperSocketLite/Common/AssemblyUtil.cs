@@ -147,8 +147,9 @@ namespace SuperSocket.Common
                     if (sourceProperty.PropertyType != p.PropertyType)
                         continue;
 
-                    if (!sourceProperty.PropertyType.IsSerializable)
-                        continue;
+                    // 2023.11.28 최흥배  닷넷5부터 지원하지 않으므로 주석 처리 한다
+                    //if (!sourceProperty.PropertyType.IsSerializable)
+                    //    continue;
 
                     p.SetValue(target, sourceProperty.GetValue(source, null), null);
                 }
