@@ -47,8 +47,10 @@ namespace PvPGameServer
         protected override int GetBodyLengthFromHeader(byte[] header, int offset, int length)
         {
             if (!BitConverter.IsLittleEndian)
+			{
                 Array.Reverse(header, offset, 2);
-
+			}
+			
             var totalSize = BitConverter.ToUInt16(header, offset + EFBinaryRequestInfo.PACKET_HEADER_MSGPACK_START_POS);
             return totalSize - EFBinaryRequestInfo.HEADERE_SIZE;
         }
@@ -56,15 +58,31 @@ namespace PvPGameServer
         protected override EFBinaryRequestInfo ResolveRequestInfo(ArraySegment<byte> header, byte[] bodyBuffer, int offset, int length)
         {
             if (!BitConverter.IsLittleEndian)
+			{
                 Array.Reverse(header.Array, 0, EFBinaryRequestInfo.HEADERE_SIZE);
+			}
+			
+			if (length > 0)
+			{		
+				if(offset >= EFBinaryRequestInfo.HEADERE_SIZE)
+				{
+					var packetStartPos = offset - EFBinaryRequestInfo.HEADERE_SIZE;
+					var packetSize = length + EFBinaryRequestInfo.HEADERE_SIZE;
 
-            var packetStartPos = offset - EFBinaryRequestInfo.HEADERE_SIZE;
-            var packetSize = length + EFBinaryRequestInfo.HEADERE_SIZE;
-            return new EFBinaryRequestInfo(bodyBuffer.CloneRange(packetStartPos, packetSize));
-            /*return new EFBinaryRequestInfo(BitConverter.ToUInt16(header.Array, pos),
-                                           BitConverter.ToUInt16(header.Array, pos + 2),
-                                           (Byte)header.Array[pos+4], 
-                                           bodyBuffer.CloneRange(offset, length));*/
+					return new EFBinaryRequestInfo(bodyBuffer.CloneRange(packetStartPos, packetSize));            
+				}
+				else
+				{
+					//offset 이 헤더 크기보다 작으므로 헤더와 보디를 직접 합쳐야 한다.
+					var packetData = new Byte[length + EFBinaryRequestInfo.HEADERE_SIZE];
+					header.CopyTo(packetData, 0);
+					Array.Copy(bodyBuffer, offset, packetData, EFBinaryRequestInfo.HEADERE_SIZE, length);
+					
+					return new EFBinaryRequestInfo(packetData);
+				}
+			}	
+			
+			return new EFBinaryRequestInfo(header.CloneRange(header.Offset, header.Count));
         }
     }
 }
