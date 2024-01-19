@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.16</PackageVersion>
-    <Version>0.16</Version>	
+    <PackageVersion>0.17</PackageVersion>
+    <Version>0.17</Version>	
 	<PackageId>SuperSocketLite</PackageId>
 	<Authors>jacking75</Authors>
 	<Company>com2us</Company>	
