@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NLog;
 
 namespace ChatServer
 {
@@ -17,7 +18,9 @@ namespace ChatServer
         {
             if (!IsSharedConfig)
             {
-                NLog.Config.XmlLoggingConfiguration.SetCandidateConfigFilePaths(new[] { ConfigFile });
+                LogManager.Setup().LoadConfigurationFromFile(new[] { ConfigFile });
+                // 2023.11.28 최흥배 비추천이 되어서 위의 코드로 변경
+                //NLog.Config.XmlLoggingConfiguration.SetCandidateConfigFilePaths(new[] { ConfigFile });
             }
             else
             {                

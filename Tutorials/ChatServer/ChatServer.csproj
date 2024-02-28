@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSBaseLib\CSBaseLib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="SuperSocketLite">
       <HintPath>..\00_superSocketLite_libs\net8.0\SuperSocketLite.dll</HintPath>
     </Reference>    

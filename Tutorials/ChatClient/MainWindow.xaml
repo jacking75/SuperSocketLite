@@ -1,0 +1,48 @@
+﻿<Window x:Class="ChatClient2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatClient2"
+        mc:Ignorable="d"
+        Title="채팅 클라이언트" Height="651.485" Width="521.262" Closed="Window_Closed">
+    <Grid Margin="0,0,0,0.226" HorizontalAlignment="Left" Width="771">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="293*"/>
+            <ColumnDefinition Width="457*"/>
+            <ColumnDefinition Width="21*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="더미 클라이언트 설정" HorizontalAlignment="Left" Height="69" Margin="10,10,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2">
+            <Label Content="서버 주소:" HorizontalAlignment="Left" Height="23" Margin="2,22,0,0" VerticalAlignment="Top" Width="66"/>
+        </GroupBox>
+        <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="23" Margin="87,50,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="77"/>
+        <Label Content="Port 번호:" HorizontalAlignment="Left" Height="23" Margin="164,50,0,0" VerticalAlignment="Top" Width="62"/>
+        <TextBox x:Name="textBoxPort" HorizontalAlignment="Left" Height="23" Margin="229,50,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="77" Grid.ColumnSpan="2"/>
+        <CheckBox x:Name="checkBoxLocalHostIP" Content="localHost 사용" HorizontalAlignment="Left" Height="17" Margin="19,54,0,0" VerticalAlignment="Top" Width="98" Grid.Column="1"/>
+        <Label x:Name="labelConnState" Content="서버 상태:" HorizontalAlignment="Left" Height="27" Margin="153,23,0,0" VerticalAlignment="Top" Width="329" Grid.ColumnSpan="2"/>
+        <GroupBox Header="로그인" HorizontalAlignment="Left" Height="48" Margin="10,84,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2"/>
+        <Label Content="아이디" HorizontalAlignment="Left" Height="21" Margin="23,101,0,0" VerticalAlignment="Top" Width="45"/>
+        <Label Content="패스워드" HorizontalAlignment="Left" Height="24" Margin="164,102,0,0" VerticalAlignment="Top" Width="55"/>
+        <TextBox x:Name="textBoxID" HorizontalAlignment="Left" Height="25" Margin="68,101,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="87"/>
+        <TextBox x:Name="textBoxPW" HorizontalAlignment="Left" Height="25" Margin="219,102,0,0" TextWrapping="Wrap" Text="32452" VerticalAlignment="Top" Width="87" Grid.ColumnSpan="2"/>
+        <Button Content="접속" HorizontalAlignment="Left" Height="26" Margin="19,100,0,0" VerticalAlignment="Top" Width="37" Click="Button_Click" Grid.Column="1"/>
+        <Button Content="로그인" HorizontalAlignment="Left" Height="26" Margin="64,100,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_1" Grid.Column="1"/>
+        <Button Content="접속 끊기" HorizontalAlignment="Left" Height="26" Margin="114,100,0,0" VerticalAlignment="Top" Width="64" Click="Button_Click_2" Grid.Column="1"/>
+        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="276" Margin="10,171,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2">           
+            
+        </GroupBox>
+        <ListBox x:Name="listBoxRoomUserList" HorizontalAlignment="Left" Height="186" Margin="21,194,0,0" VerticalAlignment="Top" Width="116"/>
+        <TextBox x:Name="textBoxRoomNum" HorizontalAlignment="Left" Height="19" Margin="23,390,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="45"/>
+        <Button Content="방 입장" HorizontalAlignment="Left" Height="21" Margin="73,388,0,0" VerticalAlignment="Top" Width="65" Click="Button_Click_3"/>
+        <Button Content="방 나가기" HorizontalAlignment="Left" Height="21" Margin="23,414,0,0" VerticalAlignment="Top" Width="65" Click="Button_Click_4"/>
+        <ListBox x:Name="listBoxChat" HorizontalAlignment="Left" Height="216" Margin="153,193,0,0" VerticalAlignment="Top" Width="318" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textBoxSendChat" HorizontalAlignment="Left" Height="22" Margin="153,416,0,0" TextWrapping="Wrap" Text="Hi~~" VerticalAlignment="Top" Width="271" Grid.ColumnSpan="2"/>
+        <Button Content="chat" HorizontalAlignment="Left" Height="21" Margin="136,415,0,0" VerticalAlignment="Top" Width="42" Click="Button_Click_5" Grid.Column="1"/>
+        <ListBox x:Name="listBoxLog" HorizontalAlignment="Left" Height="111" Margin="10,498,0,0" VerticalAlignment="Top" Width="484" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textBoxEcho" HorizontalAlignment="Left" Height="25" Margin="13,142,0,0" TextWrapping="Wrap" Text="test1" VerticalAlignment="Top" Width="353" Grid.ColumnSpan="2"/>
+        <Button Content="Echo" HorizontalAlignment="Left" Height="26" Margin="78,141,0,0" VerticalAlignment="Top" Width="38" Click="Button_Click_6" RenderTransformOrigin="0.836,2.049" Grid.Column="1"/>
+        <Button Content="모든 게임방 게임 시작" HorizontalAlignment="Left" Height="27" Margin="13,452,0,0" VerticalAlignment="Top" Width="124" Click="Button_Click_7"/>
+        <Button Content="모든 게임방 게임 끝" HorizontalAlignment="Left" Height="27" Margin="147,452,0,0" VerticalAlignment="Top" Width="129" Click="Button_Click_8"/>
+
+    </Grid>
+</Window>
