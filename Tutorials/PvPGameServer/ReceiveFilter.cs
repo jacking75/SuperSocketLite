@@ -8,81 +8,74 @@ using SuperSocket.Common;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketEngine.Protocol;
 
-namespace PvPGameServer
+namespace PvPGameServer;
+
+public class MemoryPackBinaryRequestInfo : BinaryRequestInfo
 {
-    //TODO msgpack 일체형으로 예제 코드 추가
-    public class EFBinaryRequestInfo : BinaryRequestInfo
+    public string SessionID;
+    public byte[] Data;
+
+    public const int PACKET_HEADER_MEMORYPACK_START_POS = 1;
+    public const int HEADERE_SIZE = 5 + PACKET_HEADER_MEMORYPACK_START_POS;
+            
+    public MemoryPackBinaryRequestInfo(byte[] packetData)
+        : base(null, packetData)
     {
-        //public UInt16 TotalSize;
-        //public UInt16 PacketID;
-        //public Byte Type;
-
-        public string SessionID;
-        public byte[] Data;
-
-        public const int PACKET_HEADER_MSGPACK_START_POS = 3;
-        public const int HEADERE_SIZE = 5 + PACKET_HEADER_MSGPACK_START_POS;
-                
-        /*public EFBinaryRequestInfo(UInt16 totalSize, UInt16 packetID, Byte type, byte[] body)
-            : base(null, body)
-        {
-            this.TotalSize = totalSize;
-            this.PacketID = packetID;
-            this.Type = type;
-        }*/
-        public EFBinaryRequestInfo(byte[] packetData)
-            : base(null, packetData)
-        {
-            Data = packetData;
-        }
-
+        Data = packetData;
     }
 
-    public class ReceiveFilter : FixedHeaderReceiveFilter<EFBinaryRequestInfo>
+}
+
+public class ReceiveFilter : FixedHeaderReceiveFilter<MemoryPackBinaryRequestInfo>
+{
+    public ReceiveFilter() : base(MemoryPackBinaryRequestInfo.HEADERE_SIZE)
     {
-        public ReceiveFilter() : base(EFBinaryRequestInfo.HEADERE_SIZE)
-        {
-        }
+    }
 
-        protected override int GetBodyLengthFromHeader(byte[] header, int offset, int length)
-        {
-            if (!BitConverter.IsLittleEndian)
+    protected override int GetBodyLengthFromHeader(byte[] header, int offset, int length)
+    {
+        if (!BitConverter.IsLittleEndian)
 			{
-                Array.Reverse(header, offset, 2);
+            Array.Reverse(header, offset, 2);
 			}
 			
-            var totalSize = BitConverter.ToUInt16(header, offset + EFBinaryRequestInfo.PACKET_HEADER_MSGPACK_START_POS);
-            return totalSize - EFBinaryRequestInfo.HEADERE_SIZE;
-        }
+        var totalSize = BitConverter.ToUInt16(header, offset + MemoryPackBinaryRequestInfo.PACKET_HEADER_MEMORYPACK_START_POS);
+        return totalSize - MemoryPackBinaryRequestInfo.HEADERE_SIZE;
+    }
 
-        protected override EFBinaryRequestInfo ResolveRequestInfo(ArraySegment<byte> header, byte[] bodyBuffer, int offset, int length)
-        {
-            if (!BitConverter.IsLittleEndian)
-			{
-                Array.Reverse(header.Array, 0, EFBinaryRequestInfo.HEADERE_SIZE);
-			}
+    // offset: header 데이터까지 있는 readBuffer 에서 body가 시작되는 위치를 가리킨다
+    // length: body 데이터의 크기 
+    protected override MemoryPackBinaryRequestInfo ResolveRequestInfo(ArraySegment<byte> header, byte[] readBuffer, int offset, int length)
+    {
+        if (!BitConverter.IsLittleEndian)
+		{
+            Array.Reverse(header.Array, 0, MemoryPackBinaryRequestInfo.HEADERE_SIZE);
+		}
 			
-			if (length > 0)
-			{		
-				if(offset >= EFBinaryRequestInfo.HEADERE_SIZE)
-				{
-					var packetStartPos = offset - EFBinaryRequestInfo.HEADERE_SIZE;
-					var packetSize = length + EFBinaryRequestInfo.HEADERE_SIZE;
+        // body 데이터가 있는 경우
+		if (length > 0)
+		{		
+			if(offset >= MemoryPackBinaryRequestInfo.HEADERE_SIZE)
+			{
+				var packetStartPos = offset - MemoryPackBinaryRequestInfo.HEADERE_SIZE;
+				var packetSize = length + MemoryPackBinaryRequestInfo.HEADERE_SIZE;
 
-					return new EFBinaryRequestInfo(bodyBuffer.CloneRange(packetStartPos, packetSize));            
-				}
-				else
-				{
-					//offset 이 헤더 크기보다 작으므로 헤더와 보디를 직접 합쳐야 한다.
-					var packetData = new Byte[length + EFBinaryRequestInfo.HEADERE_SIZE];
-					header.CopyTo(packetData, 0);
-					Array.Copy(bodyBuffer, offset, packetData, EFBinaryRequestInfo.HEADERE_SIZE, length);
+				return new MemoryPackBinaryRequestInfo(readBuffer.CloneRange(packetStartPos, packetSize));            
+			}
+			else
+			{
+				//offset 이 헤더 크기보다 작으므로 헤더와 보디를 직접 합쳐야 한다.
+				var packetData = new Byte[length + MemoryPackBinaryRequestInfo.HEADERE_SIZE];
+				header.CopyTo(packetData, 0);
+				Array.Copy(readBuffer, offset, packetData, MemoryPackBinaryRequestInfo.HEADERE_SIZE, length);
 					
-					return new EFBinaryRequestInfo(packetData);
-				}
-			}	
+				return new MemoryPackBinaryRequestInfo(packetData);
+			}
+		}	
 			
-			return new EFBinaryRequestInfo(header.CloneRange(header.Offset, header.Count));
-        }
+        // body 데이터가 없는 경우
+		return new MemoryPackBinaryRequestInfo(header.CloneRange(header.Offset, header.Count));
     }
+
+
 }

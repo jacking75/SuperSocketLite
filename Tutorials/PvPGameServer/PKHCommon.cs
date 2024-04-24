@@ -1,125 +1,112 @@
-﻿using System;
+﻿using MemoryPack;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MessagePack;
 
 
-namespace PvPGameServer
+
+namespace PvPGameServer;
+
+public class PKHCommon : PKHandler
 {
-    public class PKHCommon : PKHandler
+    public void RegistPacketHandler(Dictionary<int, Action<MemoryPackBinaryRequestInfo>> packetHandlerMap)
+    {            
+        packetHandlerMap.Add((int)PACKETID.NTF_IN_CONNECT_CLIENT, NotifyInConnectClient);
+        packetHandlerMap.Add((int)PACKETID.NTF_IN_DISCONNECT_CLIENT, NotifyInDisConnectClient);
+
+        packetHandlerMap.Add((int)PACKETID.REQ_LOGIN, RequestLogin);
+                                            
+    }
+
+    public void NotifyInConnectClient(MemoryPackBinaryRequestInfo requestData)
     {
-        public void RegistPacketHandler(Dictionary<int, Action<EFBinaryRequestInfo>> packetHandlerMap)
-        {            
-            packetHandlerMap.Add((int)PACKETID.NTF_IN_CONNECT_CLIENT, NotifyInConnectClient);
-            packetHandlerMap.Add((int)PACKETID.NTF_IN_DISCONNECT_CLIENT, NotifyInDisConnectClient);
+    }
 
-            packetHandlerMap.Add((int)PACKETID.REQ_LOGIN, RequestLogin);
-                                                
-        }
-
-        public void NotifyInConnectClient(EFBinaryRequestInfo requestData)
+    public void NotifyInDisConnectClient(MemoryPackBinaryRequestInfo requestData)
+    {
+        var sessionID = requestData.SessionID;
+        var user = _userMgr.GetUser(sessionID);
+        
+        if (user != null)
         {
-        }
+            var roomNum = user.RoomNumber;
 
-        public void NotifyInDisConnectClient(EFBinaryRequestInfo requestData)
-        {
-            var sessionID = requestData.SessionID;
-            var user = UserMgr.GetUser(sessionID);
-            
-            if (user != null)
+            if (roomNum != Room.InvalidRoomNumber)
             {
-                var roomNum = user.RoomNumber;
-
-                if (roomNum != PacketDef.INVALID_ROOM_NUMBER)
-                {
-                    var packet = new PKTInternalNtfRoomLeave()
-                    {
-                        RoomNumber = roomNum,
-                        UserID = user.ID(),
-                    };
-
-                    var packetBodyData = MessagePackSerializer.Serialize(packet);
-                    var internalPacket = new ServerPacketData();
-                    internalPacket.Assign(sessionID, (Int16)PACKETID.NTF_IN_ROOM_LEAVE, packetBodyData);
-
-                    DistributePacket(internalPacket);
-                }
-
-                UserMgr.RemoveUser(sessionID);
+                var internalPacket = InnerPakcetMaker.MakeNTFInnerRoomLeavePacket(sessionID, roomNum, user.ID());                
+                DistributeInnerPacket(internalPacket);
             }
+
+            _userMgr.RemoveUser(sessionID);
         }
+    }
 
 
-        public void RequestLogin(EFBinaryRequestInfo packetData)
+    public void RequestLogin(MemoryPackBinaryRequestInfo packetData)
+    {
+        var sessionID = packetData.SessionID;
+        MainServer.MainLogger.Debug("로그인 요청 받음");
+
+        try
         {
-            var sessionID = packetData.SessionID;
-            MainServer.MainLogger.Debug("로그인 요청 받음");
-
-            try
+            if(_userMgr.GetUser(sessionID) != null)
             {
-                if(UserMgr.GetUser(sessionID) != null)
-                {
-                    ResponseLoginToClient(ERROR_CODE.LOGIN_ALREADY_WORKING, packetData.SessionID);
-                    return;
-                }
-                                
-                var reqData = MessagePackSerializer.Deserialize< PKTReqLogin>(packetData.Data);
-                var errorCode = UserMgr.AddUser(reqData.UserID, sessionID);
-                if (errorCode != ERROR_CODE.NONE)
-                {
-                    ResponseLoginToClient(errorCode, packetData.SessionID);
-
-                    if (errorCode == ERROR_CODE.LOGIN_FULL_USER_COUNT)
-                    {
-                        NotifyMustCloseToClient(ERROR_CODE.LOGIN_FULL_USER_COUNT, packetData.SessionID);
-                    }
-                    
-                    return;
-                }
-
+                ResponseLoginToClient(ERROR_CODE.LOGIN_ALREADY_WORKING, packetData.SessionID);
+                return;
+            }
+                            
+            var reqData = MemoryPackSerializer.Deserialize< PKTReqLogin>(packetData.Data);
+            var errorCode = _userMgr.AddUser(reqData.UserID, sessionID);
+            if (errorCode != ERROR_CODE.NONE)
+            {
                 ResponseLoginToClient(errorCode, packetData.SessionID);
 
-                MainServer.MainLogger.Debug($"로그인 결과. UserID:{reqData.UserID}, {errorCode}");
-
-            }
-            catch(Exception ex)
-            {
-                // 패킷 해제에 의해서 로그가 남지 않도록 로그 수준을 Debug로 한다.
-                MainServer.MainLogger.Error(ex.ToString());
-            }
-        }
+                if (errorCode == ERROR_CODE.LOGIN_FULL_USER_COUNT)
+                {
+                    NotifyMustCloseToClient(ERROR_CODE.LOGIN_FULL_USER_COUNT, packetData.SessionID);
+                }
                 
-        public void ResponseLoginToClient(ERROR_CODE errorCode, string sessionID)
-        {
-            var resLogin = new PKTResLogin()
-            {
-                Result = (short)errorCode
-            };
+                return;
+            }
 
-            var sendData = MessagePackSerializer.Serialize(resLogin);
-            WriteHeaderInfo(PACKETID.RES_LOGIN, sendData);
-  
-            NetSendFunc(sessionID, sendData);
+            ResponseLoginToClient(errorCode, packetData.SessionID);
+
+            MainServer.MainLogger.Debug($"로그인 결과. UserID:{reqData.UserID}, {errorCode}");
+
         }
-
-        public void NotifyMustCloseToClient(ERROR_CODE errorCode, string sessionID)
+        catch(Exception ex)
         {
-            var resLogin = new PKNtfMustClose()
-            {
-                Result = (short)errorCode
-            };
-
-            var bodyData = MessagePackSerializer.Serialize(resLogin);
-            var sendData = PacketToBytes.Make(PACKETID.NTF_MUST_CLOSE, bodyData);
-
-            NetSendFunc(sessionID, sendData);
+            // 패킷 해제에 의해서 로그가 남지 않도록 로그 수준을 Debug로 한다.
+            MainServer.MainLogger.Error(ex.ToString());
         }
-
-
-        
-                      
     }
+            
+    public void ResponseLoginToClient(ERROR_CODE errorCode, string sessionID)
+    {
+        var resLogin = new PKTResLogin()
+        {
+            Result = (short)errorCode
+        };
+
+        var sendData = MemoryPackSerializer.Serialize(resLogin);
+        MemoryPackPacketHeadInfo.Write(sendData, PACKETID.RES_LOGIN);
+
+        NetSendFunc(sessionID, sendData);
+    }
+
+    public void NotifyMustCloseToClient(ERROR_CODE errorCode, string sessionID)
+    {
+        var resLogin = new PKNtfMustClose()
+        {
+            Result = (short)errorCode
+        };
+
+        var sendData = MemoryPackSerializer.Serialize(resLogin);
+        MemoryPackPacketHeadInfo.Write(sendData, PACKETID.NTF_MUST_CLOSE);
+
+        NetSendFunc(sessionID, sendData);
+    }
+
+
+    
+                  
 }

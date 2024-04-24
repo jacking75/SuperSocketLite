@@ -1,4 +1,4 @@
-﻿using MessagePack; //https://github.com/neuecc/MessagePack-CSharp
+﻿using MemoryPack; 
 
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,65 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace csharp_test_client
-{    
-    public struct MsgPackPacketHeadInfo
+{
+    public struct MemoryPackPacketHeadInfo
+    {
+        const int PacketHeaderMemoryPackStartPos = 1;
+        public const int HeadSize = 6;
+
+        public UInt16 TotalSize;
+        public UInt16 Id;
+        public byte Type;
+
+        public static UInt16 GetTotalSize(byte[] data, int startPos)
+        {
+            return FastBinaryRead.UInt16(data, startPos + PacketHeaderMemoryPackStartPos);
+        }
+
+        public static void WritePacketId(byte[] data, UInt16 packetId)
+        {
+            FastBinaryWrite.UInt16(data, PacketHeaderMemoryPackStartPos + 2, packetId);
+        }
+
+        public void Read(byte[] headerData)
+        {
+            var pos = PacketHeaderMemoryPackStartPos;
+
+            TotalSize = FastBinaryRead.UInt16(headerData, pos);
+            pos += 2;
+
+            Id = FastBinaryRead.UInt16(headerData, pos);
+            pos += 2;
+
+            Type = headerData[pos];
+            pos += 1;
+        }
+
+        public void Write(byte[] binary)
+        {
+            var pos = PacketHeaderMemoryPackStartPos;
+
+            FastBinaryWrite.UInt16(binary, pos, TotalSize);
+            pos += 2;
+
+            FastBinaryWrite.UInt16(binary, pos, Id);
+            pos += 2;
+
+            binary[pos] = Type;
+            pos += 1;
+        }
+
+
+        public void DebugConsolOutHeaderInfo()
+        {
+            Console.WriteLine("DebugConsolOutHeaderInfo");
+            Console.WriteLine("TotalSize : " + TotalSize);
+            Console.WriteLine("Id : " + Id);
+            Console.WriteLine("Type : " + Type);
+        }
+    }
+
+    /*public struct MsgPackPacketHeadInfo
     {
         const int PacketHeaderMsgPackStartPos = 3;
         public const int HeadSize = 8;
@@ -49,110 +106,97 @@ namespace csharp_test_client
             mqData[pos] = Type;
             pos += 1;
         }
-    }
+    }*/
 
-
-    [MessagePackObject]
-    public class MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PkHeader
     {
-        [Key(0)]
-        public Byte[] Head = new Byte[MsgPackPacketHeadInfo.HeadSize];
+        public UInt16 TotalSize { get; set; } = 0;
+        public UInt16 Id { get; set; } = 0;
+        public byte Type { get; set; } = 0;
     }
 
-
+    
     // 로그인 요청
-    [MessagePackObject]
-    public class PKTReqLogin : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTReqLogin : PkHeader
     {
-        [Key(1)]
-        public string UserID;
-        [Key(2)]
-        public string AuthToken;
+        public string UserID { get; set; }
+        public string AuthToken { get; set; }
     }
 
-    [MessagePackObject]
-    public class PKTResLogin : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTResLogin : PkHeader
     {
-        [Key(1)]
-        public short Result;
+        public short Result { get; set; }
     }
 
 
 
-    [MessagePackObject]
-    public class PKNtfMustClose : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKNtfMustClose : PkHeader
     {
-        [Key(1)]
-        public short Result;
+        public short Result { get; set; }
     }
 
 
 
-    [MessagePackObject]
-    public class PKTReqRoomEnter : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTReqRoomEnter : PkHeader
     {
-        [Key(1)]
-        public int RoomNumber;
+        public int RoomNumber { get; set; }
     }
 
-    [MessagePackObject]
-    public class PKTResRoomEnter : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTResRoomEnter : PkHeader
     {
-        [Key(1)]
-        public short Result;
+        public short Result { get; set; }
     }
 
-    [MessagePackObject]
-    public class PKTNtfRoomUserList : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTNtfRoomUserList : PkHeader
     {
-        [Key(1)]
-        public List<string> UserIDList = new List<string>();
+        public List<string> UserIDList { get; set; } = new List<string>();
     }
 
-    [MessagePackObject]
-    public class PKTNtfRoomNewUser : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTNtfRoomNewUser : PkHeader
     {
-        [Key(1)]
-        public string UserID;
+        public string UserID { get; set; }
     }
 
 
-    [MessagePackObject]
-    public class PKTReqRoomLeave : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTReqRoomLeave : PkHeader
     {
     }
 
-    [MessagePackObject]
-    public class PKTResRoomLeave : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTResRoomLeave : PkHeader
     {
-        [Key(1)]
-        public short Result;
+        public short Result { get; set; }
     }
 
-    [MessagePackObject]
-    public class PKTNtfRoomLeaveUser : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTNtfRoomLeaveUser : PkHeader
     {
-        [Key(1)]
-        public string UserID;
-    }
-
-
-    [MessagePackObject]
-    public class PKTReqRoomChat : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string ChatMessage;
+        public string UserID { get; set; }
     }
 
 
-    [MessagePackObject]
-    public class PKTNtfRoomChat : MsgPackPacketHead
+    [MemoryPackable]
+    public partial class PKTReqRoomChat : PkHeader
     {
-        [Key(1)]
-        public string UserID;
+        public string ChatMessage { get; set; }
+    }
 
-        [Key(2)]
-        public string ChatMessage;
+
+    [MemoryPackable]
+    public partial class PKTNtfRoomChat : PkHeader
+    {
+        public string UserID { get; set; }
+
+        public string ChatMessage { get; set; }
     }
 
 }

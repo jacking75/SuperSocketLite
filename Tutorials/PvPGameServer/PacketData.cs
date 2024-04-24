@@ -1,211 +1,154 @@
-﻿using MessagePack; //https://github.com/neuecc/MessagePack-CSharp
+﻿using MemoryPack;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PvPGameServer
+
+namespace PvPGameServer;
+
+public struct MemoryPackPacketHeadInfo
 {
-    public class PacketDef
+    const int PacketHeaderMemoryPackStartPos = 1;
+    public const int HeadSize = 6;
+
+    public UInt16 TotalSize;
+    public UInt16 Id;
+    public byte Type;
+
+    public static UInt16 GetTotalSize(byte[] data, int startPos)
     {
-        public const Int16 MSGPACK_PACKET_HEADER_SIZE = 8;
-
-        public const Int16 PACKET_HEADER_SIZE = 8;
-        public const int MAX_USER_ID_BYTE_LENGTH = 16;
-        public const int MAX_USER_PW_BYTE_LENGTH = 16;
-
-        public const int INVALID_ROOM_NUMBER = -1;
+        return FastBinaryRead.UInt16(data, startPos + PacketHeaderMemoryPackStartPos);
     }
 
-    public struct MsgPackPacketHeadInfo
+    public static void WritePacketId(byte[] data, UInt16 packetId)
     {
-        const int PacketHeaderMsgPackStartPos = 3;
-        public const int HeadSize = 8;
-
-        public UInt16 TotalSize;
-        public UInt16 Id;
-        public byte Type;
-
-        public static UInt16 GetTotalSize(byte[] data, int startPos)
-        {
-            return FastBinaryRead.UInt16(data, startPos + PacketHeaderMsgPackStartPos);
-        }
-
-        public static void WritePacketId(byte[] data, UInt16 packetId)
-        {
-            FastBinaryWrite.UInt16(data, PacketHeaderMsgPackStartPos + 2, packetId);
-        }
-
-        public void Read(byte[] headerData)
-        {
-            var pos = PacketHeaderMsgPackStartPos;
-
-            TotalSize = FastBinaryRead.UInt16(headerData, pos);
-            pos += 2;
-
-            Id = FastBinaryRead.UInt16(headerData, pos);
-            pos += 2;
-
-            Type = headerData[pos];
-            pos += 1;
-        }
-
-        public void Write(byte[] mqData)
-        {
-            var pos = PacketHeaderMsgPackStartPos;
-
-            FastBinaryWrite.UInt16(mqData, pos, TotalSize);
-            pos += 2;
-
-            FastBinaryWrite.UInt16(mqData, pos, Id);
-            pos += 2;
-
-            mqData[pos] = Type;
-            pos += 1;
-        }
+        FastBinaryWrite.UInt16(data, PacketHeaderMemoryPackStartPos + 2, packetId);
     }
 
-    public class PacketToBytes
+    public void Read(byte[] headerData)
     {
-        public static byte[] Make(PACKETID packetID, byte[] bodyData)
-        {
-            byte type = 0;
-            var pktID = (Int16)packetID;
-            Int16 bodyDataSize = 0;
-            if (bodyData != null)
-            {
-                bodyDataSize = (Int16)bodyData.Length;
-            }
-            var packetSize = (Int16)(bodyDataSize + PacketDef.PACKET_HEADER_SIZE);
-                        
-            var dataSource = new byte[packetSize];
-            Buffer.BlockCopy(BitConverter.GetBytes(packetSize), 0, dataSource, 0, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(pktID), 0, dataSource, 2, 2);
-            dataSource[4] = type;
-            
-            if (bodyData != null)
-            {
-                Buffer.BlockCopy(bodyData, 0, dataSource, 5, bodyDataSize);
-            }
+        var pos = PacketHeaderMemoryPackStartPos;
 
-            return dataSource;
-        }
+        TotalSize = FastBinaryRead.UInt16(headerData, pos);
+        pos += 2;
 
-        public static Tuple<int, byte[]> ClientReceiveData(int recvLength, byte[] recvData)
-        {
-            var packetSize = BitConverter.ToInt16(recvData, 0);
-            var packetID = BitConverter.ToInt16(recvData, 2);
-            var bodySize = packetSize - PacketDef.PACKET_HEADER_SIZE;
+        Id = FastBinaryRead.UInt16(headerData, pos);
+        pos += 2;
 
-            var packetBody = new byte[bodySize];
-            Buffer.BlockCopy(recvData, PacketDef.PACKET_HEADER_SIZE, packetBody,  0, bodySize);
+        Type = headerData[pos];
+        pos += 1;
+    }
+        
+    public static void Write(byte[] packetData, PACKETID packetId, byte type = 0)
+    {
+        var pos = PacketHeaderMemoryPackStartPos;
 
-            return new Tuple<int, byte[]>(packetID, packetBody);
-        }
+        FastBinaryWrite.UInt16(packetData, pos, (UInt16)packetData.Length);
+        pos += 2;
+
+        FastBinaryWrite.UInt16(packetData, pos, (UInt16)packetId);
+        pos += 2;
+
+        packetData[pos] = type;
     }
 
-
-    [MessagePackObject]
-    public class MsgPackPacketHead
+    public void DebugConsolOutHeaderInfo()
     {
-        [Key(0)]
-        public Byte[] Head = new Byte[PacketDef.MSGPACK_PACKET_HEADER_SIZE];
+        Console.WriteLine("DebugConsolOutHeaderInfo");
+        Console.WriteLine("TotalSize : " + TotalSize);
+        Console.WriteLine("Id : " + Id);
+        Console.WriteLine("Type : " + Type);
     }
-
-
-    // 로그인 요청
-    [MessagePackObject]
-    public class PKTReqLogin : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string UserID;
-        [Key(2)]
-        public string AuthToken;
-    }
-
-    [MessagePackObject]
-    public class PKTResLogin : MsgPackPacketHead
-    {
-        [Key(1)]
-        public short Result;
-    }
+}
 
 
 
-    [MessagePackObject]
-    public class PKNtfMustClose : MsgPackPacketHead
-    {
-        [Key(1)]
-        public short Result;
-    }
+[MemoryPackable]
+public partial class PkHeader
+{
+    public UInt16 TotalSize { get; set; } = 0;
+    public UInt16 Id { get; set; } = 0;
+    public byte Type { get; set; } = 0;
+}
+
+
+// 로그인 요청
+[MemoryPackable]
+public partial class PKTReqLogin : PkHeader
+{
+    public string UserID { get; set; }
+    public string AuthToken { get; set; }
+}
+
+[MemoryPackable]
+public partial class PKTResLogin : PkHeader
+{
+    public short Result { get; set; }
+}
 
 
 
-    [MessagePackObject]
-    public class PKTReqRoomEnter : MsgPackPacketHead
-    {
-        [Key(1)]
-        public int RoomNumber;
-    }
-
-    [MessagePackObject]
-    public class PKTResRoomEnter : MsgPackPacketHead
-    {
-        [Key(1)]
-        public short Result;
-    }
-
-    [MessagePackObject]
-    public class PKTNtfRoomUserList : MsgPackPacketHead
-    {
-        [Key(1)]
-        public List<string> UserIDList = new List<string>();
-    }
-
-    [MessagePackObject]
-    public class PKTNtfRoomNewUser : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string UserID;
-    }
+[MemoryPackable]
+public partial class PKNtfMustClose : PkHeader
+{
+    public short Result { get; set; }
+}
 
 
-    [MessagePackObject]
-    public class PKTReqRoomLeave : MsgPackPacketHead
-    {
-    }
 
-    [MessagePackObject]
-    public class PKTResRoomLeave : MsgPackPacketHead
-    {
-        [Key(1)]
-        public short Result;
-    }
+[MemoryPackable]
+public partial class PKTReqRoomEnter : PkHeader
+{
+    public int RoomNumber { get; set; }
+}
 
-    [MessagePackObject]
-    public class PKTNtfRoomLeaveUser : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string UserID;
-    }
+[MemoryPackable]
+public partial class PKTResRoomEnter : PkHeader
+{
+    public short Result { get; set; }
+}
+
+[MemoryPackable]
+public partial class PKTNtfRoomUserList : PkHeader
+{
+    public List<string> UserIDList { get; set; } = new List<string>();
+}
+
+[MemoryPackable]
+public partial class PKTNtfRoomNewUser : PkHeader
+{
+    public string UserID { get; set; }
+}
 
 
-    [MessagePackObject]
-    public class PKTReqRoomChat : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string ChatMessage;
-    }
+[MemoryPackable]
+public partial class PKTReqRoomLeave : PkHeader
+{
+}
 
-    
-    [MessagePackObject]
-    public class PKTNtfRoomChat : MsgPackPacketHead
-    {
-        [Key(1)]
-        public string UserID;
+[MemoryPackable]
+public partial class PKTResRoomLeave : PkHeader
+{
+    public short Result { get; set; }
+}
 
-        [Key(2)]
-        public string ChatMessage;
-    }
+[MemoryPackable]
+public partial class PKTNtfRoomLeaveUser : PkHeader
+{
+    public string UserID { get; set; }
+}
+
+
+[MemoryPackable]
+public partial class PKTReqRoomChat : PkHeader
+{
+    public string ChatMessage { get; set; }
+}
+
+
+[MemoryPackable]
+public partial class PKTNtfRoomChat : PkHeader
+{
+    public string UserID { get; set; }
+
+    public string ChatMessage { get; set; }
 }

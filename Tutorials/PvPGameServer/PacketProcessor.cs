@@ -1,113 +1,108 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using System.Threading.Tasks.Dataflow;
 
 
-namespace PvPGameServer
+namespace PvPGameServer;
+
+class PacketProcessor
 {
-    class PacketProcessor
+    bool _isThreadRunning = false;
+    System.Threading.Thread _processThread = null;
+
+    public Func<string, byte[], bool> NetSendFunc;
+    
+    //receive쪽에서 처리하지 않아도 Post에서 블럭킹 되지 않는다. 
+    //BufferBlock<T>(DataflowBlockOptions) 에서 DataflowBlockOptions의 BoundedCapacity로 버퍼 가능 수 지정. BoundedCapacity 보다 크게 쌓이면 블럭킹 된다
+    BufferBlock<MemoryPackBinaryRequestInfo> _msgBuffer = new BufferBlock<MemoryPackBinaryRequestInfo>();
+
+    UserManager _userMgr = new UserManager();
+
+    List<Room> _roomList = new List<Room>();
+
+    Dictionary<int, Action<MemoryPackBinaryRequestInfo>> _packetHandlerMap = new Dictionary<int, Action<MemoryPackBinaryRequestInfo>>();
+    PKHCommon _commonPacketHandler = new PKHCommon();
+    PKHRoom _roomPacketHandler = new PKHRoom();
+            
+
+    public void CreateAndStart(List<Room> roomList, ServerOption serverOpt)
     {
-        bool IsThreadRunning = false;
-        System.Threading.Thread ProcessThread = null;
+        var maxUserCount = serverOpt.RoomMaxCount * serverOpt.RoomMaxUserCount;
+        _userMgr.Init(maxUserCount);
 
-        public Func<string, byte[], bool> NetSendFunc;
-        public Action<EFBinaryRequestInfo> DistributePacket;
-
-        //receive쪽에서 처리하지 않아도 Post에서 블럭킹 되지 않는다. 
-        //BufferBlock<T>(DataflowBlockOptions) 에서 DataflowBlockOptions의 BoundedCapacity로 버퍼 가능 수 지정. BoundedCapacity 보다 크게 쌓이면 블럭킹 된다
-        BufferBlock<EFBinaryRequestInfo> MsgBuffer = new BufferBlock<EFBinaryRequestInfo>();
-
-        UserManager UserMgr = new UserManager();
-
-        Tuple<int,int> RoomNumberRange = new Tuple<int, int>(-1, -1);
-        List<Room> RoomList = new List<Room>();
-
-        Dictionary<int, Action<EFBinaryRequestInfo>> PacketHandlerMap = new Dictionary<int, Action<EFBinaryRequestInfo>>();
-        PKHCommon CommonPacketHandler = new PKHCommon();
-        PKHRoom RoomPacketHandler = new PKHRoom();
-                
-
-        public void CreateAndStart(List<Room> roomList, ServerOption serverOpt)
-        {
-            var maxUserCount = serverOpt.RoomMaxCount * serverOpt.RoomMaxUserCount;
-            UserMgr.Init(maxUserCount);
-
-            RoomList = roomList;
-            var minRoomNum = RoomList[0].Number;
-            var maxRoomNum = RoomList[0].Number + RoomList.Count() - 1;
-            RoomNumberRange = new Tuple<int, int>(minRoomNum, maxRoomNum);
-            
-            RegistPacketHandler();
-
-            IsThreadRunning = true;
-            ProcessThread = new System.Threading.Thread(this.Process);
-            ProcessThread.Start();
-        }
+        _roomList = roomList;
+        var minRoomNum = _roomList[0].Number;
+        var maxRoomNum = _roomList[0].Number + _roomList.Count() - 1;
         
-        public void Destory()
-        {
-            MainServer.MainLogger.Info("PacketProcessor::Destory - begin");
+        RegistPacketHandler();
 
-            IsThreadRunning = false;
-            MsgBuffer.Complete();
+        _isThreadRunning = true;
+        _processThread = new System.Threading.Thread(this.Process);
+        _processThread.Start();
+    }
+    
+    public void Destory()
+    {
+        MainServer.MainLogger.Info("PacketProcessor::Destory - begin");
 
-            ProcessThread.Join();
+        _isThreadRunning = false;
+        _msgBuffer.Complete();
 
-            MainServer.MainLogger.Info("PacketProcessor::Destory - end");
-        }
-              
-        public void InsertPacket(EFBinaryRequestInfo data)
-        {
-            MsgBuffer.Post(data);
-        }
+        _processThread.Join();
 
+        MainServer.MainLogger.Info("PacketProcessor::Destory - end");
+    }
+          
+    public void InsertPacket(MemoryPackBinaryRequestInfo data)
+    {
+        _msgBuffer.Post(data);
+    }
+
+    
+    void RegistPacketHandler()
+    {
+        PKHandler.NetSendFunc = NetSendFunc;
+        PKHandler.DistributeInnerPacket = InsertPacket;
+        _commonPacketHandler.Init(_userMgr);
+        _commonPacketHandler.RegistPacketHandler(_packetHandlerMap);                
         
-        void RegistPacketHandler()
-        {
-            PKHandler.NetSendFunc = NetSendFunc;
-            CommonPacketHandler.Init(UserMgr);
-            CommonPacketHandler.RegistPacketHandler(PacketHandlerMap);                
-            
-            RoomPacketHandler.Init(UserMgr);
-            RoomPacketHandler.SetRooomList(RoomList);
-            RoomPacketHandler.RegistPacketHandler(PacketHandlerMap);
-        }
+        _roomPacketHandler.Init(_userMgr);
+        _roomPacketHandler.SetRooomList(_roomList);
+        _roomPacketHandler.RegistPacketHandler(_packetHandlerMap);
+    }
 
-        void Process()
+    void Process()
+    {
+        while (_isThreadRunning)
         {
-            while (IsThreadRunning)
+            //System.Threading.Thread.Sleep(64); //테스트 용
+            try
             {
-                //System.Threading.Thread.Sleep(64); //테스트 용
-                try
+                var packet = _msgBuffer.Receive();
+
+                var header = new MemoryPackPacketHeadInfo();
+                header.Read(packet.Data);
+
+                if (_packetHandlerMap.ContainsKey(header.Id))
                 {
-                    var packet = MsgBuffer.Receive();
-
-                    var header = new MsgPackPacketHeadInfo();
-                    header.Read(packet.Data);
-
-                    if (PacketHandlerMap.ContainsKey(header.Id))
-                    {
-                        PacketHandlerMap[header.Id](packet);
-                    }
-                    else
-                    {
-                        //System.Diagnostics.Debug.WriteLine("세션 번호 {0}, PacketID {1}, 받은 데이터 크기: {2}", packet.SessionID, packet.PacketID, packet.BodyData.Length);
-                    }
+                    _packetHandlerMap[header.Id](packet);
                 }
-                catch (Exception ex)
+                /*else
                 {
-                    if (IsThreadRunning)
-                    {
-                        MainServer.MainLogger.Error(ex.ToString());
-                    }
+                    System.Diagnostics.Debug.WriteLine("세션 번호 {0}, PacketID {1}, 받은 데이터 크기: {2}", packet.SessionID, packet.PacketID, packet.BodyData.Length);
+                }*/
+            }
+            catch (Exception ex)
+            {
+                if (_isThreadRunning)
+                {
+                    MainServer.MainLogger.Error(ex.ToString());
                 }
             }
         }
-
-
     }
+
+
 }

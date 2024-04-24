@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.5.129" />
+    <PackageReference Include="MemoryPack" Version="1.21.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
   </ItemGroup>
 
   <ItemGroup>

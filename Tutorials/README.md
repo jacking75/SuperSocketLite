@@ -710,7 +710,9 @@ public class PacketDistributor
 ## PvPGameServer
 ![PvPGameServer](./01_images/012.png)    
   
-- PvP 게임서버를 목적으로 만든 것이다. 그러나 미완성되어 채팅서버와 거의 동일하다
+- PvP 게임서버를 목적으로 만든 것이다. 그러나 미완성 상태
+- Generic Host 구조 사용
+- 패킷 데이터 직렬화 라이브러리로 `MemoryPack` 사용  
     
 - 클라이언트는 `PvPGameServer_Client` 이다
   

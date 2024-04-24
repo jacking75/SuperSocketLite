@@ -4,29 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PvPGameServer
+namespace PvPGameServer;
+
+class RoomManager
 {
-    class RoomManager
+    List<Room> _roomsList = new List<Room>();
+
+
+    public void CreateRooms(ServerOption serverOpt)
     {
-        List<Room> RoomsList = new List<Room>();
+        var maxRoomCount = serverOpt.RoomMaxCount;
+        var startNumber = serverOpt.RoomStartNumber;
+        var maxUserCount = serverOpt.RoomMaxUserCount;
 
-        public void CreateRooms(ServerOption serverOpt)
+        for(int i = 0; i < maxRoomCount; ++i)
         {
-            var maxRoomCount = serverOpt.RoomMaxCount;
-            var startNumber = serverOpt.RoomStartNumber;
-            var maxUserCount = serverOpt.RoomMaxUserCount;
+            var roomNumber = (startNumber + i);
+            var room = new Room();
+            room.Init(i, roomNumber, maxUserCount);
 
-            for(int i = 0; i < maxRoomCount; ++i)
-            {
-                var roomNumber = (startNumber + i);
-                var room = new Room();
-                room.Init(i, roomNumber, maxUserCount);
-
-                RoomsList.Add(room);
-            }                                   
-        }
+            _roomsList.Add(room);
+        }                                   
+    }
 
 
-        public List<Room> GetRoomsList() { return RoomsList; }
+    public List<Room> GetRoomsList() 
+    { 
+        return _roomsList; 
     }
 }

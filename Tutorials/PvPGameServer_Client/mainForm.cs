@@ -1,14 +1,9 @@
-﻿using MessagePack;
+﻿using MemoryPack;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using System.Windows.Forms;
 
 namespace csharp_test_client
@@ -38,7 +33,7 @@ namespace csharp_test_client
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            PacketBuffer.Init((8096 * 10), MsgPackPacketHeadInfo.HeadSize, 1024);
+            PacketBuffer.Init((8096 * 10), MemoryPackPacketHeadInfo.HeadSize, 1024);
 
             IsNetworkThreadRunning = true;
             NetworkReadThread = new System.Threading.Thread(this.NetworkReadProcess);
@@ -107,8 +102,8 @@ namespace csharp_test_client
             }
 
             var body = Encoding.UTF8.GetBytes(textSendText.Text);
-            var packetData = new byte[body.Length + MsgPackPacketHeadInfo.HeadSize];
-            Buffer.BlockCopy(body, 0, packetData, MsgPackPacketHeadInfo.HeadSize, body.Length);
+            var packetData = new byte[body.Length + MemoryPackPacketHeadInfo.HeadSize];
+            Buffer.BlockCopy(body, 0, packetData, MemoryPackPacketHeadInfo.HeadSize, body.Length);
            
             PostSendPacket(PACKET_ID.PACKET_ID_ECHO, packetData);
 
@@ -267,7 +262,7 @@ namespace csharp_test_client
                 return;
             }
 
-            var header = new MsgPackPacketHeadInfo();
+            var header = new MemoryPackPacketHeadInfo();
             header.TotalSize = (UInt16)packetData.Length;
             header.Id = (UInt16)packetID;
             header.Type = 0;
@@ -314,7 +309,7 @@ namespace csharp_test_client
             loginReq.UserID = textBoxUserID.Text;
             loginReq.AuthToken = textBoxUserPW.Text;
 
-            var sendPacketData = MessagePackSerializer.Serialize(loginReq);
+            var sendPacketData = MemoryPackSerializer.Serialize(loginReq);
                         
             PostSendPacket(PACKET_ID.REQ_LOGIN, sendPacketData);            
             DevLog.Write($"로그인 요청:  {textBoxUserID.Text}, {textBoxUserPW.Text}");
@@ -326,7 +321,7 @@ namespace csharp_test_client
             var requestPkt = new PKTReqRoomEnter();
             requestPkt.RoomNumber = textBoxRoomNumber.Text.ToInt32();
 
-            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
+            var sendPacketData = MemoryPackSerializer.Serialize(requestPkt);
 
             PostSendPacket(PACKET_ID.REQ_ROOM_ENTER, sendPacketData);
             DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
@@ -334,7 +329,7 @@ namespace csharp_test_client
 
         private void btn_RoomLeave_Click(object sender, EventArgs e)
         {
-            PostSendPacket(PACKET_ID.REQ_ROOM_LEAVE,  null);
+            PostSendPacket(PACKET_ID.REQ_ROOM_LEAVE,  new byte[MemoryPackPacketHeadInfo.HeadSize]);
             DevLog.Write($"방 입장 요청:  {textBoxRoomNumber.Text} 번");
         }
 
@@ -349,7 +344,7 @@ namespace csharp_test_client
             var requestPkt = new PKTReqRoomChat();
             requestPkt.ChatMessage = textBoxRoomSendMsg.Text;
 
-            var sendPacketData = MessagePackSerializer.Serialize(requestPkt);
+            var sendPacketData = MemoryPackSerializer.Serialize(requestPkt);
 
             PostSendPacket(PACKET_ID.REQ_ROOM_CHAT, sendPacketData);
             DevLog.Write($"방 채팅 요청");
