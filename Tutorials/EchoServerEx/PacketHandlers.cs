@@ -1,40 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EchoServerEx
+namespace EchoServerEx;
+
+public class PacketData
 {
-    public class PacketData
+    public NetworkSession Session;
+    public EFBinaryRequestInfo ReqInfo;
+}
+
+public enum PacketId : int
+{
+    ReqEcho = 101,
+}
+
+public class CommonHandler
+{
+    public void RequestEcho(NetworkSession session, EFBinaryRequestInfo requestInfo)
     {
-        public NetworkSession session;
-        public EFBinaryRequestInfo reqInfo;
+        var totalSize = (Int16)(requestInfo.Body.Length + EFBinaryRequestInfo.HeaderSize);
+
+        List<byte> dataSource =
+        [
+            .. BitConverter.GetBytes(totalSize),
+            .. BitConverter.GetBytes((Int16)PacketId.ReqEcho),
+            .. new byte[1],
+            .. requestInfo.Body,
+        ];
+
+        session.Send(dataSource.ToArray(), 0, dataSource.Count);
     }
+}
 
-    public enum PACKETID : int
-    {
-        REQ_ECHO = 101,
-    }
-
-    public class CommonHandler
-    {
-        public void RequestEcho(NetworkSession session, EFBinaryRequestInfo requestInfo)
-        {
-            var totalSize = (Int16)(requestInfo.Body.Length + EFBinaryRequestInfo.HEADERE_SIZE);
-
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(BitConverter.GetBytes(totalSize));
-            dataSource.AddRange(BitConverter.GetBytes((Int16)PACKETID.REQ_ECHO));
-            dataSource.AddRange(new byte[1]);
-            dataSource.AddRange(requestInfo.Body);
-
-            session.Send(dataSource.ToArray(), 0, dataSource.Count);
-        }
-    }
-
-    public class PK_ECHO
-    {
-        public string msg;
-    }
+public class PK_ECHO
+{
+    public string Message;
 }

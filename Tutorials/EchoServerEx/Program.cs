@@ -9,22 +9,24 @@ namespace EchoServerEx
         {
             Console.WriteLine("Hello SuperSocketLite");
 
+            // 명령어 인수로 서버 옵셥을 받아서 처리한다.
             var serverOption = ParseCommandLine(args);
             if (serverOption == null)
             {
                 return;
             }
 
-            
+            // 서버를 생성하고 초기화한다.
             var server = new MainServer();
             server.InitConfig(serverOption);
             server.CreateServer();
 
+            // 서버를 시작한다.
             var IsResult = server.Start();
 
             if (IsResult)
             {
-                MainServer.MainLogger.Info("서버 네트워크 시작");
+                MainServer.s_MainLogger.Info("서버 네트워크 시작");
             }
             else
             {
@@ -32,7 +34,7 @@ namespace EchoServerEx
                 return;
             }
 
-            MainServer.MainLogger.Info("key를 누르면 종료한다....");
+            MainServer.s_MainLogger.Info("key를 누르면 종료한다....");
             Console.ReadKey();
         }
 
