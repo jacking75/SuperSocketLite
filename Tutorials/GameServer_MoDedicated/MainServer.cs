@@ -91,7 +91,7 @@ namespace GameServer
             MainPacketProcessor.Destory();
         }
 
-        public ERROR_CODE CreateComponent()
+        public ErrorCode CreateComponent()
         {
             ClientSession.CreateIndexPool(m_Config.MaxConnectionNumber);
 
@@ -102,7 +102,7 @@ namespace GameServer
             MainPacketProcessor.CreateAndStart(RoomMgr.GetRoomsList(), this);
 
             MainLogger.Info("CreateComponent - Success");
-            return ERROR_CODE.NONE;
+            return ErrorCode.None;
         }
 
         public bool SendData(string sessionID, byte[] sendData)

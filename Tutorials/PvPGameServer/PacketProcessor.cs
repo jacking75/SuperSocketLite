@@ -16,15 +16,15 @@ class PacketProcessor
     
     //receive쪽에서 처리하지 않아도 Post에서 블럭킹 되지 않는다. 
     //BufferBlock<T>(DataflowBlockOptions) 에서 DataflowBlockOptions의 BoundedCapacity로 버퍼 가능 수 지정. BoundedCapacity 보다 크게 쌓이면 블럭킹 된다
-    BufferBlock<MemoryPackBinaryRequestInfo> _msgBuffer = new BufferBlock<MemoryPackBinaryRequestInfo>();
+    BufferBlock<MemoryPackBinaryRequestInfo> _packetBuffer = new ();
 
     UserManager _userMgr = new UserManager();
 
     List<Room> _roomList = new List<Room>();
 
-    Dictionary<int, Action<MemoryPackBinaryRequestInfo>> _packetHandlerMap = new Dictionary<int, Action<MemoryPackBinaryRequestInfo>>();
-    PKHCommon _commonPacketHandler = new PKHCommon();
-    PKHRoom _roomPacketHandler = new PKHRoom();
+    Dictionary<int, Action<MemoryPackBinaryRequestInfo>> _packetHandlerDict = new ();
+    PKHCommon _commonPacketHandler = new ();
+    PKHRoom _roomPacketHandler = new ();
             
 
     public void CreateAndStart(List<Room> roomList, ServerOption serverOpt)
@@ -45,19 +45,19 @@ class PacketProcessor
     
     public void Destory()
     {
-        MainServer.MainLogger.Info("PacketProcessor::Destory - begin");
+        MainServer.s_MainLogger.Info("PacketProcessor::Destory - begin");
 
         _isThreadRunning = false;
-        _msgBuffer.Complete();
+        _packetBuffer.Complete();
 
         _processThread.Join();
 
-        MainServer.MainLogger.Info("PacketProcessor::Destory - end");
+        MainServer.s_MainLogger.Info("PacketProcessor::Destory - end");
     }
           
     public void InsertPacket(MemoryPackBinaryRequestInfo data)
     {
-        _msgBuffer.Post(data);
+        _packetBuffer.Post(data);
     }
 
     
@@ -66,28 +66,27 @@ class PacketProcessor
         PKHandler.NetSendFunc = NetSendFunc;
         PKHandler.DistributeInnerPacket = InsertPacket;
         _commonPacketHandler.Init(_userMgr);
-        _commonPacketHandler.RegistPacketHandler(_packetHandlerMap);                
+        _commonPacketHandler.RegistPacketHandler(_packetHandlerDict);                
         
         _roomPacketHandler.Init(_userMgr);
         _roomPacketHandler.SetRooomList(_roomList);
-        _roomPacketHandler.RegistPacketHandler(_packetHandlerMap);
+        _roomPacketHandler.RegistPacketHandler(_packetHandlerDict);
     }
 
     void Process()
     {
         while (_isThreadRunning)
         {
-            //System.Threading.Thread.Sleep(64); //테스트 용
             try
             {
-                var packet = _msgBuffer.Receive();
+                var packet = _packetBuffer.Receive();
 
-                var header = new MemoryPackPacketHeadInfo();
+                var header = new MemoryPackPacketHeader();
                 header.Read(packet.Data);
 
-                if (_packetHandlerMap.ContainsKey(header.Id))
+                if (_packetHandlerDict.ContainsKey(header.Id))
                 {
-                    _packetHandlerMap[header.Id](packet);
+                    _packetHandlerDict[header.Id](packet);
                 }
                 /*else
                 {
@@ -98,7 +97,7 @@ class PacketProcessor
             {
                 if (_isThreadRunning)
                 {
-                    MainServer.MainLogger.Error(ex.ToString());
+                    MainServer.s_MainLogger.Error(ex.ToString());
                 }
             }
         }

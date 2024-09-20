@@ -6,105 +6,111 @@ using System.Threading.Tasks;
 
 using CSBaseLib;
 
-namespace GameServer
+
+namespace GameServer;
+
+public class UserManager
 {
-    public class UserManager
+    int _maxUserCount;
+    UInt64 _userSequenceNumber = 0;
+
+    Dictionary<int, User> _userDict = new ();
+
+
+    public void Init(int maxUserCount)
     {
-        int MaxUserCount;
-       UInt64 UserSequenceNumber = 0;
-
-        Dictionary<int, User> UserMap = new Dictionary<int, User>();
-
-        public void Init(int maxUserCount)
-        {
-            MaxUserCount = maxUserCount;
-        }
-
-        public ERROR_CODE AddUser(string userID, string sessionID, int sessionIndex)
-        {
-            if(IsFullUserCount())
-            {
-                return ERROR_CODE.LOGIN_FULL_USER_COUNT;
-            }
-
-            if (UserMap.ContainsKey(sessionIndex))
-            {
-                return ERROR_CODE.ADD_USER_DUPLICATION;
-            }
-
-
-            ++UserSequenceNumber;
-            
-            var user = new User();
-            user.Set(UserSequenceNumber, sessionID, sessionIndex, userID);
-            UserMap.Add(sessionIndex, user);
-
-            return ERROR_CODE.NONE;
-        }
-
-        public ERROR_CODE RemoveUser(int sessionIndex)
-        {
-            if(UserMap.Remove(sessionIndex) == false)
-            {
-                return ERROR_CODE.REMOVE_USER_SEARCH_FAILURE_USER_ID;
-            }
-
-            return ERROR_CODE.NONE;
-        }
-
-        public User GetUser(int sessionIndex)
-        {
-            User user = null;
-            UserMap.TryGetValue(sessionIndex, out user);
-            return user;
-        }
-
-        bool IsFullUserCount()
-        {
-            return MaxUserCount <= UserMap.Count();
-         }
-                
+        _maxUserCount = maxUserCount;
     }
 
-    public class User
+    public ErrorCode AddUser(string userID, string sessionID, int sessionIndex)
     {
-        UInt64 SequenceNumber = 0;
-        string SessionID;
-        int SessionIndex = -1;
-        public int RoomNumber { get; private set; } = -1;
-        string UserID;
-                
-        public void Set(UInt64 sequence, string sessionID, int sessionIndex, string userID)
+        if(IsFullUserCount())
         {
-            SequenceNumber = sequence;
-            SessionID = sessionID;
-            SessionIndex = sessionIndex;
-            UserID = userID;
-        }                   
+            return ErrorCode.LoginFullUserCount;
+        }
+
+        if (_userDict.ContainsKey(sessionIndex))
+        {
+            return ErrorCode.AddUserDuplication;
+        }
+
+
+        ++_userSequenceNumber;
         
-        public bool IsConfirm(string netSessionID)
-        {
-            return SessionID == netSessionID;
-        }
+        var user = new User();
+        user.Set(_userSequenceNumber, sessionID, sessionIndex, userID);
+        _userDict.Add(sessionIndex, user);
 
-        public string ID()
-        {
-            return UserID;
-        }
-
-        public void EnteredRoom(int roomNumber)
-        {
-            RoomNumber = roomNumber;
-        }
-
-        public void LeaveRoom()
-        {
-            RoomNumber = -1;
-        }
-
-        public bool IsStateLogin() { return SessionIndex != -1; }
-
-        public bool IsStateRoom() { return RoomNumber != -1; }
+        return ErrorCode.None;
     }
-    
+
+    public ErrorCode RemoveUser(int sessionIndex)
+    {
+        if(_userDict.Remove(sessionIndex) == false)
+        {
+            return ErrorCode.RemoveUserSearchFailureUserId;
+        }
+
+        return ErrorCode.None;
+    }
+
+    public User GetUser(int sessionIndex)
+    {
+        User user = null;
+        _userDict.TryGetValue(sessionIndex, out user);
+        return user;
+    }
+
+    bool IsFullUserCount()
+    {
+        return _maxUserCount <= _userDict.Count();
+     }
+            
 }
+
+public class User
+{
+    UInt64 _sequenceNumber = 0;
+    
+    string _sessionID;
+    
+    int _sessionIndex = -1;
+
+    public int RoomNumber { get; private set; } = -1;
+    
+    string _userID;
+            
+
+    public void Set(UInt64 sequence, string sessionID, int sessionIndex, string userID)
+    {
+        _sequenceNumber = sequence;
+        _sessionID = sessionID;
+        _sessionIndex = sessionIndex;
+        _userID = userID;
+    }                   
+    
+    public bool IsConfirm(string netSessionID)
+    {
+        return _sessionID == netSessionID;
+    }
+
+    public string ID()
+    {
+        return _userID;
+    }
+
+    public void EnteredRoom(int roomNumber)
+    {
+        RoomNumber = roomNumber;
+    }
+
+    public void LeaveRoom()
+    {
+        RoomNumber = -1;
+    }
+
+    public bool IsStateLogin() { return _sessionIndex != -1; }
+
+    public bool IsStateRoom() { return RoomNumber != -1; }
+}
+

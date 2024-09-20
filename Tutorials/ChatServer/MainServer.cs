@@ -13,162 +13,165 @@ using SuperSocket.SocketEngine;
 using CSBaseLib;
 
 
-//TODO 1. 주기적으로 접속한 세션이 패킷을 주고 받았는지 조사(좀비 클라이언트 검사)
+//TODO 1. 주기적으로 접속한 세션이 패킷을 주고 받았는지 조사(좀비 클라이언트 검사)하는 기능을 만든다
 
-namespace ChatServer
+
+namespace ChatServer;
+
+public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
 {
-    public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
+    public static ChatServerOption s_ServerOption;
+    public static SuperSocket.SocketBase.Logging.ILog s_MainLogger;
+
+    SuperSocket.SocketBase.Config.IServerConfig _config;
+
+    PacketProcessor _mainPacketProcessor = new ();
+    RoomManager _roomMgr = new ();
+    
+    
+    public MainServer()
+        : base(new DefaultReceiveFilterFactory<ReceiveFilter, EFBinaryRequestInfo>())
     {
-        public static ChatServerOption ServerOption;
-        public static SuperSocket.SocketBase.Logging.ILog MainLogger;
+        NewSessionConnected += new SessionHandler<ClientSession>(OnConnected);
+        SessionClosed += new SessionHandler<ClientSession, CloseReason>(OnClosed);
+        NewRequestReceived += new RequestHandler<ClientSession, EFBinaryRequestInfo>(OnPacketReceived);
+    }
 
-        SuperSocket.SocketBase.Config.IServerConfig m_Config;
+    public void InitConfig(ChatServerOption option)
+    {
+        s_ServerOption = option;
 
-        PacketProcessor MainPacketProcessor = new PacketProcessor();
-        RoomManager RoomMgr = new RoomManager();
-        
-        
-        public MainServer()
-            : base(new DefaultReceiveFilterFactory<ReceiveFilter, EFBinaryRequestInfo>())
+        _config = new SuperSocket.SocketBase.Config.ServerConfig
         {
-            NewSessionConnected += new SessionHandler<ClientSession>(OnConnected);
-            SessionClosed += new SessionHandler<ClientSession, CloseReason>(OnClosed);
-            NewRequestReceived += new RequestHandler<ClientSession, EFBinaryRequestInfo>(OnPacketReceived);
-        }
-
-        public void InitConfig(ChatServerOption option)
+            Name = option.Name,
+            Ip = "Any",
+            Port = option.Port,
+            Mode = SocketMode.Tcp,
+            MaxConnectionNumber = option.MaxConnectionNumber,
+            MaxRequestLength = option.MaxRequestLength,
+            ReceiveBufferSize = option.ReceiveBufferSize,
+            SendBufferSize = option.SendBufferSize
+        };
+    }
+    
+    public void CreateStartServer()
+    {
+        try
         {
-            ServerOption = option;
+            bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), 
+                                _config, 
+                                logFactory: new NLogLogFactory());
 
-            m_Config = new SuperSocket.SocketBase.Config.ServerConfig
+            if (bResult == false)
             {
-                Name = option.Name,
-                Ip = "Any",
-                Port = option.Port,
-                Mode = SocketMode.Tcp,
-                MaxConnectionNumber = option.MaxConnectionNumber,
-                MaxRequestLength = option.MaxRequestLength,
-                ReceiveBufferSize = option.ReceiveBufferSize,
-                SendBufferSize = option.SendBufferSize
-            };
-        }
-        
-        public void CreateStartServer()
-        {
-            try
+                Console.WriteLine("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
+                return;
+            } 
+            else 
             {
-                bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), m_Config, logFactory: new NLogLogFactory());
-
-                if (bResult == false)
-                {
-                    Console.WriteLine("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
-                    return;
-                } 
-                else 
-                {
-                    MainLogger = base.Logger;
-                    MainLogger.Info("서버 초기화 성공");
-                }
-
-
-                CreateComponent();
-
-                Start();
-
-                MainLogger.Info("서버 생성 성공");
+                s_MainLogger = base.Logger;
+                s_MainLogger.Info("서버 초기화 성공");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] 서버 생성 실패: {ex.ToString()}");
-            }          
+
+
+            CreateComponent();
+
+            Start();
+
+            s_MainLogger.Info("서버 생성 성공");
         }
-
-        
-        public void StopServer()
-        {            
-            Stop();
-
-            MainPacketProcessor.Destory();
-        }
-
-        public ERROR_CODE CreateComponent()
+        catch (Exception ex)
         {
-            Room.NetSendFunc = this.SendData;
-            RoomMgr.CreateRooms();
+            Console.WriteLine($"[ERROR] 서버 생성 실패: {ex.ToString()}");
+        }          
+    }
 
-            MainPacketProcessor = new PacketProcessor();
-            MainPacketProcessor.CreateAndStart(RoomMgr.GetRoomsList(), this);
+    
+    public void StopServer()
+    {            
+        Stop();
 
-            MainLogger.Info("CreateComponent - Success");
-            return ERROR_CODE.NONE;
-        }
+        _mainPacketProcessor.Destory();
+    }
 
-        public bool SendData(string sessionID, byte[] sendData)
+    // 주요 객체 생성
+    public ErrorCode CreateComponent()
+    {
+        Room.NetSendFunc = this.SendData;
+        _roomMgr.CreateRooms();
+
+        _mainPacketProcessor = new PacketProcessor();
+        _mainPacketProcessor.CreateAndStart(_roomMgr.GetRoomsList(), this);
+
+        s_MainLogger.Info("CreateComponent - Success");
+        return ErrorCode.None;
+    }
+
+    // 네트워크로 패킷을 보낸다
+    public bool SendData(string sessionID, byte[] sendData)
+    {
+        var session = GetSessionByID(sessionID);
+
+        try
         {
-            var session = GetSessionByID(sessionID);
-
-            try
+            if (session == null)
             {
-                if (session == null)
-                {
-                    return false;
-                }
-
-                session.Send(sendData, 0, sendData.Length);
+                return false;
             }
-            catch(Exception ex)
-            {
-                // TimeoutException 예외가 발생할 수 있다
-                MainServer.MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
 
-                session.SendEndWhenSendingTimeOut(); 
-                session.Close();
-            }
-            return true;
+            session.Send(sendData, 0, sendData.Length);
         }
-
-        public void Distribute(ServerPacketData requestPacket)
+        catch(Exception ex)
         {
-            MainPacketProcessor.InsertPacket(requestPacket);
+            // TimeoutException 예외가 발생할 수 있다
+            MainServer.s_MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
+
+            session.SendEndWhenSendingTimeOut(); 
+            session.Close();
         }
-                        
-        void OnConnected(ClientSession session)
-        {
-            //옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
-            MainLogger.Info(string.Format("세션 번호 {0} 접속", session.SessionID));
-                        
-            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID);            
-            Distribute(packet);
-        }
+        return true;
+    }
 
-        void OnClosed(ClientSession session, CloseReason reason)
-        {
-            MainLogger.Info(string.Format("세션 번호 {0} 접속해제: {1}", session.SessionID, reason.ToString()));
-
-            var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID);
-            Distribute(packet);
-        }
-
-        void OnPacketReceived(ClientSession session, EFBinaryRequestInfo reqInfo)
-        {
-            MainLogger.Debug(string.Format("세션 번호 {0} 받은 데이터 크기: {1}, ThreadId: {2}", session.SessionID, reqInfo.Body.Length, System.Threading.Thread.CurrentThread.ManagedThreadId));
-
-            var packet = new ServerPacketData();
-            packet.SessionID = session.SessionID;
-            packet.PacketSize = reqInfo.Size;            
-            packet.PacketID = reqInfo.PacketID;
-            packet.Type = reqInfo.Type;
-            packet.BodyData = reqInfo.Body;
+    // 패킷처리기로 패킷을 전달한다
+    public void Distribute(ServerPacketData requestPacket)
+    {
+        _mainPacketProcessor.InsertPacket(requestPacket);
+    }
                     
-            Distribute(packet);
-        }
+
+    void OnConnected(ClientSession session)
+    {
+        //옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
+        s_MainLogger.Info(string.Format("세션 번호 {0} 접속", session.SessionID));
+                    
+        var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID);            
+        Distribute(packet);
     }
 
-    public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
+    void OnClosed(ClientSession session, CloseReason reason)
     {
+        s_MainLogger.Info($"세션 번호 {session.SessionID} 접속해제: {reason.ToString()}");
+
+        var packet = ServerPacketData.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID);
+        Distribute(packet);
     }
-        /*class ConfigTemp
-        {
-            static public List<string> RemoteServers = new List<string>();
-        }*/
- }
+
+    void OnPacketReceived(ClientSession session, EFBinaryRequestInfo reqInfo)
+    {
+        s_MainLogger.Debug($"세션 번호 {session.SessionID} 받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {System.Threading.Thread.CurrentThread.ManagedThreadId}");
+
+        var packet = new ServerPacketData();
+        packet.SessionID = session.SessionID;
+        packet.PacketSize = reqInfo.Size;            
+        packet.PacketID = reqInfo.PacketID;
+        packet.Type = reqInfo.Type;
+        packet.BodyData = reqInfo.Body;
+                
+        Distribute(packet);
+    }
+}
+
+public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
+{
+}
+

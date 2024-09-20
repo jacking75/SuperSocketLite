@@ -5,34 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace BinaryPacketServer
+namespace BinaryPacketServer;
+
+public class PacketData
 {
-    public class PacketData
-    {
-        public NetworkSession session;
-        public EFBinaryRequestInfo reqInfo;
-    }
+    public NetworkSession Session;
+    public EFBinaryRequestInfo ReqInfo;
+}
 
-    public enum PACKETID : int
-    {
-        REQ_ECHO = 1,
-    }
+public enum PACKETID : int
+{
+    ReqEcho = 1,
+}
 
-    public class CommonHandler
+public class CommonHandler
+{
+    public void RequestEcho(NetworkSession session, EFBinaryRequestInfo requestInfo)
     {
-        public void RequestEcho(NetworkSession session, EFBinaryRequestInfo requestInfo)
-        {
-            List<byte> dataSource = new List<byte>();
-            dataSource.AddRange(BitConverter.GetBytes((int)PACKETID.REQ_ECHO));
-            dataSource.AddRange(BitConverter.GetBytes(requestInfo.Body.Length));
-            dataSource.AddRange(requestInfo.Body);
+        List<byte> dataSource = new List<byte>();
+        dataSource.AddRange(BitConverter.GetBytes((int)PACKETID.ReqEcho));
+        dataSource.AddRange(BitConverter.GetBytes(requestInfo.Body.Length));
+        dataSource.AddRange(requestInfo.Body);
 
-            session.Send(dataSource.ToArray(), 0, dataSource.Count);
-        }
+        session.Send(dataSource.ToArray(), 0, dataSource.Count);
     }
+}
 
-    public class PK_ECHO
-    {
-        public string msg;
-    }
+public class PktEcho
+{
+    public string Message;
 }

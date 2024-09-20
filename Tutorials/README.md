@@ -43,6 +43,8 @@
 ## EchoServer_GenericHost
 ![EchoServerGenericHost](./01_images/003.png)          
   
+[Generic Host(일반 호스트) 소개 및 사용](https://jacking75.github.io/NET_GenericHost/)  | [MS Docs](https://learn.microsoft.com/ko-kr/dotnet/core/extensions/generic-host?tabs=appbuilder)   
+    
 - `EchoServer`에 `GenericHost` 기능을 사용하여 프로그램화 한 것이다.  
 - 빌드 후 EchoServer_GenericHost.bat 배치 파일로 실행한다. 
 - 클라이언트는 EchoClient 프로젝틀 사용한다.    
@@ -113,7 +115,8 @@ namespace EchoServer_GenericHost
 ## MultiPortServer  
 ![MultiPortServer](./01_images/004.png)          
   
-- 서버가 복수의 port 번호를 사용하는 경우에 대한 예제이다.  
+- 서버가 복수의 port 번호를 사용하는 경우에 대한 예제이다.
+- 이런 방식이 사용되는 경우는 이 서버에 내부 서버와 외부 클라이언트가 접속하는 경우 보안 상의 이유 등으로 port 1은 내부 서버에서만 접속하고, port 2는 외부 클라이언트만 접속하도록 할 때 이렇게 사용한다.  
 
 ```
 class Program

@@ -3,34 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace sendFailTestServer
-{
+namespace sendFailTestServer;
+
 #if (__NOT_USE_NLOG__ != true)  //NLog를 사용하지 않는다면 __NOT_USE_NLOG__ 선언한다
-    public class NLogLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
+public class NLogLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
+{
+    public NLogLogFactory()
+        : this("NLog.config")
     {
-        public NLogLogFactory()
-            : this("NLog.config")
-        {
-        }
+    }
 
-        public NLogLogFactory(string nlogConfig)
-            : base(nlogConfig)
+    public NLogLogFactory(string nlogConfig)
+        : base(nlogConfig)
+    {
+        if (!IsSharedConfig)
         {
-            if (!IsSharedConfig)
-            {
-                LogManager.Setup().LoadConfigurationFromFile(new[] { ConfigFile });
-                // 2023.11.28 최흥배 비추천이 되어서 위의 코드로 변경
-                //NLog.Config.XmlLoggingConfiguration.SetCandidateConfigFilePaths(new[] { ConfigFile });
-            }
-            else
-            {                
-            }
+            LogManager.Setup().LoadConfigurationFromFile(new[] { ConfigFile });
+            // 2023.11.28 최흥배 비추천이 되어서 위의 코드로 변경
+            //NLog.Config.XmlLoggingConfiguration.SetCandidateConfigFilePaths(new[] { ConfigFile });
         }
-
-        public override SuperSocket.SocketBase.Logging.ILog GetLog(string name)
-        {
-            return new NLogLog(NLog.LogManager.GetLogger(name));
+        else
+        {                
         }
     }
-#endif
+
+    public override SuperSocket.SocketBase.Logging.ILog GetLog(string name)
+    {
+        return new NLogLog(NLog.LogManager.GetLogger(name));
+    }
 }
+#endif

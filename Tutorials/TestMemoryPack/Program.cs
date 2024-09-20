@@ -17,7 +17,7 @@ Console.WriteLine("");
 Test6();
 
 
-
+// 기본적인 직렬화가 잘 되는지 테스트
 void Test1()
 {
     Console.WriteLine("[ Test 1 ] 기능 검증");
@@ -43,6 +43,7 @@ void Test1()
     }
 }
 
+// 클래스를 직렬화 했을 때의 바이너리 크기 확인
 void Test2()
 {
     Console.WriteLine("[ Test 2 ] 직렬화 했을 때의 바이너리 크기");
@@ -57,6 +58,7 @@ void Test2()
     Console.WriteLine($"Test2 - TestClassSize size: {bin.Length}"); 
 }
 
+// 클래스를 직렬화 할 때 1개의 클래스가 가질 수 있는 최대 멤버 개수 확인
 void Test3()
 {
     Console.WriteLine("[ Test 3 ] 직렬화 할 클래스의 데이터 멤버 개수");
@@ -67,6 +69,8 @@ void Test3()
     Console.WriteLine($"Test3 - TestClassTooDataCount size: {bin.Length}");
 }
 
+// 네트워크 프로그래밍에서 사용될 목적으로 헤더+보디 구조로된 패킷을 직렬화 할 때의 방법을 확인
+// 패킷의 보디 부분만 직렬화 하면 간단하게 패킷을 직렬화 할 수 있지만 이러면 메모리 할당과 복사가 추가로 발생한다. 그래서 1번에 헤더+보디를 직렬화 하려고 한다.
 void Test6()
 {
     Console.WriteLine("[ Test 6 ] 패킷 데이터 직렬화");

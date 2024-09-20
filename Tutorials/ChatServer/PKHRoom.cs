@@ -1,255 +1,252 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using MessagePack;
 
 using CSBaseLib;
 
 
-namespace ChatServer
+namespace ChatServer;
+
+public class PKHRoom : PKHandler
 {
-    public class PKHRoom : PKHandler
+    List<Room> _roomList = null;
+    int _startRoomNumber;
+    
+
+    public void SetRooomList(List<Room> roomList)
     {
-        List<Room> RoomList = null;
-        int StartRoomNumber;
+        _roomList = roomList;
+        _startRoomNumber = roomList[0].Number;
+    }
+
+    public void RegistPacketHandler(Dictionary<int, Action<ServerPacketData>> packetHandlerMap)
+    {
+        packetHandlerMap.Add((int)PacketId.ReqRoomEnter, HandleRequestRoomEnter);
+        packetHandlerMap.Add((int)PacketId.ReqRoomLeave, HandleRequestLeave);
+        packetHandlerMap.Add((int)PacketId.NtfInRoomLeave, HandleNotifyLeaveInternal);
+        packetHandlerMap.Add((int)PacketId.ReqRoomChat, HandleRequestChat);
+    }
+
+
+    Room GetRoom(int roomNumber)
+    {
+        var index = roomNumber - _startRoomNumber;
+
+        if( index < 0 || index >= _roomList.Count())
+        {
+            return null;
+        }
+
+        return _roomList[index];
+    }
+            
+    (bool, Room, RoomUser) CheckRoomAndRoomUser(string userNetSessionID)
+    {
+        var user = _userMgr.GetUser(userNetSessionID);
+        if (user == null)
+        {
+            return (false, null, null);
+        }
+
         
-        public void SetRooomList(List<Room> roomList)
+        var room = GetRoom(user.RoomNumber);
+        if(room == null)
         {
-            RoomList = roomList;
-            StartRoomNumber = roomList[0].Number;
+            return (false, null, null);
         }
 
-        public void RegistPacketHandler(Dictionary<int, Action<ServerPacketData>> packetHandlerMap)
+        var roomUser = room.GetUserByNetSessionId(userNetSessionID);
+        if (roomUser == null)
         {
-            packetHandlerMap.Add((int)PACKETID.REQ_ROOM_ENTER, RequestRoomEnter);
-            packetHandlerMap.Add((int)PACKETID.REQ_ROOM_LEAVE, RequestLeave);
-            packetHandlerMap.Add((int)PACKETID.NTF_IN_ROOM_LEAVE, NotifyLeaveInternal);
-            packetHandlerMap.Add((int)PACKETID.REQ_ROOM_CHAT, RequestChat);
+            return (false, room, null);
         }
 
+        return (true, room, roomUser);
+    }
 
-        Room GetRoom(int roomNumber)
+
+
+    public void HandleRequestRoomEnter(ServerPacketData packetData)
+    {
+        var sessionID = packetData.SessionID;
+        MainServer.s_MainLogger.Debug("RequestRoomEnter");
+
+        try
         {
-            var index = roomNumber - StartRoomNumber;
-
-            if( index < 0 || index >= RoomList.Count())
+            var user = _userMgr.GetUser(sessionID);
+            if (user == null || user.IsConfirm(sessionID) == false)
             {
-                return null;
+                SendResponseEnterRoomToClient(ErrorCode.RoomEnterInvalidUser, sessionID);
+                return;
             }
 
-            return RoomList[index];
-        }
-                
-        (bool, Room, RoomUser) CheckRoomAndRoomUser(string userNetSessionID)
-        {
-            var user = UserMgr.GetUser(userNetSessionID);
-            if (user == null)
+            if (user.IsStateRoom())
             {
-                return (false, null, null);
+                SendResponseEnterRoomToClient(ErrorCode.RoomEnterInvalidState, sessionID);
+                return;
             }
 
-            var roomNumber = user.RoomNumber;
-            var room = GetRoom(roomNumber);
 
-            if(room == null)
-            {
-                return (false, null, null);
-            }
+            var reqData = MessagePackSerializer.Deserialize<PKTReqRoomEnter>(packetData.BodyData);
+            
+            var room = GetRoom(reqData.RoomNumber);
 
-            var roomUser = room.GetUserByNetSessionId(userNetSessionID);
-
-            if (roomUser == null)
-            {
-                return (false, room, null);
-            }
-
-            return (true, room, roomUser);
-        }
-
-
-
-        public void RequestRoomEnter(ServerPacketData packetData)
-        {
-            var sessionID = packetData.SessionID;
-            MainServer.MainLogger.Debug("RequestRoomEnter");
-
-            try
-            {
-                var user = UserMgr.GetUser(sessionID);
-
-                if (user == null || user.IsConfirm(sessionID) == false)
-                {
-                    ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_INVALID_USER, sessionID);
-                    return;
-                }
-
-                if (user.IsStateRoom())
-                {
-                    ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_INVALID_STATE, sessionID);
-                    return;
-                }
-
-                var reqData = MessagePackSerializer.Deserialize<PKTReqRoomEnter>(packetData.BodyData);
-                
-                var room = GetRoom(reqData.RoomNumber);
-
-                if (room == null)
-                {
-                    ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_INVALID_ROOM_NUMBER, sessionID);
-                    return;
-                }
-
-                if (room.AddUser(user.ID(), sessionID) == false)
-                {
-                    ResponseEnterRoomToClient(ERROR_CODE.ROOM_ENTER_FAIL_ADD_USER, sessionID);
-                    return;
-                }
-
-
-                user.EnteredRoom(reqData.RoomNumber);
-
-                room.NotifyPacketUserList(sessionID);
-                room.NofifyPacketNewUser(sessionID, user.ID());
-
-                ResponseEnterRoomToClient(ERROR_CODE.NONE, sessionID);
-
-                MainServer.MainLogger.Debug("RequestEnterInternal - Success");
-            }
-            catch (Exception ex)
-            {
-                MainServer.MainLogger.Error(ex.ToString());
-            }
-        }
-
-        void ResponseEnterRoomToClient(ERROR_CODE errorCode, string sessionID)
-        {
-            var resRoomEnter = new PKTResRoomEnter()
-            {
-                Result = (short)errorCode
-            };
-
-            var bodyData = MessagePackSerializer.Serialize(resRoomEnter);
-            var sendData = PacketToBytes.Make(PACKETID.RES_ROOM_ENTER, bodyData);
-
-            ServerNetwork.SendData(sessionID, sendData);
-        }
-
-        public void RequestLeave(ServerPacketData packetData)
-        {
-            var sessionID = packetData.SessionID;
-            MainServer.MainLogger.Debug("로그인 요청 받음");
-
-            try
-            {
-                var user = UserMgr.GetUser(sessionID);
-                if(user == null)
-                {
-                    return;
-                }
-
-                if(LeaveRoomUser(sessionID, user.RoomNumber) == false)
-                {
-                    return;
-                }
-
-                user.LeaveRoom();
-
-                ResponseLeaveRoomToClient(sessionID);
-
-                MainServer.MainLogger.Debug("Room RequestLeave - Success");
-            }
-            catch (Exception ex)
-            {
-                MainServer.MainLogger.Error(ex.ToString());
-            }
-        }
-
-        bool LeaveRoomUser(string sessionID, int roomNumber)
-        {
-            MainServer.MainLogger.Debug($"LeaveRoomUser. SessionID:{sessionID}");
-
-            var room = GetRoom(roomNumber);
             if (room == null)
             {
-                return false;
+                SendResponseEnterRoomToClient(ErrorCode.RoomEnterInvalidRoomNumber, sessionID);
+                return;
             }
 
-            var roomUser = room.GetUserByNetSessionId(sessionID);
-            if (roomUser == null)
+            if (room.AddUser(user.ID(), sessionID) == false)
             {
-                return false;
+                SendResponseEnterRoomToClient(ErrorCode.RoomEnterFailAddUser, sessionID);
+                return;
             }
-                        
-            var userID = roomUser.UserID;
-            room.RemoveUser(roomUser);
 
-            room.NotifyPacketLeaveUser(userID);
-            return true;
+
+            user.EnteredRoom(reqData.RoomNumber);
+
+            room.SendNotifyPacketUserList(sessionID);
+            room.SendNofifyPacketNewUser(sessionID, user.ID());
+
+            SendResponseEnterRoomToClient(ErrorCode.None, sessionID);
+
+            MainServer.s_MainLogger.Debug("RequestEnterInternal - Success");
+        }
+        catch (Exception ex)
+        {
+            MainServer.s_MainLogger.Error(ex.ToString());
+        }
+    }
+
+    void SendResponseEnterRoomToClient(ErrorCode errorCode, string sessionID)
+    {
+        var resRoomEnter = new PKTResRoomEnter()
+        {
+            Result = (short)errorCode
+        };
+
+        var bodyData = MessagePackSerializer.Serialize(resRoomEnter);
+        var sendData = PacketToBytes.Make(PacketId.ResRoomEnter, bodyData);
+
+        _serverNetwork.SendData(sessionID, sendData);
+    }
+
+    public void HandleRequestLeave(ServerPacketData packetData)
+    {
+        var sessionID = packetData.SessionID;
+        MainServer.s_MainLogger.Debug("로그인 요청 받음");
+
+        try
+        {
+            var user = _userMgr.GetUser(sessionID);
+            if(user == null)
+            {
+                return;
+            }
+
+            if(LeaveRoomUser(sessionID, user.RoomNumber) == false)
+            {
+                return;
+            }
+
+            user.LeaveRoom();
+
+            SendResponseLeaveRoomToClient(sessionID);
+
+            MainServer.s_MainLogger.Debug("Room RequestLeave - Success");
+        }
+        catch (Exception ex)
+        {
+            MainServer.s_MainLogger.Error(ex.ToString());
+        }
+    }
+
+    bool LeaveRoomUser(string sessionID, int roomNumber)
+    {
+        MainServer.s_MainLogger.Debug($"LeaveRoomUser. SessionID:{sessionID}");
+
+        var room = GetRoom(roomNumber);
+        if (room == null)
+        {
+            return false;
         }
 
-        void ResponseLeaveRoomToClient(string sessionID)
+        var roomUser = room.GetUserByNetSessionId(sessionID);
+        if (roomUser == null)
         {
-            var resRoomLeave = new PKTResRoomLeave()
+            return false;
+        }
+                    
+        var userID = roomUser.UserID;
+        room.RemoveUser(roomUser);
+
+        room.SendNotifyPacketLeaveUser(userID);
+        return true;
+    }
+
+    void SendResponseLeaveRoomToClient(string sessionID)
+    {
+        var resRoomLeave = new PKTResRoomLeave()
+        {
+            Result = (short)ErrorCode.None
+        };
+
+        var bodyData = MessagePackSerializer.Serialize(resRoomLeave);
+        var sendData = PacketToBytes.Make(PacketId.ResRoomLeave, bodyData);
+
+        _serverNetwork.SendData(sessionID, sendData);
+    }
+
+
+    public void HandleNotifyLeaveInternal(ServerPacketData packetData)
+    {
+        var sessionID = packetData.SessionID;
+        MainServer.s_MainLogger.Debug($"NotifyLeaveInternal. SessionID: {sessionID}");
+
+        var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfRoomLeave>(packetData.BodyData);            
+        LeaveRoomUser(sessionID, reqData.RoomNumber);
+    }
+            
+    public void HandleRequestChat(ServerPacketData packetData)
+    {
+        var sessionID = packetData.SessionID;
+        MainServer.s_MainLogger.Debug("Room RequestChat");
+
+        try
+        {
+            var (isResult, room, roomUser) = CheckRoomAndRoomUser(sessionID);
+            
+            if(isResult == false)
             {
-                Result = (short)ERROR_CODE.NONE
+                return;
+            }
+
+            var reqData = MessagePackSerializer.Deserialize<PKTReqRoomChat>(packetData.BodyData);
+
+
+            var notifyPacket = new PKTNtfRoomChat()
+            {
+                UserID = roomUser.UserID,
+                ChatMessage = reqData.ChatMessage
             };
 
-            var bodyData = MessagePackSerializer.Serialize(resRoomLeave);
-            var sendData = PacketToBytes.Make(PACKETID.RES_ROOM_LEAVE, bodyData);
+            var Body = MessagePackSerializer.Serialize(notifyPacket);
+            var sendData = PacketToBytes.Make(PacketId.NtfRoomChat, Body);
 
-            ServerNetwork.SendData(sessionID, sendData);
+            room.Broadcast("", sendData);
+
+            MainServer.s_MainLogger.Debug("Room RequestChat - Success");
         }
-
-        public void NotifyLeaveInternal(ServerPacketData packetData)
+        catch (Exception ex)
         {
-            var sessionID = packetData.SessionID;
-            MainServer.MainLogger.Debug($"NotifyLeaveInternal. SessionID: {sessionID}");
-
-            var reqData = MessagePackSerializer.Deserialize<PKTInternalNtfRoomLeave>(packetData.BodyData);            
-            LeaveRoomUser(sessionID, reqData.RoomNumber);
+            MainServer.s_MainLogger.Error(ex.ToString());
         }
-                
-        public void RequestChat(ServerPacketData packetData)
-        {
-            var sessionID = packetData.SessionID;
-            MainServer.MainLogger.Debug("Room RequestChat");
-
-            try
-            {
-                var roomObject = CheckRoomAndRoomUser(sessionID);
-
-                if(roomObject.Item1 == false)
-                {
-                    return;
-                }
-
-
-                var reqData = MessagePackSerializer.Deserialize<PKTReqRoomChat>(packetData.BodyData);
-
-                var notifyPacket = new PKTNtfRoomChat()
-                {
-                    UserID = roomObject.Item3.UserID,
-                    ChatMessage = reqData.ChatMessage
-                };
-
-                var Body = MessagePackSerializer.Serialize(notifyPacket);
-                var sendData = PacketToBytes.Make(PACKETID.NTF_ROOM_CHAT, Body);
-
-                roomObject.Item2.Broadcast("", sendData);
-
-                MainServer.MainLogger.Debug("Room RequestChat - Success");
-            }
-            catch (Exception ex)
-            {
-                MainServer.MainLogger.Error(ex.ToString());
-            }
-        }
-       
-
-        
-
     }
+   
+
+    
+
 }

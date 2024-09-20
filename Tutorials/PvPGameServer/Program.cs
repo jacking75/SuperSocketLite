@@ -12,6 +12,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        // generic host를 사용한다
         var host = new HostBuilder()
             .ConfigureAppConfiguration((hostingContext, config) =>
             {

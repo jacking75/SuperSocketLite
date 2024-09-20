@@ -1,80 +1,80 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading;
 
-namespace GameServer
+
+namespace GameServer;
+
+// 게임 로직을 주기적으로 업데이트 하는 클래스
+class GameUpdater
 {
-    class GameUpdater
+    bool _isThreadRunning = false;
+    Thread _processThread = null;
+
+    UInt16 _maxGameCount = 0;
+    GameLogic[] _gameLogics = null;
+
+    ConcurrentQueue<InOutGameElement> _newGameQueue = new ConcurrentQueue<InOutGameElement>();
+
+
+    public void Init(UInt16 maxGameCount)
     {
-        bool IsThreadRunning = false;
-        Thread ProcessThread = null;
+        _maxGameCount = maxGameCount;
+        _gameLogics = new GameLogic[maxGameCount];
 
-        UInt16 MaxGameCount = 0;
-        GameLogic[] GameLogics = null;
+        _isThreadRunning = true;
+        _processThread = new Thread(this.Process);
+        _processThread.Start();
+    }
 
-        ConcurrentQueue<InOutGameElement> NewGameQueue = new ConcurrentQueue<InOutGameElement>();
-
-        public void Init(UInt16 maxGameCount)
+    public void Stop()
+    {
+        if (_isThreadRunning == false)
         {
-            MaxGameCount = maxGameCount;
-            GameLogics = new GameLogic[maxGameCount];
-
-            IsThreadRunning = true;
-            ProcessThread = new Thread(this.Process);
-            ProcessThread.Start();
+            return;
         }
 
-        public void Stop()
+        _isThreadRunning = false;
+        _processThread.Join();
+    }
+
+    public void NewGame(UInt16 index, GameLogic game)
+    {
+        _newGameQueue.Enqueue(new InOutGameElement { Index = index, GameObj = game })  ;
+    }
+
+    // 업데이트 주기를 최대한 원하는 시간에 맞추기 위해서 Sleep을 사용
+    void Process()
+    {
+        while (_isThreadRunning)
         {
-            if (IsThreadRunning == false)
+            if(_newGameQueue.TryDequeue(out var newGame))
             {
-                return;
+                _gameLogics[newGame.Index] = newGame.GameObj;
             }
 
-            IsThreadRunning = false;
-            ProcessThread.Join();
-        }
-
-        public void NewGame(UInt16 index, GameLogic game)
-        {
-            NewGameQueue.Enqueue(new InOutGameElement { Index = index, GameObj = game })  ;
-        }
-
-        void Process()
-        {
-            while (IsThreadRunning)
+            for(var i = 0; i < _maxGameCount; ++ i)
             {
-                if(NewGameQueue.TryDequeue(out var newGame))
+                if (_gameLogics[i] == null)
                 {
-                    GameLogics[newGame.Index] = newGame.GameObj;
+                    continue;
                 }
 
-                for(var i = 0; i < MaxGameCount; ++ i)
+                if(_gameLogics[i].IsStop)
                 {
-                    if (GameLogics[i] == null)
-                    {
-                        continue;
-                    }
+                    _gameLogics[i] = null;
+                }
 
-                    if(GameLogics[i].IsStop)
-                    {
-                        GameLogics[i] = null;
-                    }
+                _gameLogics[i].Update();
+            }                
 
-                    GameLogics[i].Update();
-                }                
-
-                Thread.Sleep(1);
-            }
+            Thread.Sleep(1);
         }
     }
+}
 
-    class InOutGameElement
-    {
-        public UInt16 Index;
-        public GameLogic GameObj;
-    }
+class InOutGameElement
+{
+    public UInt16 Index;
+    public GameLogic GameObj;
 }

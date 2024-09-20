@@ -1,85 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PvPGameServer
+
+namespace PvPGameServer;
+
+public class NLogLog : SuperSocket.SocketBase.Logging.ILog
 {
-    public class NLogLog : SuperSocket.SocketBase.Logging.ILog
+    private NLog.ILogger _logger;
+
+
+    public NLogLog(NLog.ILogger logger)
     {
-        private NLog.ILogger Log;
-
-        public NLogLog(NLog.ILogger log)
+        if (logger == null)
         {
-            if (log == null)
-            {
-                throw new ArgumentNullException("log");
-            }
-
-            Log = log;
+            throw new ArgumentNullException("log");
         }
 
-        public bool IsDebugEnabled
-        {
-            get { return Log.IsDebugEnabled; }
-        }
-
-        public bool IsErrorEnabled
-        {
-            get { return Log.IsErrorEnabled; }
-        }
-
-        public bool IsFatalEnabled
-        {
-            get { return Log.IsFatalEnabled; }
-        }
-
-        public bool IsInfoEnabled
-        {
-            get { return Log.IsInfoEnabled; }
-        }
-
-        public bool IsWarnEnabled
-        {
-            get { return Log.IsWarnEnabled; }
-        }
-
-        public void Debug(string message)
-        {
-            Log.Debug(message);
-        }                         
-        
-        public void Error(string message)
-        {
-            Log.Error(message);
-        }
-        
-        public void Error(string message, Exception exception)
-        {
-            Log.Error($"msg:{message}, exception:{exception.ToString()}");
-        }
-                
-        public void Fatal(string message)
-        {
-            Log.Fatal(message);
-        }
-        
-        public void Fatal(string message, Exception exception)
-        {
-            Log.Fatal($"msg:{message}, exception:{exception.ToString()}");
-        }
-              
-        public void Info(string message)
-        {
-            Log.Info(message);
-        }
-                 
-        public void Warn(string message)
-        {
-            Log.Warn(message);
-        }
-
-        
-        
+        _logger = logger;
     }
 
+    public bool IsDebugEnabled
+    {
+        get { return _logger.IsDebugEnabled; }
+    }
+
+    public bool IsErrorEnabled
+    {
+        get { return _logger.IsErrorEnabled; }
+    }
+
+    public bool IsFatalEnabled
+    {
+        get { return _logger.IsFatalEnabled; }
+    }
+
+    public bool IsInfoEnabled
+    {
+        get { return _logger.IsInfoEnabled; }
+    }
+
+    public bool IsWarnEnabled
+    {
+        get { return _logger.IsWarnEnabled; }
+    }
+
+    public void Debug(string message)
+    {
+        _logger.Debug(message);
+    }                         
+    
+    public void Error(string message)
+    {
+        _logger.Error(message);
+    }
+    
+    public void Error(string message, Exception exception)
+    {
+        _logger.Error($"msg:{message}, exception:{exception.ToString()}");
+    }
+            
+    public void Fatal(string message)
+    {
+        _logger.Fatal(message);
+    }
+    
+    public void Fatal(string message, Exception exception)
+    {
+        _logger.Fatal($"msg:{message}, exception:{exception.ToString()}");
+    }
+          
+    public void Info(string message)
+    {
+        _logger.Info(message);
+    }
+             
+    public void Warn(string message)
+    {
+        _logger.Warn(message);
+    }
+
+    
+    
 }

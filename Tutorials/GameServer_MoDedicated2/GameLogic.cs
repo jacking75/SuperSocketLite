@@ -1,89 +1,84 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GameServer
+
+namespace GameServer;
+
+public class GameLogic
 {
-    public class GameLogic
+    UInt32 _index = 0;
+    ConcurrentQueue<GameMessage> _msgQueue = new ConcurrentQueue<GameMessage>();
+
+    UInt16 _updateIntervalMilliSec = 0;
+    DateTime _prevUpdateTime = DateTime.Now;
+
+    public bool IsStop { get; private set; } = false;
+
+
+    public void Init(UInt32 index, UInt16 intervalMSec)
     {
-        UInt32 Index = 0;
-        ConcurrentQueue<GameMessage> MsgQueue = new ConcurrentQueue<GameMessage>();
+        _index = index;
+        _updateIntervalMilliSec = intervalMSec;
+    }
 
-        UInt16 UpdateIntervalMilliSec = 0;
-        DateTime PrevUpdateTime = DateTime.Now;
+    public void Clear()
+    {
+    }
 
-        public bool IsStop { get; private set; } = false;
+    public void Start()
+    {
+        IsStop = false;
+        _prevUpdateTime = DateTime.Now.AddMilliseconds(-_updateIntervalMilliSec);
+    }
 
+    public void Stop()
+    {
+        IsStop = true;
+    }
+            
+    public void AddMessage(UInt16 msgId, byte[] msgData)
+    {
+        _msgQueue.Enqueue(new GameMessage(msgId, msgData));
+    }
 
-        public void Init(UInt32 index, UInt16 intervalMSec)
+    public bool Update()
+    {
+        var curTime = DateTime.Now;
+        var diffTime = curTime - _prevUpdateTime;
+
+        if(diffTime.TotalMilliseconds < _updateIntervalMilliSec)
         {
-            Index = index;
-            UpdateIntervalMilliSec = intervalMSec;
+            return false;
         }
 
-        public void Clear()
-        {
+        _prevUpdateTime = curTime;
 
-        }
+        MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{_index}, [{curTime.Millisecond}]");
 
-        public void Start()
+        if (_msgQueue.TryDequeue(out var gameMsg))
         {
-            IsStop = false;
-            PrevUpdateTime = DateTime.Now.AddMilliseconds(-UpdateIntervalMilliSec);
-        }
+            MainServer.MainLogger.Debug($"[GameLogic-Update] id: {gameMsg.MsgId}. Index:{_index}");
 
-        public void Stop()
-        {
-            IsStop = true;
-        }
-                
-        public void AddMessage(UInt16 msgId, byte[] msgData)
-        {
-            MsgQueue.Enqueue(new GameMessage(msgId, msgData));
-        }
-
-        public bool Update()
-        {
-            var curTime = DateTime.Now;
-            var diffTime = curTime - PrevUpdateTime;
-
-            if(diffTime.TotalMilliseconds < UpdateIntervalMilliSec)
+            if (gameMsg.MsgId == 0)
             {
                 return false;
             }
-
-            PrevUpdateTime = curTime;
-
-            MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{Index}, [{curTime.Millisecond}]");
-
-            if (MsgQueue.TryDequeue(out var gameMsg))
-            {
-                MainServer.MainLogger.Debug($"[GameLogic-Update] id: {gameMsg.MsgId}. Index:{Index}");
-
-                if (gameMsg.MsgId == 0)
-                {
-                    return false;
-                }
-            }
-                        
-            return true;
         }
-        
+                    
+        return true;
     }
+    
+}
 
 
-    public struct GameMessage
+public struct GameMessage
+{
+    public GameMessage(UInt16 msgId, byte[] msgData)
     {
-        public GameMessage(UInt16 msgId, byte[] msgData)
-        {
-            MsgId = msgId;
-            MsgData = msgData;
-        }
-
-        public UInt16 MsgId;
-        public byte[] MsgData;
+        MsgId = msgId;
+        MsgData = msgData;
     }
 
+    public UInt16 MsgId;
+    public byte[] MsgData;
 }

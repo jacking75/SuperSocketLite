@@ -1,134 +1,133 @@
 ﻿using CSBaseLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace ChatServer
+
+namespace ChatServer;
+
+enum SessionStatus
 {
-    enum SessionStatus
+    None = 0,
+    Logining = 1,
+    Login = 2,
+    RoomEntering = 3,
+    Room = 4,
+}
+
+// 연결된 세션 클래스
+class ConnectSession
+{
+    public bool IsEnable = true;
+    Int64 _currentState = (Int64)SessionStatus.None;
+    string _userID;
+    Int64 _roomNumber = PacketDef.InvalidRoomNumber;
+
+
+    public void Clear()
     {
-        NONE = 0,
-        LOGIN_ING = 1,
-        LOGIN = 2,
-        ROOM_ENTERING = 3,
-        ROOM = 4,
+        IsEnable = true;
+        _currentState = (Int64)SessionStatus.None;
+        _roomNumber = PacketDef.InvalidRoomNumber;
     }
 
-    class ConnectSession
+    public bool IsStateNone()
     {
-        public bool IsEnable = true;
-        Int64 CurrentState = (Int64)SessionStatus.NONE;
-        string UserID;
-        Int64 RoomNumber = PacketDef.INVALID_ROOM_NUMBER;
+        return (IsEnable && _currentState == (Int64)SessionStatus.None);
+    }
 
-        public void Clear()
+    public bool IsStateLogin()
+    {
+        return (IsEnable && _currentState == (Int64)SessionStatus.Login);
+    }
+
+    public bool IsStateRoom()
+    {
+        return (IsEnable && GetState() == SessionStatus.Room);
+    }
+
+    public void SetDisable()
+    {
+        IsEnable = false;
+    }
+
+    public void SetStateNone()
+    {
+        if (IsEnable)
         {
-            IsEnable = true;
-            CurrentState = (Int64)SessionStatus.NONE;
-            RoomNumber = PacketDef.INVALID_ROOM_NUMBER;
+            _currentState = (int)SessionStatus.None;
+        }
+    }
+
+    public void SetStateLogin()
+    {
+        if (IsEnable)
+        {
+            _currentState = (Int64)SessionStatus.Login;
+            Interlocked.Exchange(ref _roomNumber, PacketDef.InvalidRoomNumber);
+        }
+     }
+
+    public void SetStatePreLogin()
+    {
+        if (IsEnable)
+        {
+            _currentState = (Int64)SessionStatus.Logining;
+        }           
+    }
+
+    public void SetStateLogin(string userID)
+    {
+        if (IsEnable == false)
+        {
+            return;
         }
 
-        public bool IsStateNone()
+        _currentState = (Int64)SessionStatus.Login;
+        _userID = userID;
+    }
+
+    public int GetRoomNumber()
+    {
+        return (int)Interlocked.Read(ref _roomNumber);
+    }
+
+    SessionStatus GetState()
+    {
+        return (SessionStatus)Interlocked.Read(ref _currentState);
+    }
+
+    // 방에 완전 입장하기 전 상태로 변경  
+    public bool SetPreRoomEnter(int roomNumber)
+    {
+        if (IsEnable == false)
         {
-            return (IsEnable && CurrentState == (Int64)SessionStatus.NONE);
+            return false;
         }
 
-        public bool IsStateLogin()
+        var oldValue = Interlocked.CompareExchange(ref _currentState, (Int64)SessionStatus.RoomEntering, (Int64)SessionStatus.Login);
+        if (oldValue != (Int64)SessionStatus.Login)
         {
-            return (IsEnable && CurrentState == (Int64)SessionStatus.LOGIN);
+            return false;
         }
 
-        public bool IsStateRoom()
+        Interlocked.Exchange(ref _roomNumber, roomNumber);
+        return true;
+    }
+
+    public bool SetRoomEntered(Int64 roomNumber)
+    {
+        if (IsEnable == false)
         {
-            return (IsEnable && GetState() == SessionStatus.ROOM);
+            return false;
         }
 
-        public void SetDisable()
+        var oldValue = Interlocked.CompareExchange(ref _currentState, (Int64)SessionStatus.Room, (Int64)SessionStatus.RoomEntering);
+        if (oldValue != (Int64)SessionStatus.RoomEntering)
         {
-            IsEnable = false;
+            return false;
         }
 
-        public void SetStateNone()
-        {
-            if (IsEnable)
-            {
-                CurrentState = (int)SessionStatus.NONE;
-            }
-        }
-
-        public void SetStateLogin()
-        {
-            if (IsEnable)
-            {
-                CurrentState = (Int64)SessionStatus.LOGIN;
-                Interlocked.Exchange(ref RoomNumber, PacketDef.INVALID_ROOM_NUMBER);
-            }
-         }
-
-        public void SetStatePreLogin()
-        {
-            if (IsEnable)
-            {
-                CurrentState = (Int64)SessionStatus.LOGIN_ING;
-            }           
-        }
-
-        public void SetStateLogin(string userID)
-        {
-            if (IsEnable == false)
-            {
-                return;
-            }
-
-            CurrentState = (Int64)SessionStatus.LOGIN;
-            UserID = userID;
-        }
-
-        public int GetRoomNumber()
-        {
-            return (int)Interlocked.Read(ref RoomNumber);
-        }
-
-        SessionStatus GetState()
-        {
-            return (SessionStatus)Interlocked.Read(ref CurrentState);
-        }
-
-        public bool SetPreRoomEnter(int roomNumber)
-        {
-            if (IsEnable == false)
-            {
-                return false;
-            }
-
-            var oldValue = Interlocked.CompareExchange(ref CurrentState, (Int64)SessionStatus.ROOM_ENTERING, (Int64)SessionStatus.LOGIN);
-            if (oldValue != (Int64)SessionStatus.LOGIN)
-            {
-                return false;
-            }
-
-            Interlocked.Exchange(ref RoomNumber, roomNumber);
-            return true;
-        }
-
-        public bool SetRoomEntered(Int64 roomNumber)
-        {
-            if (IsEnable == false)
-            {
-                return false;
-            }
-
-            var oldValue = Interlocked.CompareExchange(ref CurrentState, (Int64)SessionStatus.ROOM, (Int64)SessionStatus.ROOM_ENTERING);
-            if (oldValue != (Int64)SessionStatus.ROOM_ENTERING)
-            {
-                return false;
-            }
-
-            Interlocked.Exchange(ref RoomNumber, roomNumber);
-            return true;
-        }
+        Interlocked.Exchange(ref _roomNumber, roomNumber);
+        return true;
     }
 }

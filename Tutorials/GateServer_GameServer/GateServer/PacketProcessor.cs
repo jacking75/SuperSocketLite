@@ -1,64 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Threading.Tasks.Dataflow;
 
 using CommonLib;
 
-namespace GateServer
+
+namespace GateServer;
+
+class PacketProcessor
 {
-    class PacketProcessor
+    bool _isThreadRunning = false;
+    System.Threading.Thread _processThread = null;
+
+    //receive쪽에서 처리하지 않아도 Post에서 블럭킹 되지 않는다. 
+    //BufferBlock<T>(DataflowBlockOptions) 에서 DataflowBlockOptions의 BoundedCapacity로 버퍼 가능 수 지정. BoundedCapacity 보다 크게 쌓이면 블럭킹 된다
+    BufferBlock<ServerPacketData> _packetBuffer = new ();
+
+    PKHandler _packetHandler = new ();
+
+
+    public void CreateAndStart(Action<string, byte[]> sendPacket)
     {
-        bool IsThreadRunning = false;
-        System.Threading.Thread ProcessThread = null;
+        _packetHandler.Init(sendPacket);
 
-        //receive쪽에서 처리하지 않아도 Post에서 블럭킹 되지 않는다. 
-        //BufferBlock<T>(DataflowBlockOptions) 에서 DataflowBlockOptions의 BoundedCapacity로 버퍼 가능 수 지정. BoundedCapacity 보다 크게 쌓이면 블럭킹 된다
-        BufferBlock<ServerPacketData> MsgBuffer = new BufferBlock<ServerPacketData>();
-
-        PKHandler PacketHandler = new PKHandler();
-
-        public void CreateAndStart(Action<string, byte[]> sendPacket)
+        _isThreadRunning = true;
+        _processThread = new System.Threading.Thread(this.Process);
+        _processThread.Start();
+    }
+    
+    public void Destory()
+    {
+        _isThreadRunning = false;
+        _packetBuffer.Complete();
+    }
+          
+    public void InsertPacket(ServerPacketData data)
+    {
+        _packetBuffer.Post(data);
+    }
+         
+    void Process()
+    {
+        while (_isThreadRunning)
         {
-            PacketHandler.Init(sendPacket);
-
-            IsThreadRunning = true;
-            ProcessThread = new System.Threading.Thread(this.Process);
-            ProcessThread.Start();
-        }
-        
-        public void Destory()
-        {
-            IsThreadRunning = false;
-            MsgBuffer.Complete();
-        }
-              
-        public void InsertPacket(ServerPacketData data)
-        {
-            MsgBuffer.Post(data);
-        }
-             
-        void Process()
-        {
-            while (IsThreadRunning)
+            //System.Threading.Thread.Sleep(64); //테스트 용
+            try
             {
-                //System.Threading.Thread.Sleep(64); //테스트 용
-                try
-                {
-                    var packet = MsgBuffer.Receive();
+                var packet = _packetBuffer.Receive();
 
-                    PacketHandler.Process(packet);                    
-                }
-                catch (Exception ex)
-                {
-                    IsThreadRunning.IfTrue(() => MainServer.MainLogger.Error(ex.ToString()));
-                }
+                _packetHandler.Process(packet);                    
+            }
+            catch (Exception ex)
+            {
+                _isThreadRunning.IfTrue(() => MainServer.s_MainLogger.Error(ex.ToString()));
             }
         }
-
-
     }
+
+
 }

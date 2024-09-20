@@ -4,6 +4,7 @@ using System;
 
 namespace PvPGameServer;
 
+// 서버 내부에서 사용하는 패킷을 만드는 클래스
 public class InnerPakcetMaker
 {
     public static MemoryPackBinaryRequestInfo MakeNTFInnerRoomLeavePacket(string sessionID, int roomNumber, string userID)
@@ -15,7 +16,7 @@ public class InnerPakcetMaker
         };
 
         var sendData = MemoryPackSerializer.Serialize(packet);
-        MemoryPackPacketHeadInfo.Write(sendData, PACKETID.NTF_IN_ROOM_LEAVE);
+        MemoryPackPacketHeader.Write(sendData, PacketId.NtfInRoomLeave);
         
         var memoryPakcPacket = new MemoryPackBinaryRequestInfo(null);
         memoryPakcPacket.Data = sendData;
@@ -26,15 +27,15 @@ public class InnerPakcetMaker
     public static MemoryPackBinaryRequestInfo MakeNTFInConnectOrDisConnectClientPacket(bool isConnect, string sessionID)
     {
         var memoryPakcPacket = new MemoryPackBinaryRequestInfo(null);
-        memoryPakcPacket.Data = new byte[MemoryPackPacketHeadInfo.HeadSize];
+        memoryPakcPacket.Data = new byte[MemoryPackPacketHeader.HeaderSize];
         
         if (isConnect)
         {
-            MemoryPackPacketHeadInfo.WritePacketId(memoryPakcPacket.Data, (UInt16)PACKETID.NTF_IN_CONNECT_CLIENT);
+            MemoryPackPacketHeader.WritePacketId(memoryPakcPacket.Data, (UInt16)PacketId.NtfInConnectClient);
         }
         else
         {
-            MemoryPackPacketHeadInfo.WritePacketId(memoryPakcPacket.Data, (UInt16)PACKETID.NTF_IN_DISCONNECT_CLIENT);
+            MemoryPackPacketHeader.WritePacketId(memoryPakcPacket.Data, (UInt16)PacketId.NtfInDisconnectClient);
         }
 
         memoryPakcPacket.SessionID = sessionID;

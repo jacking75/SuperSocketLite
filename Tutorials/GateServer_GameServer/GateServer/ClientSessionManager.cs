@@ -1,74 +1,69 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 using CommonLib;
 
-namespace GateServer
+
+namespace GateServer;
+
+public class ClientSessionManager
 {
-    public class ClientSessionManager
+    static public int s_MaxSessionCount { get; private set; } = 0;
+    static ConcurrentBag<int> s_indexPool = new ();
+
+    ConcurrentDictionary<int, ClientSession> _sessionDict = new ();
+
+
+    public void Init(int maxCount)
     {
-        static public int MaxSessionCount { get; private set; } = 0;
-        static ConcurrentBag<int> IndexPool = new ConcurrentBag<int>();
-
-        ConcurrentDictionary<int, ClientSession> SessionMap = new ConcurrentDictionary<int, ClientSession>();
-
-
-        public void Init(int maxCount)
+        for (int i = 0; i < maxCount; ++i)
         {
-            for (int i = 0; i < maxCount; ++i)
-            {
-                IndexPool.Add(i);
-            }
-
-            MaxSessionCount = maxCount;
-        }
-         
-        public bool NewSession(ClientSession session)
-        {
-            var index = PopIndex();
-            if(index == -1)
-            {
-                return false;
-            }
-
-            session.SetSessionIndex(index);
-            SessionMap.TryAdd(index, session);
-            return true;
+            s_indexPool.Add(i);
         }
 
-        public void ColesdSession(ClientSession session)
+        s_MaxSessionCount = maxCount;
+    }
+     
+    public bool NewSession(ClientSession session)
+    {
+        var index = PopIndex();
+        if(index == -1)
         {
-            PushIndex(session.SessionIndex);
-            SessionMap.TryRemove(session.SessionIndex, out var _);
+            return false;
         }
 
-        int PopIndex()
-        {
-            if (IndexPool.TryTake(out var result))
-            {
-                return result;
-            }
-
-            return -1;
-        }
-
-        void PushIndex(int index)
-        {
-            if (index >= 0)
-            {
-                IndexPool.Add(index);
-            }
-        }
-                
-        
-
-
+        session.SetSessionIndex(index);
+        _sessionDict.TryAdd(index, session);
+        return true;
     }
 
+    public void ColesdSession(ClientSession session)
+    {
+        PushIndex(session.SessionIndex);
+        _sessionDict.TryRemove(session.SessionIndex, out var _);
+    }
 
+    int PopIndex()
+    {
+        if (s_indexPool.TryTake(out var result))
+        {
+            return result;
+        }
+
+        return -1;
+    }
+
+    void PushIndex(int index)
+    {
+        if (index >= 0)
+        {
+            s_indexPool.Add(index);
+        }
+    }
+            
     
+
+
 }
+
+
+

@@ -1,113 +1,108 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Threading.Tasks.Dataflow;
 
 using CSBaseLib;
 
-namespace DB
+namespace DB;
+
+public class DBProcessor
 {
-    public class DBProcessor
+    public SuperSocket.SocketBase.Logging.ILog MainLogger;
+    bool IsThreadRunning = false;
+    List<System.Threading.Thread> ThreadList = new List<System.Threading.Thread>();
+
+    BufferBlock<DBQueue> MsgBuffer = new BufferBlock<DBQueue>();
+
+    Dictionary<PacketId, Func<DBQueue, DBResultQueue>> DBWorkHandlerMap = new Dictionary<PacketId, Func<DBQueue, DBResultQueue>>();
+    DBJobWorkHandler DBWorkHandler = null;
+
+    Action<DBResultQueue> DBWorkResultFunc = null;
+
+    RedisLib RedisWraper = new RedisLib();
+
+
+    public ErrorCode CreateAndStart(int threadCount, Action<DBResultQueue> dbWorkResultFunc, string redisAddress)
     {
-        public SuperSocket.SocketBase.Logging.ILog MainLogger;
-        bool IsThreadRunning = false;
-        List<System.Threading.Thread> ThreadList = new List<System.Threading.Thread>();
+        MainLogger.Info("DB Init Start");
 
-        BufferBlock<DBQueue> MsgBuffer = new BufferBlock<DBQueue>();
+        RedisWraper.Init(redisAddress);
 
-        Dictionary<PACKETID, Func<DBQueue, DBResultQueue>> DBWorkHandlerMap = new Dictionary<PACKETID, Func<DBQueue, DBResultQueue>>();
-        DBJobWorkHandler DBWorkHandler = null;
+        DBWorkResultFunc = dbWorkResultFunc;
+        var error = RegistPacketHandler();
 
-        Action<DBResultQueue> DBWorkResultFunc = null;
-
-        RedisLib RedisWraper = new RedisLib();
-
-
-        public ERROR_CODE CreateAndStart(int threadCount, Action<DBResultQueue> dbWorkResultFunc, string redisAddress)
+        if (error.Item1 != ErrorCode.None)
         {
-            MainLogger.Info("DB Init Start");
-
-            RedisWraper.Init(redisAddress);
-
-            DBWorkResultFunc = dbWorkResultFunc;
-            var error = RegistPacketHandler();
-
-            if (error.Item1 != ERROR_CODE.NONE)
-            {
-                return error.Item1;
-            }
-
-
-            IsThreadRunning = true;
-
-            for (int i = 0; i < threadCount; ++i)
-            {
-                var processThread = new System.Threading.Thread(this.Process);
-                processThread.Start();
-
-                ThreadList.Add(processThread);
-            }
-
-            MainLogger.Info("DB Init Success");
-            return ERROR_CODE.NONE;
-        }
-
-        public void Destory()
-        {
-            IsThreadRunning = false;
-            MsgBuffer.Complete();
-        }
-
-        public void InsertMsg(DBQueue dbQueue)
-        {
-            MsgBuffer.Post(dbQueue);
+            return error.Item1;
         }
 
 
-        Tuple<ERROR_CODE, string> RegistPacketHandler()
+        IsThreadRunning = true;
+
+        for (int i = 0; i < threadCount; ++i)
         {
-            DBWorkHandler = new DBJobWorkHandler();
-            var error = DBWorkHandler.Init(RedisWraper);
+            var processThread = new System.Threading.Thread(this.Process);
+            processThread.Start();
 
-            if (error.Item1 != ERROR_CODE.NONE)
-            {
-                return error;
-            }
-
-
-            DBWorkHandlerMap.Add(PACKETID.REQ_DB_LOGIN, DBWorkHandler.RequestLogin);
-
-            return new Tuple<ERROR_CODE, string>(ERROR_CODE.NONE, "");
+            ThreadList.Add(processThread);
         }
 
-        void Process()
+        MainLogger.Info("DB Init Success");
+        return ErrorCode.None;
+    }
+
+    public void Destory()
+    {
+        IsThreadRunning = false;
+        MsgBuffer.Complete();
+    }
+
+    public void InsertMsg(DBQueue dbQueue)
+    {
+        MsgBuffer.Post(dbQueue);
+    }
+
+
+    Tuple<ErrorCode, string> RegistPacketHandler()
+    {
+        DBWorkHandler = new DBJobWorkHandler();
+        var error = DBWorkHandler.Init(RedisWraper);
+
+        if (error.Item1 != ErrorCode.None)
         {
-            while (IsThreadRunning)
+            return error;
+        }
+
+
+        DBWorkHandlerMap.Add(PacketId.ReqDbLogin, DBWorkHandler.RequestLogin);
+
+        return new Tuple<ErrorCode, string>(ErrorCode.None, "");
+    }
+
+    void Process()
+    {
+        while (IsThreadRunning)
+        {
+            try
             {
-                try
+                var dbJob = MsgBuffer.Receive();
+
+                if (DBWorkHandlerMap.ContainsKey(dbJob.PacketID))
                 {
-                    var dbJob = MsgBuffer.Receive();
-
-                    if (DBWorkHandlerMap.ContainsKey(dbJob.PacketID))
-                    {
-                        var result = DBWorkHandlerMap[dbJob.PacketID](dbJob);
-                        DBWorkResultFunc(result);
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("세션 번호 {0}, DBWorkID {1}", dbJob.SessionID, dbJob.PacketID);
-                    }
+                    var result = DBWorkHandlerMap[dbJob.PacketID](dbJob);
+                    DBWorkResultFunc(result);
                 }
-                catch (Exception ex)
+                else
                 {
-                    IsThreadRunning.IfTrue(() => MainLogger.Error(ex.ToString()));
+                    System.Diagnostics.Debug.WriteLine("세션 번호 {0}, DBWorkID {1}", dbJob.SessionID, dbJob.PacketID);
                 }
+            }
+            catch (Exception ex)
+            {
+                IsThreadRunning.IfTrue(() => MainLogger.Error(ex.ToString()));
             }
         }
     }
-
-    
 }
+
+

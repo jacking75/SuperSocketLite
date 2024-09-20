@@ -4,29 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatServer
+namespace ChatServer;
+
+// 방 관리 클래스
+class RoomManager
 {
-    class RoomManager
+    List<Room> _roomList = new List<Room>();
+
+
+    public void CreateRooms()
     {
-        List<Room> RoomsList = new List<Room>();
+        var maxRoomCount = MainServer.s_ServerOption.RoomMaxCount;
+        var startNumber = MainServer.s_ServerOption.RoomStartNumber;
+        var maxUserCount = MainServer.s_ServerOption.RoomMaxUserCount;
 
-        public void CreateRooms()
+        for(int i = 0; i < maxRoomCount; ++i)
         {
-            var maxRoomCount = MainServer.ServerOption.RoomMaxCount;
-            var startNumber = MainServer.ServerOption.RoomStartNumber;
-            var maxUserCount = MainServer.ServerOption.RoomMaxUserCount;
+            var roomNumber = (startNumber + i);
+            var room = new Room();
+            room.Init(i, roomNumber, maxUserCount);
 
-            for(int i = 0; i < maxRoomCount; ++i)
-            {
-                var roomNumber = (startNumber + i);
-                var room = new Room();
-                room.Init(i, roomNumber, maxUserCount);
-
-                RoomsList.Add(room);
-            }                                   
-        }
-
-
-        public List<Room> GetRoomsList() { return RoomsList; }
+            _roomList.Add(room);
+        }                                   
     }
+
+
+    public List<Room> GetRoomsList() { return _roomList; }
 }

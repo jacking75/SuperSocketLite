@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using StackExchange.Redis;
 
 
-namespace DB
+namespace DB;
+
+public class RedisLib
 {
-    public class RedisLib
+    ConnectionMultiplexer _connection;
+    IDatabase _db;
+
+
+    public void Init(string address)
     {
-        ConnectionMultiplexer Connection;
-        IDatabase Db;
+        _connection = ConnectionMultiplexer.Connect(address);
 
-
-        public void Init(string address)
+        if(_connection.IsConnected)
         {
-            Connection = ConnectionMultiplexer.Connect(address);
-
-            if(Connection.IsConnected)
-            {
-                Db = Connection.GetDatabase();
-            }
+            _db = _connection.GetDatabase();
         }
-
-        
-        public Task<RedisValue> GetString(string key)
-        {
-            return Db.StringGetAsync(key);
-        }   
-        
-
-        
     }
+
+    
+    public Task<RedisValue> GetString(string key)
+    {
+        return _db.StringGetAsync(key);
+    }   
+    
+
+    
 }

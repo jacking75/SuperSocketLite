@@ -1,129 +1,127 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SuperSocket.SocketBase;
 
-namespace ChatServer
+
+namespace ChatServer;
+
+class RemoteConnectCheck
 {
-    class RemoteConnectCheck
+    MainServer _appServer;
+    List<RemoteCheckState> _remoteList = new List<RemoteCheckState>();
+    
+    bool _isCheckRunning = false;
+    System.Threading.Thread _checkThread = null;
+
+
+    public void Init(MainServer appServer, List<Tuple<string, string, int>> remoteInfoList)
     {
-        MainServer AppServer;
-        List<RemoteCheckState> RemoteList = new List<RemoteCheckState>();
-        
-        bool IsCheckRunning = false;
-        System.Threading.Thread CheckThread = null;
+        _appServer = appServer;
 
-
-        public void Init(MainServer appServer, List<Tuple<string, string, int>> remoteInfoList)
+        foreach (var remoteInfo in remoteInfoList)
         {
-            AppServer = appServer;
+            var serverAddress = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(remoteInfo.Item2), remoteInfo.Item3);
 
-            foreach (var remoteInfo in remoteInfoList)
-            {
-                var serverAddress = new System.Net.IPEndPoint(System.Net.IPAddress.Parse(remoteInfo.Item2), remoteInfo.Item3);
+            var remote = new RemoteCheckState();
+            remote.Init(remoteInfo.Item1, serverAddress);
 
-                var remote = new RemoteCheckState();
-                remote.Init(remoteInfo.Item1, serverAddress);
-
-                RemoteList.Add(remote);
-            }
-
-            IsCheckRunning = true;
-            CheckThread = new System.Threading.Thread(this.CheckAndConnect);
-            CheckThread.Start();
+            _remoteList.Add(remote);
         }
 
-        public void Stop()
+        _isCheckRunning = true;
+        _checkThread = new System.Threading.Thread(this.CheckAndConnect);
+        _checkThread.Start();
+    }
+
+    public void Stop()
+    {
+        _isCheckRunning = false;
+
+        _checkThread.Join();
+    }
+
+    void CheckAndConnect()
+    {
+        while (_isCheckRunning)
         {
-            IsCheckRunning = false;
+            System.Threading.Thread.Sleep(100);
 
-            CheckThread.Join();
-        }
-
-        void CheckAndConnect()
-        {
-            while (IsCheckRunning)
+            foreach (var remote in _remoteList)
             {
-                System.Threading.Thread.Sleep(100);
-
-                foreach (var remote in RemoteList)
+                if(remote.IsPass())
                 {
-                    if(remote.IsPass())
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        remote.TryConnect(AppServer);
-                    }
-                }
-            }
-        }
-
-
-
-        class RemoteCheckState
-        {
-            string ServerType;
-            System.Net.IPEndPoint Address;
-            IAppSession Session = null;
-
-            bool IsTryConnecting = false;
-            DateTime CheckedTime = DateTime.Now;
-
-            public void Init(string serverType, System.Net.IPEndPoint endPoint)
-            {
-                ServerType = serverType;
-                Address = endPoint;
-            }
-
-            public bool IsPass()
-            {
-                if ((Session != null && Session.Connected) || IsTryConnecting)
-                {
-                    return true;
-                }
-
-                var curTime = DateTime.Now;
-                var diffTime = curTime.Subtract(CheckedTime);
-
-                if (diffTime.Seconds <= 3)
-                {
-                    return true;
+                    continue;
                 }
                 else
                 {
-                    CheckedTime = curTime;
+                    remote.TryConnect(_appServer);
                 }
+            }
+        }
+    }
 
-                return false;
+
+
+    class RemoteCheckState
+    {
+        string _serverType;
+        System.Net.IPEndPoint _address;
+        IAppSession _session = null;
+
+        bool _isTryConnecting = false;
+        DateTime _checkedTime = DateTime.Now;
+
+
+        public void Init(string serverType, System.Net.IPEndPoint endPoint)
+        {
+            _serverType = serverType;
+            _address = endPoint;
+        }
+
+        public bool IsPass()
+        {
+            if ((_session != null && _session.Connected) || _isTryConnecting)
+            {
+                return true;
             }
 
-            public async void TryConnect(MainServer appServer)
+            var curTime = DateTime.Now;
+            var diffTime = curTime.Subtract(_checkedTime);
+
+            if (diffTime.Seconds <= 3)
             {
-                IsTryConnecting = true;
-                var activeConnector = appServer as SuperSocket.SocketBase.IActiveConnector;
+                return true;
+            }
+            else
+            {
+                _checkedTime = curTime;
+            }
 
-                try
-                {
-                    var task = await activeConnector.ActiveConnect(Address);
+            return false;
+        }
 
-                    if (task.Result)
-                    {
-                        Session = task.Session;
-                    }
-                }
-                catch
-                {
+        public async void TryConnect(MainServer appServer)
+        {
+            _isTryConnecting = true;
+            var activeConnector = appServer as SuperSocket.SocketBase.IActiveConnector;
 
-                }
-                finally
+            try
+            {
+                var task = await activeConnector.ActiveConnect(_address);
+
+                if (task.Result)
                 {
-                    IsTryConnecting = false;
+                    _session = task.Session;
                 }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                _isTryConnecting = false;
             }
         }
     }

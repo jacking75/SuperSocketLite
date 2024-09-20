@@ -18,7 +18,7 @@ namespace ChatServer
             serverApp.InitConfig(serverOption);
             serverApp.CreateStartServer();
             
-            MainServer.MainLogger.Info("Press q to shut down the server");
+            MainServer.s_MainLogger.Info("Press q to shut down the server");
 
             while (true)
             {

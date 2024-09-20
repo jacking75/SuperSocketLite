@@ -1,54 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CSBaseLib;
+﻿using CSBaseLib;
 using DB;
 
-namespace ChatServer
+namespace ChatServer;
+
+public class PKHandler
 {
-    public class PKHandler
+    protected MainServer _serverNetwork;
+    protected ConnectSessionManager _sessionMgr;
+
+
+    public void Init(MainServer serverNetwork, ConnectSessionManager sessionManager)
     {
-        protected MainServer ServerNetwork;
-        protected ConnectSessionManager SessionManager;
+        _serverNetwork = serverNetwork;
+        _sessionMgr = sessionManager;
+    }
+            
 
+    public bool RequestDBJob(PacketDistributor distributor, DBQueue dbQueue)
+    {
+        distributor.DistributeDBJobRequest(dbQueue);
+        return true;
+    }
 
-        public void Init(MainServer serverNetwork, ConnectSessionManager sessionManager)
+    public DBQueue MakeDBQueue(PacketId packetID, string sessionID, int sessionIndex, byte[] jobDatas)
+    {
+        var dbQueue = new DBQueue()
         {
-            ServerNetwork = serverNetwork;
-            SessionManager = sessionManager;
-        }
-                
+            PacketID    = packetID,
+            SessionID   = sessionID,
+            SessionIndex = sessionIndex, 
+            Datas       = jobDatas
+        };
 
-        public bool RequestDBJob(PacketDistributor distributor, DBQueue dbQueue)
-        {
-            distributor.DistributeDBJobRequest(dbQueue);
-            return true;
-        }
+        return dbQueue;
+    }
 
-        public DBQueue MakeDBQueue(PACKETID packetID, string sessionID, int sessionIndex, byte[] jobDatas)
-        {
-            var dbQueue = new DBQueue()
-            {
-                PacketID    = packetID,
-                SessionID   = sessionID,
-                SessionIndex = sessionIndex, 
-                Datas       = jobDatas
-            };
+    protected void SendInternalCommonPacket(ServerPacketData packetData)
+    {
+        _serverNetwork.GetPacketDistributor().DistributeCommon(false, packetData);
+    }
 
-            return dbQueue;
-        }
-
-        protected void SendInternalCommonPacket(ServerPacketData packetData)
-        {
-            ServerNetwork.GetPacketDistributor().DistributeCommon(false, packetData);
-        }
-
-        protected bool SendInternalRoomProcessor(bool isPreRoomEnter,  int roomNumber, ServerPacketData packetData)
-        {
-            return ServerNetwork.GetPacketDistributor().DistributeRoomProcessor(false, isPreRoomEnter, roomNumber, packetData);
-        }
+    protected bool SendInternalRoomProcessor(bool isPreRoomEnter,  int roomNumber, ServerPacketData packetData)
+    {
+        return _serverNetwork.GetPacketDistributor().DistributeRoomProcessor(false, isPreRoomEnter, roomNumber, packetData);
     }
 }

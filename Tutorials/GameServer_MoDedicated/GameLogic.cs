@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+
 
 // asyn-await를 사용한 대량의 게임 업데이트 처리
 /*
@@ -13,81 +12,79 @@ using System.Threading.Tasks;
  - 200ms 하면 20~208 정도로 거의 맞음(1000개 실행)
  - 100ms 하면 110~120 정도(1000개 실행)
 */
-namespace GameServer
+namespace GameServer;
+
+public class GameLogic
 {
-    public class GameLogic
+    UInt32 _index = 0;
+    bool _isRunable = false;
+    ConcurrentQueue<GameMessage> _msgQueue = new ();
+
+
+    public void Init(UInt32 index)
     {
-        UInt32 Index = 0;
-        bool IsRunable = false;
-        ConcurrentQueue<GameMessage> MsgQueue = new ConcurrentQueue<GameMessage>();
+        _index = index;
+    }
 
-        public void Init(UInt32 index)
+    public void Clear()
+    {
+    }
+
+    public void Start()
+    {
+        _isRunable = true;
+        Task.Run(() => Update());
+    }
+
+    public void End()
+    {
+        _isRunable = false;
+    }
+
+    public void AddMessage(UInt16 msgId, byte[] msgData)
+    {
+        _msgQueue.Enqueue(new GameMessage(msgId, msgData));
+    }
+
+    public async Task<int> Update()
+    {
+        MainServer.MainLogger.Debug($"[GameLogic-Update] Start. Index:{_index}");
+
+        while (_isRunable)
         {
-            Index = index;
-        }
+            MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{_index}, [{DateTime.Now.Millisecond}]");
 
-        public void Clear()
-        {
-
-        }
-
-        public void Start()
-        {
-            IsRunable = true;
-            Task.Run(() => Update());
-        }
-
-        public void End()
-        {
-            IsRunable = false;
-        }
-
-        public void AddMessage(UInt16 msgId, byte[] msgData)
-        {
-            MsgQueue.Enqueue(new GameMessage(msgId, msgData));
-        }
-
-        public async Task<int> Update()
-        {
-            MainServer.MainLogger.Debug($"[GameLogic-Update] Start. Index:{Index}");
-
-            while (IsRunable)
+            if (_msgQueue.TryDequeue(out var gameMsg))
             {
-                MainServer.MainLogger.Debug($"[GameLogic-Update] Call. Index:{Index}, [{DateTime.Now.Millisecond}]");
+                MainServer.MainLogger.Debug($"[GameLogic-Update] id: {gameMsg.Id}. Index:{_index}");
 
-                if (MsgQueue.TryDequeue(out var gameMsg))
+                if (gameMsg.Id == 0)
                 {
-                    MainServer.MainLogger.Debug($"[GameLogic-Update] id: {gameMsg.MsgId}. Index:{Index}");
-
-                    if (gameMsg.MsgId == 0)
-                    {
-                        return 1;
-                    }
+                    return 1;
                 }
-
-                //System.Threading.Thread.Sleep(3000);
-
-                //MainServer.MainLogger.Debug($"[GameLogic-Update] Next Frame... Index:{Index}");
-                await Task.Delay(100); // 
             }
 
-            MainServer.MainLogger.Debug($"[GameLogic-Update] End. Index:{Index}");
-            return 0;
+            //System.Threading.Thread.Sleep(3000);
+
+            //MainServer.MainLogger.Debug($"[GameLogic-Update] Next Frame... Index:{Index}");
+            await Task.Delay(100); // 
         }
-        
+
+        MainServer.MainLogger.Debug($"[GameLogic-Update] End. Index:{_index}");
+        return 0;
     }
+    
+}
 
 
-    public struct GameMessage
+public struct GameMessage
+{
+    public GameMessage(UInt16 msgId, byte[] msgData)
     {
-        public GameMessage(UInt16 msgId, byte[] msgData)
-        {
-            MsgId = msgId;
-            MsgData = msgData;
-        }
-
-        public UInt16 MsgId;
-        public byte[] MsgData;
+        Id = msgId;
+        Data = msgData;
     }
 
+    public UInt16 Id;
+    public byte[] Data;
 }

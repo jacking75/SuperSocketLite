@@ -5,14 +5,15 @@ using System.Collections.Generic;
 
 namespace PvPGameServer;
 
-public struct MemoryPackPacketHeadInfo
+public struct MemoryPackPacketHeader
 {
     const int PacketHeaderMemoryPackStartPos = 1;
-    public const int HeadSize = 6;
+    public const int HeaderSize = 6;
 
     public UInt16 TotalSize;
     public UInt16 Id;
     public byte Type;
+
 
     public static UInt16 GetTotalSize(byte[] data, int startPos)
     {
@@ -38,7 +39,7 @@ public struct MemoryPackPacketHeadInfo
         pos += 1;
     }
         
-    public static void Write(byte[] packetData, PACKETID packetId, byte type = 0)
+    public static void Write(byte[] packetData, PacketId packetId, byte type = 0)
     {
         var pos = PacketHeaderMemoryPackStartPos;
 

@@ -7,42 +7,41 @@ using System.Threading.Tasks;
 using MessagePack;
 using CSBaseLib;
 
-namespace DB
+
+namespace DB;
+
+public class DBQueue
 {
-    public class DBQueue
-    {
-        public PACKETID PacketID;
-        public int SessionIndex;
-        public string SessionID;
-        //public string UserID;
-        public byte[] Datas;
-    }
+    public PacketId PacketID;
+    public int SessionIndex;
+    public string SessionID;
+    public byte[] Datas;
+}
 
-    public class DBResultQueue
-    {
-        public PACKETID PacketID;
-        public int SessionIndex;
-        public string SessionID;
-        public byte[] Datas;
-    }
+public class DBResultQueue
+{
+    public PacketId PacketID;
+    public int SessionIndex;
+    public string SessionID;
+    public byte[] Datas;
+}
 
 
-    [MessagePackObject]
-    public class DBReqLogin
-    {
-        [Key(0)]
-        public string UserID;
+[MessagePackObject]
+public class DBReqLogin
+{
+    [Key(0)]
+    public string UserID;
 
-        [Key(1)]
-        public string AuthToken;
-    }
+    [Key(1)]
+    public string AuthToken;
+}
 
-    [MessagePackObject]
-    public class DBResLogin
-    {
-        [Key(0)]
-        public string UserID;
-        [Key(1)]
-        public ERROR_CODE Result;
-    }
+[MessagePackObject]
+public class DBResLogin
+{
+    [Key(0)]
+    public string UserID;
+    [Key(1)]
+    public ErrorCode Result;
 }

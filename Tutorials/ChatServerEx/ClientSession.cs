@@ -7,53 +7,54 @@ using System.Threading.Tasks;
 
 using SuperSocket.SocketBase;
 
-namespace ChatServer
+
+namespace ChatServer;
+
+public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
 {
-    public class ClientSession : AppSession<ClientSession, EFBinaryRequestInfo>
+    static public int s_MaxSessionCount { get; private set; } = 0;
+   
+    static ConcurrentBag<int> s_IndexPool = new ();
+   
+    public int SessionIndex { get; private set; } = -1;
+
+    
+    public static void CreateIndexPool(int maxCount)
     {
-        static public int MaxSessionCount { get; private set; } = 0;
-        static ConcurrentBag<int> IndexPool = new ConcurrentBag<int>();
-       
-        public int SessionIndex { get; private set; } = -1;
-
-        
-        public static void CreateIndexPool(int maxCount)
+        for(int i = 0; i < maxCount; ++i)
         {
-            for(int i = 0; i < maxCount; ++i)
-            {
-                IndexPool.Add(i);
-            }
-
-            MaxSessionCount = maxCount;
+            s_IndexPool.Add(i);
         }
 
-        public static int PopIndex()
-        {
-            if (IndexPool.TryTake(out var result))
-            {
-                return result;
-            }
-
-            return -1;
-        }
-
-        public static void PushIndex(int index)
-        {
-            if (index >= 0)
-            {
-                IndexPool.Add(index);
-            }
-        }
-
-        public void AllocSessionIndex()
-        {
-            SessionIndex = PopIndex();
-        }
-
-        public void FreeSessionIndex(int index)
-        {
-            PushIndex(index);
-        }
-      
+        s_MaxSessionCount = maxCount;
     }
+
+    public static int PopIndex()
+    {
+        if (s_IndexPool.TryTake(out var result))
+        {
+            return result;
+        }
+
+        return -1;
+    }
+
+    public static void PushIndex(int index)
+    {
+        if (index >= 0)
+        {
+            s_IndexPool.Add(index);
+        }
+    }
+
+    public void AllocSessionIndex()
+    {
+        SessionIndex = PopIndex();
+    }
+
+    public void FreeSessionIndex(int index)
+    {
+        PushIndex(index);
+    }
+  
 }

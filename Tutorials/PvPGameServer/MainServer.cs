@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Threading;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,14 +10,13 @@ using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using SuperSocket.SocketBase.Config;
-using System.Threading.Tasks;
-using System.Threading;
+
 
 namespace PvPGameServer;
 
 public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>, IHostedService
 {
-    public static ILog MainLogger;
+    public static ILog s_MainLogger;
             
     PacketProcessor _packetProcessor = new PacketProcessor();
     RoomManager _roomMgr = new RoomManager();
@@ -76,13 +77,13 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
 
     private void AppOnStopped()
     {
-        MainLogger.Info("OnStopped - begin");
+        s_MainLogger.Info("OnStopped - begin");
 
         base.Stop();
 
         _packetProcessor.Destory();
 
-        MainLogger.Info("OnStopped - end");
+        s_MainLogger.Info("OnStopped - end");
     }
             
     public void InitConfig(ServerOption option)
@@ -105,21 +106,21 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
 
             if (bResult == false)
             {
-                MainLogger.Error("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
+                s_MainLogger.Error("[ERROR] 서버 네트워크 설정 실패 ㅠㅠ");
                 return;
             }
             else
             {
-                MainLogger = base.Logger;
+                s_MainLogger = base.Logger;
             }
 
             CreateComponent(serverOpt);
 
-            MainLogger.Info("서버 생성 성공");
+            s_MainLogger.Info("서버 생성 성공");
         }
         catch(Exception ex)
         {
-            MainLogger.Error($"[ERROR] 서버 생성 실패: {ex.ToString()}");
+            s_MainLogger.Error($"[ERROR] 서버 생성 실패: {ex.ToString()}");
         }
     }
 
@@ -140,7 +141,7 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
         _packetProcessor.Destory();
     }
 
-    public ERROR_CODE CreateComponent(ServerOption serverOpt)
+    public ErrorCode CreateComponent(ServerOption serverOpt)
     {
         Room.NetSendFunc = this.SendData;
         _roomMgr.CreateRooms(serverOpt);
@@ -149,8 +150,8 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
         _packetProcessor.NetSendFunc = this.SendData;
         _packetProcessor.CreateAndStart(_roomMgr.GetRoomsList(), serverOpt);
 
-        MainLogger.Info("CreateComponent - Success");
-        return ERROR_CODE.NONE;
+        s_MainLogger.Info("CreateComponent - Success");
+        return ErrorCode.None;
     }
 
     public bool SendData(string sessionID, byte[] sendData)
@@ -169,7 +170,7 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
         catch (Exception ex)
         {
             // TimeoutException 예외가 발생할 수 있다
-            MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
+            s_MainLogger.Error($"{ex.ToString()},  {ex.StackTrace}");
 
             session.SendEndWhenSendingTimeOut();
             session.Close();
@@ -185,7 +186,7 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
     void OnConnected(NetworkSession session)
     {
         // 옵션의 최대 연결 수를 넘으면 SuperSocket이 바로 접속을 짤라버린다. 즉 이 OnConneted 함수가 호출되지 않는다
-        MainLogger.Info($"세션 번호 {session.SessionID} 접속");
+        s_MainLogger.Info($"세션 번호 {session.SessionID} 접속");
 
         var packet = InnerPakcetMaker.MakeNTFInConnectOrDisConnectClientPacket(true, session.SessionID);
         Distribute(packet);
@@ -193,7 +194,7 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
 
     void OnClosed(NetworkSession session, CloseReason reason)
     {
-        MainLogger.Info($"세션 번호 {session.SessionID} 접속해제: {reason.ToString()}");
+        s_MainLogger.Info($"세션 번호 {session.SessionID} 접속해제: {reason.ToString()}");
 
         var packet = InnerPakcetMaker.MakeNTFInConnectOrDisConnectClientPacket(false, session.SessionID);
         Distribute(packet);
@@ -201,7 +202,7 @@ public class MainServer : AppServer<NetworkSession, MemoryPackBinaryRequestInfo>
 
     void OnPacketReceived(NetworkSession session, MemoryPackBinaryRequestInfo reqInfo)
     {
-        MainLogger.Debug($"세션 번호 {session.SessionID} 받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {Thread.CurrentThread.ManagedThreadId}");
+        s_MainLogger.Debug($"세션 번호 {session.SessionID} 받은 데이터 크기: {reqInfo.Body.Length}, ThreadId: {Thread.CurrentThread.ManagedThreadId}");
 
         reqInfo.SessionID = session.SessionID;       
         Distribute(reqInfo);         

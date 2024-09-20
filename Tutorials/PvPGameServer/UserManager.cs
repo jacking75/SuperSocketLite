@@ -18,16 +18,16 @@ public class UserManager
         _maxUserCount = maxUserCount;
     }
 
-    public ERROR_CODE AddUser(string userID, string sessionID)
+    public ErrorCode AddUser(string userID, string sessionID)
     {
         if(IsFullUserCount())
         {
-            return ERROR_CODE.LOGIN_FULL_USER_COUNT;
+            return ErrorCode.LoginFullUserCount;
         }
 
         if (_userMap.ContainsKey(sessionID))
         {
-            return ERROR_CODE.ADD_USER_DUPLICATION;
+            return ErrorCode.AddUserDuplication;
         }
 
 
@@ -37,17 +37,17 @@ public class UserManager
         user.Set(_userSequenceNumber, sessionID, userID);
         _userMap.Add(sessionID, user);
 
-        return ERROR_CODE.NONE;
+        return ErrorCode.None;
     }
 
-    public ERROR_CODE RemoveUser(string sessionID)
+    public ErrorCode RemoveUser(string sessionID)
     {
         if(_userMap.Remove(sessionID) == false)
         {
-            return ERROR_CODE.REMOVE_USER_SEARCH_FAILURE_USER_ID;
+            return ErrorCode.RemoveUserSearchFailureUserId;
         }
 
-        return ERROR_CODE.NONE;
+        return ErrorCode.None;
     }
 
     public User GetUser(string sessionID)
@@ -66,27 +66,28 @@ public class UserManager
 
 public class User
 {
-    UInt64 SequenceNumber = 0;
-    string SessionID;
+    UInt64 _sequenceNumber = 0;
+    string _sessionID;
    
     public int RoomNumber { get; private set; } = -1;
-    string UserID;
+    string _userID;
+
             
     public void Set(UInt64 sequence, string sessionID, string userID)
     {
-        SequenceNumber = sequence;
-        SessionID = sessionID;
-        UserID = userID;
+        _sequenceNumber = sequence;
+        _sessionID = sessionID;
+        _userID = userID;
     }                   
     
     public bool IsConfirm(string netSessionID)
     {
-        return SessionID == netSessionID;
+        return _sessionID == netSessionID;
     }
 
     public string ID()
     {
-        return UserID;
+        return _userID;
     }
 
     public void EnteredRoom(int roomNumber)
@@ -99,7 +100,7 @@ public class User
         RoomNumber = -1;
     }
 
-    public bool IsStateLogin() { return SequenceNumber != 0; }
+    public bool IsStateLogin() { return _sequenceNumber != 0; }
 
     public bool IsStateRoom() { return RoomNumber != -1; }
 }

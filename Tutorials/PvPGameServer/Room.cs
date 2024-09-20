@@ -68,7 +68,7 @@ public class Room
         return _userList.Count();
     }
 
-    public void NotifyPacketUserList(string userNetSessionID)
+    public void SendNotifyPacketUserList(string userNetSessionID)
     {
         var packet = new PKTNtfRoomUserList();
         foreach (var user in _userList)
@@ -77,23 +77,23 @@ public class Room
         }
 
         var sendPacket = MemoryPackSerializer.Serialize(packet);
-        MemoryPackPacketHeadInfo.Write(sendPacket, PACKETID.NTF_ROOM_USER_LIST);
+        MemoryPackPacketHeader.Write(sendPacket, PacketId.NtfRoomUserList);
         
         NetSendFunc(userNetSessionID, sendPacket);
     }
 
-    public void NofifyPacketNewUser(string newUserNetSessionID, string newUserID)
+    public void SendNofifyPacketNewUser(string newUserNetSessionID, string newUserID)
     {
         var packet = new PKTNtfRoomNewUser();
         packet.UserID = newUserID;
         
         var sendPacket = MemoryPackSerializer.Serialize(packet);
-        MemoryPackPacketHeadInfo.Write(sendPacket, PACKETID.NTF_ROOM_NEW_USER);
+        MemoryPackPacketHeader.Write(sendPacket, PacketId.NtfRoomNewUser);
         
         Broadcast(newUserNetSessionID, sendPacket);
     }
 
-    public void NotifyPacketLeaveUser(string userID)
+    public void SendNotifyPacketLeaveUser(string userID)
     {
         if(CurrentUserCount() == 0)
         {
@@ -104,7 +104,7 @@ public class Room
         packet.UserID = userID;
         
         var sendPacket = MemoryPackSerializer.Serialize(packet);
-        MemoryPackPacketHeadInfo.Write(sendPacket, PACKETID.NTF_ROOM_LEAVE_USER);
+        MemoryPackPacketHeader.Write(sendPacket, PacketId.NtfRoomLeaveUser);
       
         Broadcast("", sendPacket);
     }

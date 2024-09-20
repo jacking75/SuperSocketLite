@@ -5,14 +5,13 @@ using System.Text;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 
-namespace SwitchReceiveFilter
-{
-    public class MyAppServer : AppServer
-    {
-        public MyAppServer()
-            : base(new DefaultReceiveFilterFactory<SwitchReceiveFilter, StringRequestInfo>())
-        {
+namespace SwitchReceiveFilter;
 
-        }
+public class MyAppServer : AppServer
+{
+    public MyAppServer()
+        : base(new DefaultReceiveFilterFactory<SwitchReceiveFilter, StringRequestInfo>())
+    {
+
     }
 }

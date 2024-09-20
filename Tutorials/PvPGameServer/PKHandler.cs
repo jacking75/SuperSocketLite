@@ -13,7 +13,7 @@ public class PKHandler
 
     public void Init(UserManager userMgr)
     {
-        this._userMgr = userMgr;
+        _userMgr = userMgr;
     }           
             
     
