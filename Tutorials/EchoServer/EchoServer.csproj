@@ -14,11 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DevLog.cs" />
-    <Compile Remove="PacketHandlers.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\SuperSocketLite\SuperSocketLite.csproj" />
   </ItemGroup>
 
