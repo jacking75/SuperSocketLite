@@ -99,7 +99,10 @@ public class DBProcessor
             }
             catch (Exception ex)
             {
-                IsThreadRunning.IfTrue(() => MainLogger.Error(ex.ToString()));
+                if (IsThreadRunning)
+                {
+                    MainLogger.Error(ex.ToString());
+                }                
             }
         }
     }

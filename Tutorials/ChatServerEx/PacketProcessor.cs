@@ -60,13 +60,14 @@ class PacketProcessor
 
     public bool 관리중인_Room(int roomNumber)
     {
-        //InRange의 min, max도 포함된다.
-        return roomNumber.InRange(_roomNumberRange.Item1, _roomNumberRange.Item2);
+        // roomNumber가 _roomNumberRange 안에 포함 되는지 확인
+        return roomNumber >= _roomNumberRange.Item1 && roomNumber <= _roomNumberRange.Item2;
     }
 
     public void InsertMsg(bool isClientRequest, ServerPacketData data)
     {
-        if (isClientRequest && (data.PacketID.InRange((int)PacketId.CsBegin, (int)PacketId.CsEnd) == false))
+        if (isClientRequest && 
+            (data.PacketID <= (short)PacketId.CsBegin || data.PacketID >= (short)PacketId.CsEnd))
         {
             return;
         }
@@ -113,7 +114,10 @@ class PacketProcessor
             }
             catch (Exception ex)
             {
-                _isThreadRunning.IfTrue(() => MainServer.s_MainLogger.Error(ex.ToString()));
+                if (_isThreadRunning)
+                {
+                    MainServer.s_MainLogger.Error(ex.ToString());
+                }
             }
         }
     }

@@ -90,7 +90,8 @@ public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
         foreach(var server in ConfigTemp.RemoteServers)
         {
             var infoList = server.Split(":");
-            remoteInfoList.Add(new Tuple<string, string, int>(infoList[0], infoList[1], infoList[2].ToInt32()));
+            Int32 port = int.Parse(infoList[2]);
+            remoteInfoList.Add(new Tuple<string, string, int>(infoList[0], infoList[1], port));
 
             s_MainLogger.Info(string.Format("(To)연결할 서버 정보: {0}, {1}, {2}", infoList[0], infoList[1], infoList[2]));
         }
