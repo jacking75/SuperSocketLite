@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+message PacketHeader {
+    fixed32 total_size = 1;
+    fixed32 id = 2;
+    fixed32 value = 3;
+}
+
+message LoginRequest {
+    PacketHeader header = 1;
+    string user_id = 2;
+    string password = 3;
+}
