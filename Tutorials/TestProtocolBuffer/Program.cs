@@ -4,6 +4,7 @@ namespace TestProtocolBuffer;
 
 internal class Program
 {
+	// protoc.exe -I=./ --csharp_out=./ ./packet_protocol.proto
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
@@ -13,8 +14,8 @@ internal class Program
         {
             Header = new PacketHeader
             {
-                TotalSize = 0, // 실제 크기는 직렬화 후 계산
-                Id = 1,        // 패킷 ID
+                TotalSize = 1, // 실제 크기는 직렬화 후 계산
+                Id = 2,        // 패킷 ID
                 Value = 1      // 패킷 타입
             },
             UserId = "jacking75",
@@ -23,6 +24,9 @@ internal class Program
 
         byte[] serialized = loginRequest.ToByteArray();
 
+
+        //주의: 수동으로 데이터를 바꾸는 경우 그 데이터는 절대 0인 상태에서 직렬화 되면 안된다. 0으로 하면 프로토버퍼가 최적화 해버린다. 더미 값이라도 넣어야 한다.
+
         // [일반적인 방법으로 직렬화를 풀어본다]
         LoginRequest request1 = LoginRequest.Parser.ParseFrom(serialized);
         Console.WriteLine($"UserId: {request1.UserId}, TotalSize: {request1.Header.TotalSize}");
@@ -30,11 +34,16 @@ internal class Program
 
         // [직렬화한 데이터의 헤더 부분을 수동으로 변경한다]
         uint totalSize = (uint)serialized.Length;
+        Console.WriteLine($"serialized의 크기: {totalSize}");
         ProtocolBufferHeaderParser.WritePacketHeaderTotalSize(serialized, totalSize);
-
+        
         LoginRequest request2 = LoginRequest.Parser.ParseFrom(serialized);
         Console.WriteLine($"UserId: {request2.UserId}, TotalSize: {request2.Header.TotalSize}");
 
+
+        // 헤더만 먼저 파싱하고 싶을 때
+        PacketHeader header = ProtocolBufferHeaderParser.ParseHeaderOnly(serialized);
+        Console.WriteLine($"TotalSize: {header.TotalSize}, Id: {header.Id}, Value: {header.Value}");
 
         // 첫 번째 직렬화로 전체 크기 계산
         //byte[] serialized = loginRequest.ToByteArray();
