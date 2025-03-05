@@ -11,3 +11,21 @@ message LoginRequest {
     string user_id = 2;
     string password = 3;
 }
+
+
+message MoveRequest {
+    PacketHeader header = 1;
+    int32 pos_x = 2;
+    int32 pos_y = 3;
+    int32 pos_z = 4;
+}
+
+
+message SendMailRequest {
+    PacketHeader header = 1;
+    string to_user_id = 2;
+    int32 my_pos_x = 3;
+    int32 my_pos_y = 4;
+    int32 my_pos_z =5;
+    string message = 6;
+}

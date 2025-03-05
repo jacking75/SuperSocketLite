@@ -7,16 +7,26 @@ internal class Program
 	// protoc.exe -I=./ --csharp_out=./ ./packet_protocol.proto
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine("--- LoginRequest ---");
+        PacketTest.LoginPacket();
+
+        Console.WriteLine("--- MoveRequest ---");
+        PacketTest.MovePacket();
 
 
+
+
+    }
+
+    static void TestLoginPacket()
+    {
         var loginRequest = new LoginRequest
         {
             Header = new PacketHeader
             {
-                TotalSize = 1, // 실제 크기는 직렬화 후 계산
+                TotalSize = UInt32.MaxValue, // 실제 크기는 직렬화 후 계산
                 Id = 2,        // 패킷 ID
-                Value = 1      // 패킷 타입
+                Value = 7      // 패킷 타입
             },
             UserId = "jacking75",
             Password = "password"
@@ -25,38 +35,78 @@ internal class Program
         byte[] serialized = loginRequest.ToByteArray();
 
 
-        //주의: 수동으로 데이터를 바꾸는 경우 그 데이터는 절대 0인 상태에서 직렬화 되면 안된다. 0으로 하면 프로토버퍼가 최적화 해버린다. 더미 값이라도 넣어야 한다.
-
-        // [일반적인 방법으로 직렬화를 풀어본다]
+        Console.WriteLine("일반적인 방법으로 직렬화를 풀어본다");
         LoginRequest request1 = LoginRequest.Parser.ParseFrom(serialized);
         Console.WriteLine($"UserId: {request1.UserId}, TotalSize: {request1.Header.TotalSize}");
+        Console.WriteLine("");
 
 
-        // [직렬화한 데이터의 헤더 부분을 수동으로 변경한다]
+        Console.WriteLine("직렬화한 데이터의 헤더 부분을 수동으로 변경한다");
+        //주의: 수동으로 데이터를 바꾸는 경우 그 데이터는 절대 0인 상태에서 직렬화 되면 안된다. 0으로 하면 프로토버퍼가 최적화 해버린다. 0이 아닌 더미 값이을 꼭 넣어야 한다.
         uint totalSize = (uint)serialized.Length;
         Console.WriteLine($"serialized의 크기: {totalSize}");
         ProtocolBufferHeaderParser.WritePacketHeaderTotalSize(serialized, totalSize);
-        
+
         LoginRequest request2 = LoginRequest.Parser.ParseFrom(serialized);
         Console.WriteLine($"UserId: {request2.UserId}, TotalSize: {request2.Header.TotalSize}");
+        Console.WriteLine("");
 
 
-        // 헤더만 먼저 파싱하고 싶을 때
+        Console.WriteLine("헤더만 먼저 비직렬화 후 전체 비직렬화하기");
         PacketHeader header = ProtocolBufferHeaderParser.ParseHeaderOnly(serialized);
         Console.WriteLine($"TotalSize: {header.TotalSize}, Id: {header.Id}, Value: {header.Value}");
 
-        // 첫 번째 직렬화로 전체 크기 계산
-        //byte[] serialized = loginRequest.ToByteArray();
+        LoginRequest request3 = LoginRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"UserId: {request2.UserId}, TotalSize: {request2.Header.TotalSize}");
+        Console.WriteLine("");
+    }
+
+    static void TestMovePacket()
+    {
+        var requestPacket = new MoveRequest
+        {
+            Header = new PacketHeader
+            {
+                TotalSize = UInt32.MaxValue, // 실제 크기는 직렬화 후 계산
+                Id = 3,        // 패킷 ID
+                Value = 7      // 패킷 타입
+            },
+            
+            PosX = 355,
+            PosY = 123,
+            PosZ = 987
+        };
+
+        byte[] serialized = requestPacket.ToByteArray();
 
 
+        Console.WriteLine("일반적인 방법으로 직렬화를 풀어본다");
+        MoveRequest request1 = MoveRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"PosX: {request1.PosX}, PosY: {request1.PosY}, TotalSize: {request1.Header.TotalSize}");
+        Console.WriteLine("");
 
 
+        Console.WriteLine("직렬화한 데이터의 헤더 부분을 수동으로 변경한다");
+        uint totalSize = (uint)serialized.Length;
+        Console.WriteLine($"serialized의 크기: {totalSize}");
+        ProtocolBufferHeaderParser.WritePacketHeaderTotalSize(serialized, totalSize);
 
-        //var parser = new ProtocolBufferHeaderParser();
-        //byte[] serializedData = // 직렬화된 LoginRequest 데이터
-        //PacketHeader header = parser.ParseHeaderOnly(serializedData);
+        MoveRequest request2 = MoveRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"PosX: {request1.PosX}, PosY: {request1.PosY}, TotalSize: {request1.Header.TotalSize}");
+        Console.WriteLine("");
+
+
+        Console.WriteLine("헤더만 먼저 비직렬화 후 전체 비직렬화하기");
+        PacketHeader header = ProtocolBufferHeaderParser.ParseHeaderOnly(serialized);
+        Console.WriteLine($"TotalSize: {header.TotalSize}, Id: {header.Id}, Value: {header.Value}");
+
+        MoveRequest request3 = MoveRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"PosX: {request1.PosX}, PosY: {request1.PosY}, TotalSize: {request1.Header.TotalSize}");
+        Console.WriteLine("");
     }
 }
+
+
 
 /*
 message LoginRequest {

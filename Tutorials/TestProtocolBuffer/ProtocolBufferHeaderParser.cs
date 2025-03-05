@@ -12,10 +12,28 @@ public class ProtocolBufferHeaderParser
     // 프로토콜 버퍼 와이어 타입
     private const int WIRETYPE_FIXED32 = 5;
 
-    static public PacketHeader ParseHeaderOnly(byte[] data)
+    static public PacketHeader ParseHeaderOnly(byte[] serialized)
     {
         var header = new PacketHeader();
-        int position = 0;
+
+        const int TOTAL_SIZE_POSITION = 3; // 직렬화 메타 정보가 들어가 있음
+        var readPos = TOTAL_SIZE_POSITION;
+        
+        var bytesSpan1 = serialized.AsSpan(readPos, 4);
+        header.TotalSize = BinaryPrimitives.ReadUInt32LittleEndian(bytesSpan1);
+        readPos += 5; // 1바이트 태그를 건너뛰기 위해 4가 아닌 5를 더함
+
+        var bytesSpan2 = serialized.AsSpan(readPos, 4);
+        header.Id = BinaryPrimitives.ReadUInt32LittleEndian(bytesSpan2);
+        readPos += 5;
+
+        var bytesSpan3 = serialized.AsSpan(readPos, 4);
+        header.Value = BinaryPrimitives.ReadUInt32LittleEndian(bytesSpan3);
+
+        // totalSize 값을 직접 쓰기
+        //BinaryPrimitives.WriteUInt32LittleEndian(bytesSpan, totalSize);
+
+        /*int position = 0;
 
         while (position < data.Length)
         {
@@ -50,7 +68,7 @@ public class ProtocolBufferHeaderParser
             // 헤더 필드를 모두 읽었다면 종료
             if (fieldNumber > 3)
                 break;
-        }
+        }*/
 
         return header;
     }
@@ -101,22 +119,11 @@ public class ProtocolBufferHeaderParser
 
 
     static public void WritePacketHeaderTotalSize(byte[] serialized, UInt32 totalSize)
-    {
-        // fixed32 타입의 경우 태그는 1byte를 차지하고
-        // 실제 값은 그 다음 4byte를 차지합니다
-        const int TOTAL_SIZE_POSITION = 3; // 태그(1byte) 다음 위치
+    {        
+        const int TOTAL_SIZE_POSITION = 3; // 직렬화 메타 정보가 들어가 있음
         var bytesSpan = serialized.AsSpan(TOTAL_SIZE_POSITION, 4);
         
         // totalSize 값을 직접 쓰기
-        if (BitConverter.IsLittleEndian)
-        {
-            BinaryPrimitives.WriteUInt32LittleEndian(bytesSpan, totalSize);
-            //BinaryPrimitives.WriteUInt32LittleEndian(new Span<byte>(serialized, TOTAL_SIZE_POSITION, 4), totalSize);
-        }
-        else
-        {
-            BinaryPrimitives.WriteUInt32BigEndian(bytesSpan, totalSize);
-            //BinaryPrimitives.WriteUInt32BigEndian(new Span<byte>(serialized, TOTAL_SIZE_POSITION, 4),totalSize);
-        }
+        BinaryPrimitives.WriteUInt32LittleEndian(bytesSpan, totalSize);        
     }
 }
