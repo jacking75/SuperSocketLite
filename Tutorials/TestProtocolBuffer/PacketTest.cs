@@ -95,4 +95,51 @@ public class PacketTest
         Console.WriteLine($"PosX: {request3.PosX}, PosY: {request3.PosY}, TotalSize: {request3.Header.TotalSize}");
         Console.WriteLine("");
     }
+
+
+    public static void SendMailPacket()
+    {
+        var requestPacket = new SendMailRequest
+        {
+            Header = new PacketHeader
+            {
+                TotalSize = UInt32.MaxValue, // 실제 크기는 직렬화 후 계산
+                Id = 23,        // 패킷 ID
+                Value = 8      // 패킷 타입
+            },
+
+            ToUserId = "jacking75",
+            MyPosX = 355,
+            MyPosY = 223,
+            MyPosZ = 187,
+            Message = "Hello, World!"
+        };
+
+        byte[] serialized = requestPacket.ToByteArray();
+
+
+        Console.WriteLine("일반적인 방법으로 직렬화를 풀어본다");
+        SendMailRequest request1 = SendMailRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"ToUserId: {request1.ToUserId}, MyPosX: {request1.MyPosX}, MyPosY: {request1.MyPosY}, TotalSize: {request1.Header.TotalSize}");
+        Console.WriteLine("");
+
+
+        Console.WriteLine("직렬화한 데이터의 헤더 부분을 수동으로 변경한다");
+        uint totalSize = (uint)serialized.Length;
+        Console.WriteLine($"serialized의 크기: {totalSize}");
+        ProtocolBufferHeaderParser.WritePacketHeaderTotalSize(serialized, totalSize);
+
+        SendMailRequest request2 = SendMailRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"MyPosX: {request2.MyPosX}, MyPosY: {request2.MyPosY}, Message: {request2.Message}, TotalSize: {request2.Header.TotalSize}");
+        Console.WriteLine("");
+
+
+        Console.WriteLine("헤더만 먼저 비직렬화 후 전체 비직렬화하기");
+        PacketHeader header = ProtocolBufferHeaderParser.ParseHeaderOnly(serialized);
+        Console.WriteLine($"TotalSize: {header.TotalSize}, Id: {header.Id}, Value: {header.Value}");
+
+        SendMailRequest request3 = SendMailRequest.Parser.ParseFrom(serialized);
+        Console.WriteLine($"MyPosX: {request3.MyPosX}, MyPosY: {request3.MyPosY}, Message: {request3.Message}, TotalSize: {request3.Header.TotalSize}");
+        Console.WriteLine("");
+    }
 }
