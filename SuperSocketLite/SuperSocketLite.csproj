@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <PackageVersion>0.17</PackageVersion>
-    <Version>0.17</Version>	
+    <TargetFramework>net9.0</TargetFramework>
+    <PackageVersion>0.19</PackageVersion>
+    <Version>0.19</Version>	
 	<PackageId>SuperSocketLite</PackageId>
 	<Authors>jacking75</Authors>
 	<Company>com2us</Company>	
