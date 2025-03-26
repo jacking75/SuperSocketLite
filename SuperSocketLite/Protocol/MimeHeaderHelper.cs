@@ -1,81 +1,80 @@
 ﻿using System.Collections.Specialized;
 using System.IO;
 
-namespace SuperSocket.SocketEngine.Protocol
+namespace SuperSocket.SocketEngine.Protocol;
+
+/// <summary>
+/// MimeHeader Helper class
+/// </summary>
+public static class MimeHeaderHelper
 {
+    private const string Tab = "\t";
+    private const char Colon = ':';
+    private const string Space = " ";
+    private const string ValueSeparator = ", ";
+
     /// <summary>
-    /// MimeHeader Helper class
+    /// Parses the HTTP header.
     /// </summary>
-    public static class MimeHeaderHelper
+    /// <param name="headerData">The header data.</param>
+    /// <param name="header">The header.</param>
+    public static void ParseHttpHeader(string headerData, NameValueCollection header)
     {
-        private const string Tab = "\t";
-        private const char Colon = ':';
-        private const string Space = " ";
-        private const string ValueSeparator = ", ";
+        string line;
+        string firstLine = string.Empty;
+        string prevKey = string.Empty;
 
-        /// <summary>
-        /// Parses the HTTP header.
-        /// </summary>
-        /// <param name="headerData">The header data.</param>
-        /// <param name="header">The header.</param>
-        public static void ParseHttpHeader(string headerData, NameValueCollection header)
+        var reader = new StringReader(headerData);
+
+        while (!string.IsNullOrEmpty(line = reader.ReadLine()))
         {
-            string line;
-            string firstLine = string.Empty;
-            string prevKey = string.Empty;
-
-            var reader = new StringReader(headerData);
-
-            while (!string.IsNullOrEmpty(line = reader.ReadLine()))
+            if (string.IsNullOrEmpty(firstLine))
             {
-                if (string.IsNullOrEmpty(firstLine))
-                {
-                    firstLine = line;
-                    continue;
-                }
-
-                if (line.StartsWith(Tab) && !string.IsNullOrEmpty(prevKey))
-                {
-                    string currentValue = header[prevKey];
-                    header[prevKey] = currentValue + line.Trim();
-                    continue;
-                }
-
-                int pos = line.IndexOf(Colon);
-
-                if (pos <= 0)
-                    continue;
-
-                string key = line.Substring(0, pos);
-
-                if (!string.IsNullOrEmpty(key))
-                    key = key.Trim();
-
-                var valueOffset = pos + 1;
-
-                if (line.Length <= valueOffset) //No value in this line
-                    continue;
-
-                string value = line.Substring(valueOffset);
-                if (!string.IsNullOrEmpty(value) && value.StartsWith(Space) && value.Length > 1)
-                    value = value.Substring(1);
-
-                if (string.IsNullOrEmpty(key))
-                    continue;
-
-                string oldValue = header[key];
-
-                if (string.IsNullOrEmpty(oldValue))
-                {
-                    header.Add(key, value);
-                }
-                else
-                {
-                    header[key] = oldValue + ValueSeparator + value;
-                }
-
-                prevKey = key;
+                firstLine = line;
+                continue;
             }
+
+            if (line.StartsWith(Tab) && !string.IsNullOrEmpty(prevKey))
+            {
+                string currentValue = header[prevKey];
+                header[prevKey] = currentValue + line.Trim();
+                continue;
+            }
+
+            int pos = line.IndexOf(Colon);
+
+            if (pos <= 0)
+                continue;
+
+            string key = line.Substring(0, pos);
+
+            if (!string.IsNullOrEmpty(key))
+                key = key.Trim();
+
+            var valueOffset = pos + 1;
+
+            if (line.Length <= valueOffset) //No value in this line
+                continue;
+
+            string value = line.Substring(valueOffset);
+            if (!string.IsNullOrEmpty(value) && value.StartsWith(Space) && value.Length > 1)
+                value = value.Substring(1);
+
+            if (string.IsNullOrEmpty(key))
+                continue;
+
+            string oldValue = header[key];
+
+            if (string.IsNullOrEmpty(oldValue))
+            {
+                header.Add(key, value);
+            }
+            else
+            {
+                header[key] = oldValue + ValueSeparator + value;
+            }
+
+            prevKey = key;
         }
     }
 }

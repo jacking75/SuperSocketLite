@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using SuperSocket.Common;
+﻿using System.Net.Sockets;
 using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketEngine.AsyncSocket;
 
-namespace SuperSocket.SocketEngine
+namespace SuperSocket.SocketEngine;
+
+interface IAsyncSocketSessionBase : ILoggerProvider
 {
-    interface IAsyncSocketSessionBase : ILoggerProvider
-    {
-        SocketAsyncEventArgsProxy SocketAsyncProxy { get; }
-        
-        Socket Client { get; }
-    }
+    SocketAsyncEventArgsProxy SocketAsyncProxy { get; }
+    
+    Socket Client { get; }
+}
 
-    interface IAsyncSocketSession : IAsyncSocketSessionBase
-    {
-        void ProcessReceive(SocketAsyncEventArgs e);
-    }
+interface IAsyncSocketSession : IAsyncSocketSessionBase
+{
+    void ProcessReceive(SocketAsyncEventArgs e);
 }

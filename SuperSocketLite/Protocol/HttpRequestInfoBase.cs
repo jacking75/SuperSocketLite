@@ -1,67 +1,66 @@
 ﻿using System.Collections.Specialized;
 using SuperSocket.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol
+namespace SuperSocket.SocketEngine.Protocol;
+
+/// <summary>
+/// IHttpRequestInfo
+/// </summary>
+public interface IHttpRequestInfo : IRequestInfo
 {
     /// <summary>
-    /// IHttpRequestInfo
+    /// Gets the http header.
     /// </summary>
-    public interface IHttpRequestInfo : IRequestInfo
-    {
-        /// <summary>
-        /// Gets the http header.
-        /// </summary>
-        NameValueCollection Header { get; }
-    }
+    NameValueCollection Header { get; }
+}
+
+/// <summary>
+/// HttpRequestInfoBase
+/// </summary>
+public abstract class HttpRequestInfoBase : IHttpRequestInfo
+{
+    /// <summary>
+    /// Gets the key of this request.
+    /// </summary>
+    public string Key { get; private set; }
 
     /// <summary>
-    /// HttpRequestInfoBase
+    /// Gets the http header.
     /// </summary>
-    public abstract class HttpRequestInfoBase : IHttpRequestInfo
-    {
-        /// <summary>
-        /// Gets the key of this request.
-        /// </summary>
-        public string Key { get; private set; }
-
-        /// <summary>
-        /// Gets the http header.
-        /// </summary>
-        public NameValueCollection Header { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequestInfoBase"/> class.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="header">The header.</param>
-        protected HttpRequestInfoBase(string key, NameValueCollection header)
-        {
-            Key = key;
-            Header = header;
-        }
-    }
+    public NameValueCollection Header { get; private set; }
 
     /// <summary>
-    /// HttpRequestInfoBase
+    /// Initializes a new instance of the <see cref="HttpRequestInfoBase"/> class.
     /// </summary>
-    /// <typeparam name="TRequestBody">The type of the request body.</typeparam>
-    public abstract class HttpRequestInfoBase<TRequestBody> : HttpRequestInfoBase
+    /// <param name="key">The key.</param>
+    /// <param name="header">The header.</param>
+    protected HttpRequestInfoBase(string key, NameValueCollection header)
     {
-        /// <summary>
-        /// Gets the body.
-        /// </summary>
-        public TRequestBody Body { get; private set; }
+        Key = key;
+        Header = header;
+    }
+}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequestInfoBase&lt;TRequestBody&gt;"/> class.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="header">The header.</param>
-        /// <param name="body">The body.</param>
-        protected HttpRequestInfoBase(string key, NameValueCollection header, TRequestBody body)
-            : base(key, header)
-        {
-            Body = body;
-        }
+/// <summary>
+/// HttpRequestInfoBase
+/// </summary>
+/// <typeparam name="TRequestBody">The type of the request body.</typeparam>
+public abstract class HttpRequestInfoBase<TRequestBody> : HttpRequestInfoBase
+{
+    /// <summary>
+    /// Gets the body.
+    /// </summary>
+    public TRequestBody Body { get; private set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HttpRequestInfoBase&lt;TRequestBody&gt;"/> class.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="header">The header.</param>
+    /// <param name="body">The body.</param>
+    protected HttpRequestInfoBase(string key, NameValueCollection header, TRequestBody body)
+        : base(key, header)
+    {
+        Body = body;
     }
 }

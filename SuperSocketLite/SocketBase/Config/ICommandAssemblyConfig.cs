@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+namespace SuperSocket.SocketBase.Config;
 
-namespace SuperSocket.SocketBase.Config
+/// <summary>
+/// The basic interface for command assembly config
+/// </summary>
+public interface ICommandAssemblyConfig
 {
     /// <summary>
-    /// The basic interface for command assembly config
+    /// Gets the assembly name.
     /// </summary>
-    public interface ICommandAssemblyConfig
-    {
-        /// <summary>
-        /// Gets the assembly name.
-        /// </summary>
-        /// <value>
-        /// The assembly.
-        /// </value>
-        string Assembly { get; }
-    }
+    /// <value>
+    /// The assembly.
+    /// </value>
+    string Assembly { get; }
 }

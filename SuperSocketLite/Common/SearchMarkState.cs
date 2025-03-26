@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace SuperSocket.Common
+
+namespace SuperSocket.Common;
+
+/// <summary>
+/// SearchMarkState
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class SearchMarkState<T>
+    where T : IEquatable<T>
 {
     /// <summary>
-    /// SearchMarkState
+    /// Initializes a new instance of the <see cref="SearchMarkState&lt;T&gt;"/> class.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class SearchMarkState<T>
-        where T : IEquatable<T>
+    /// <param name="mark">The mark.</param>
+    public SearchMarkState(T[] mark)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SearchMarkState&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="mark">The mark.</param>
-        public SearchMarkState(T[] mark)
-        {
-            Mark = mark;
-        }
-
-        /// <summary>
-        /// Gets the mark.
-        /// </summary>
-        public T[] Mark { get; private set; }
-
-        /// <summary>
-        /// Gets or sets whether matched already.
-        /// </summary>
-        /// <value>
-        /// The matched.
-        /// </value>
-        public int Matched { get; set; }
+        Mark = mark;
     }
+
+    /// <summary>
+    /// Gets the mark.
+    /// </summary>
+    public T[] Mark { get; private set; }
+
+    /// <summary>
+    /// Gets or sets whether matched already.
+    /// </summary>
+    /// <value>
+    /// The matched.
+    /// </value>
+    public int Matched { get; set; }
 }

@@ -1,96 +1,94 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 
-namespace SuperSocket.Common
+
+namespace SuperSocket.Common;
+
+//TODO 유닛테스트 필요
+public class ReuseLockBaseBuffer
 {
-    //TODO 유닛테스트 필요
-    public class ReuseLockBaseBuffer
+    Int32 ReadPos = 0;
+    Int32 WritePos = 0;
+    Int32 BufferSize = 0;
+    byte[] mBuffer = null;
+
+    Int32 MinumBufferSize = 0;
+
+    public ReuseLockBaseBuffer(int bufferSize)
     {
-        Int32 ReadPos = 0;
-        Int32 WritePos = 0;
-        Int32 BufferSize = 0;
-        byte[] mBuffer = null;
+        BufferSize = bufferSize;
+        mBuffer = new byte[bufferSize];
+        MinumBufferSize = BufferSize / 4;
+    }
 
-        Int32 MinumBufferSize = 0;
-
-        public ReuseLockBaseBuffer(int bufferSize)
+    public void Clear()
+    {
+        lock (mBuffer)
         {
-            BufferSize = bufferSize;
-            mBuffer = new byte[bufferSize];
-            MinumBufferSize = BufferSize / 4;
+            ReadPos = 0;
+            WritePos = 0;
+        }
+    }
+
+    public bool Copy(byte[] source, int pos, int count)
+    {
+        lock(mBuffer)
+        {
+            var expectedLength = WritePos + count;
+            if(BufferSize <= expectedLength)
+            {
+                return false;
+            }
+
+            Buffer.BlockCopy(source, pos, mBuffer, WritePos, count);
         }
 
-        public void Clear()
+        return true;
+    }
+
+    // 1개의 스레드에서만 호출해야 한다.
+    public ArraySegment<byte> GetData()
+    {
+        lock (mBuffer)
         {
-            lock (mBuffer)
+            var size = WritePos - ReadPos;
+            return new ArraySegment<byte>(mBuffer, ReadPos, size);
+        }
+    }
+
+    public void Commit(int size)
+    {
+        lock (mBuffer)
+        {
+            var currenDataSize = WritePos - ReadPos;
+
+            if (currenDataSize == size)
             {
                 ReadPos = 0;
                 WritePos = 0;
-            }
-        }
-
-        public bool Copy(byte[] source, int pos, int count)
-        {
-            lock(mBuffer)
-            {
-                var expectedLength = WritePos + count;
-                if(BufferSize <= expectedLength)
-                {
-                    return false;
-                }
-
-                Buffer.BlockCopy(source, pos, mBuffer, WritePos, count);
+                return;
             }
 
-            return true;
-        }
 
-        // 1개의 스레드에서만 호출해야 한다.
-        public ArraySegment<byte> GetData()
-        {
-            lock (mBuffer)
+            ReadPos += size;
+            currenDataSize = WritePos - ReadPos;
+
+            if(currenDataSize < ReadPos)
             {
-                var size = WritePos - ReadPos;
-                return new ArraySegment<byte>(mBuffer, ReadPos, size);
+                Buffer.BlockCopy(mBuffer, ReadPos, mBuffer, 0, currenDataSize);
+                ReadPos = 0;
+                WritePos = currenDataSize;
             }
-        }
-
-        public void Commit(int size)
-        {
-            lock (mBuffer)
+            else
             {
-                var currenDataSize = WritePos - ReadPos;
-
-                if (currenDataSize == size)
+                var remainingBufferLength = BufferSize - WritePos;
+                if (MinumBufferSize < remainingBufferLength)
                 {
-                    ReadPos = 0;
-                    WritePos = 0;
-                    return;
-                }
+                    var temp = new byte[currenDataSize];
+                    Buffer.BlockCopy(mBuffer, ReadPos, temp, 0, currenDataSize);
+                    Buffer.BlockCopy(temp, 0, mBuffer, 0, currenDataSize);
 
-
-                ReadPos += size;
-                currenDataSize = WritePos - ReadPos;
-
-                if(currenDataSize < ReadPos)
-                {
-                    Buffer.BlockCopy(mBuffer, ReadPos, mBuffer, 0, currenDataSize);
                     ReadPos = 0;
                     WritePos = currenDataSize;
-                }
-                else
-                {
-                    var remainingBufferLength = BufferSize - WritePos;
-                    if (MinumBufferSize < remainingBufferLength)
-                    {
-                        var temp = new byte[currenDataSize];
-                        Buffer.BlockCopy(mBuffer, ReadPos, temp, 0, currenDataSize);
-                        Buffer.BlockCopy(temp, 0, mBuffer, 0, currenDataSize);
-
-                        ReadPos = 0;
-                        WritePos = currenDataSize;
-                    }
                 }
             }
         }

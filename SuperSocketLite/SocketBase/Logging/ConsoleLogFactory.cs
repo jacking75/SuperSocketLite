@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+namespace SuperSocket.SocketBase.Logging;
 
-namespace SuperSocket.SocketBase.Logging
+/// <summary>
+/// Console log factory
+/// </summary>
+public class ConsoleLogFactory : ILogFactory
 {
     /// <summary>
-    /// Console log factory
+    /// Gets the log by name.
     /// </summary>
-    public class ConsoleLogFactory : ILogFactory
+    /// <param name="name">The name.</param>
+    /// <returns></returns>
+    public ILog GetLog(string name)
     {
-        /// <summary>
-        /// Gets the log by name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
-        public ILog GetLog(string name)
-        {
-            return new ConsoleLog(name);
-        }
+        return new ConsoleLog(name);
     }
 }

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+namespace SuperSocket.SocketBase.Protocol;
 
-namespace SuperSocket.SocketBase.Protocol
+/// <summary>
+/// The interface for a Receive filter to adapt receiving buffer offset
+/// </summary>
+public interface IOffsetAdapter
 {
     /// <summary>
-    /// The interface for a Receive filter to adapt receiving buffer offset
+    /// Gets the offset delta.
     /// </summary>
-    public interface IOffsetAdapter
-    {
-        /// <summary>
-        /// Gets the offset delta.
-        /// </summary>
-        int OffsetDelta { get; }
-    }
+    int OffsetDelta { get; }
 }
