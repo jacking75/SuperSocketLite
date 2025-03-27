@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleUDPServer", "SimpleUD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwitchReceiveFilter", "SwitchReceiveFilter\SwitchReceiveFilter.csproj", "{1F17D2CB-41AF-4081-8D07-87E53E59EBA1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestMemoryPack", "TestMemoryPack\TestMemoryPack.csproj", "{5B956538-8960-4C7C-9C0A-FD033A863CEE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EchoServer": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 32452 --maxConnectionNumber 32 --name EchoServer"
+    }
+  }
+}
