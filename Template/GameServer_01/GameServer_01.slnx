@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../SuperSocketLite/SuperSocketLite.csproj" />
+  <Project Path="GameServer_01.csproj" />
+</Solution>
