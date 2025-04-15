@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Async extension class

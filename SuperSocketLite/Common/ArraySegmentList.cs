@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// ArraySegmentList

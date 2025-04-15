@@ -1,56 +1,55 @@
 ﻿using System;
 
-namespace GameServer
+namespace GameServer;
+
+class Program
 {
-    class Program
+    //dotnet ChatServer.dll --uniqueID 1 --roomMaxCount 16 --roomMaxUserCount 4 --roomStartNumber 1 --maxUserCount 100
+    static void Main(string[] args)
     {
-        //dotnet ChatServer.dll --uniqueID 1 --roomMaxCount 16 --roomMaxUserCount 4 --roomStartNumber 1 --maxUserCount 100
-        static void Main(string[] args)
+        var serverOption = ParseCommandLine(args);
+        if(serverOption == null)
         {
-            var serverOption = ParseCommandLine(args);
-            if(serverOption == null)
-            {
-                return;
-            }
-
-           
-            var serverApp = new MainServer();
-            serverApp.InitConfig(serverOption);
-
-            serverApp.CreateStartServer();
-
-            MainServer.MainLogger.Info("Press q to shut down the server");
-
-            while (true)
-            {
-                System.Threading.Thread.Sleep(50);
-
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    if (key.KeyChar == 'q')
-                    {
-                        Console.WriteLine("Server Terminate ~~~");
-                        serverApp.StopServer();
-                        break;
-                    }
-                }
-                                
-            }
+            return;
         }
 
-        static GameServerOption ParseCommandLine(string[] args)
+       
+        var serverApp = new MainServer();
+        serverApp.InitConfig(serverOption);
+
+        serverApp.CreateStartServer();
+
+        MainServer.MainLogger.Info("Press q to shut down the server");
+
+        while (true)
         {
-            var result = CommandLine.Parser.Default.ParseArguments<GameServerOption>(args) as CommandLine.Parsed<GameServerOption>;
+            System.Threading.Thread.Sleep(50);
 
-            if (result == null)
+            if (Console.KeyAvailable)
             {
-                System.Console.WriteLine("Failed Command Line");
-                return null;
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                if (key.KeyChar == 'q')
+                {
+                    Console.WriteLine("Server Terminate ~~~");
+                    serverApp.StopServer();
+                    break;
+                }
             }
+                            
+        }
+    }
 
-            return result.Value;
-        }                  
+    static GameServerOption ParseCommandLine(string[] args)
+    {
+        var result = CommandLine.Parser.Default.ParseArguments<GameServerOption>(args) as CommandLine.Parsed<GameServerOption>;
 
-    } // end Class
-}
+        if (result == null)
+        {
+            System.Console.WriteLine("Failed Command Line");
+            return null;
+        }
+
+        return result.Value;
+    }                  
+
+} // end Class

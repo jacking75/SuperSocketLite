@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
 
 namespace EchoServerEx;
 
@@ -15,7 +15,7 @@ class MainServer : AppServer<NetworkSession, EFBinaryRequestInfo>
     /// <summary>
     /// 메인 로거 인스턴스입니다.
     /// </summary>
-    public static SuperSocket.SocketBase.Logging.ILog s_MainLogger;
+    public static SuperSocketLite.SocketBase.Logging.ILog s_MainLogger;
 
     /// <summary>
     /// 패킷 핸들러 맵입니다.

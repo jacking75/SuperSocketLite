@@ -1,5 +1,5 @@
 ﻿
-using SuperSocket.SocketBase;
+using SuperSocketLite.SocketBase;
 
 
 namespace GateServer;

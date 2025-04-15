@@ -1,7 +1,7 @@
-﻿using SuperSocket.SocketBase.Config;
+﻿using SuperSocketLite.SocketBase.Config;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// An item can be started and stopped

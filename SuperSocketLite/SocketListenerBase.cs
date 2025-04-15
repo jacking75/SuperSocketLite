@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 abstract class SocketListenerBase : ISocketListener
 {

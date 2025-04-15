@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// the attribute to mark which property of ServerConfig support hot update

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// IHttpRequestInfo

@@ -5,7 +5,7 @@ using System.Security.Authentication;
 using System.Net.Sockets;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// CloseReason enum

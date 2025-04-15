@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 public sealed class SendingQueue : IList<ArraySegment<byte>>
 {

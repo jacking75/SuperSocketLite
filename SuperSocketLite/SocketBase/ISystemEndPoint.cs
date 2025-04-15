@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The interface for endpoint who can send/receive system message with each other

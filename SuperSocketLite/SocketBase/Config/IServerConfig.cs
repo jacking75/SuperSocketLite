@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// Server instance configuation interface

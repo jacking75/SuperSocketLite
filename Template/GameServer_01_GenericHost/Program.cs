@@ -89,7 +89,7 @@ class Program
                 services.Configure<ServerOption>(hostContext.Configuration.GetSection("ServerOption"));
                 services.AddHostedService<MainServer>();
 
-                services.AddSingleton<SuperSocket.SocketBase.Logging.ILogFactory, SuperSocketLogProvider>();
+                services.AddSingleton<SuperSocketLite.SocketBase.Logging.ILogFactory, SuperSocketLogProvider>();
             })
             .Build();
 

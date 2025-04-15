@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
-using SuperSocket.Common;
+using SuperSocketLite.Common;
 using System.Collections.Specialized;
 
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// Root configuration model

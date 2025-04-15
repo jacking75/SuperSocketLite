@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 abstract partial class SocketSession
 {

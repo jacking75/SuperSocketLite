@@ -2,7 +2,7 @@
 using System.Net;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Active connect result model

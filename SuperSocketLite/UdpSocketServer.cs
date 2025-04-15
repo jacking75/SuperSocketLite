@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 class UdpSocketServer<TRequestInfo> : SocketServerBase, IActiveConnector
     where TRequestInfo : IRequestInfo

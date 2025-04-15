@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using SuperSocket.SocketBase;
+using SuperSocketLite.SocketBase;
 
 
 namespace ChatServer;
@@ -104,7 +104,7 @@ class RemoteConnectCheck
         public async void TryConnect(MainServer appServer)
         {
             _isTryConnecting = true;
-            var activeConnector = appServer as SuperSocket.SocketBase.IActiveConnector;
+            var activeConnector = appServer as SuperSocketLite.SocketBase.IActiveConnector;
 
             try
             {

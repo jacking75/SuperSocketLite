@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Config;
 using System.Threading.Tasks;
 using System.Threading;
+
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
+
 
 namespace EchoServer_GenericHost;
 
 
 class MainServer : AppServer<NetworkSession, EFBinaryRequestInfo>, IHostedService
 {
-    public static SuperSocket.SocketBase.Logging.ILog MainLogger;
+    public static SuperSocketLite.SocketBase.Logging.ILog MainLogger;
 
     Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>> HandlerMap = new Dictionary<int, Action<NetworkSession, EFBinaryRequestInfo>>();
     CommonHandler CommonHan = new CommonHandler();

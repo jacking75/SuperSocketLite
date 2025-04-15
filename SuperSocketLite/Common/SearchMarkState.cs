@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// SearchMarkState

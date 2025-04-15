@@ -1,10 +1,10 @@
 ﻿using System;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 /// <summary>
 /// Default socket server factory

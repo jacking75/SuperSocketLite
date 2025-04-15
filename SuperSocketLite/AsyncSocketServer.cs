@@ -5,10 +5,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Threading.Tasks;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 class AsyncSocketServer : TcpSocketServerBase, IActiveConnector
 {

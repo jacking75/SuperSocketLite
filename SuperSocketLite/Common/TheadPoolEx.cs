@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// Thread pool extension class

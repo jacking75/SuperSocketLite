@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 class ArraySegmentEx<T>
 {

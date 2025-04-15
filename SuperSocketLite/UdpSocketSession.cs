@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 class UdpSocketSession : SocketSession
 {

@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// This class is designed for detect platform attribute in runtime

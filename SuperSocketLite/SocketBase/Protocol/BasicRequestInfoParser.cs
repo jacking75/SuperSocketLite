@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// Basic request info parser, which parse request info by separating

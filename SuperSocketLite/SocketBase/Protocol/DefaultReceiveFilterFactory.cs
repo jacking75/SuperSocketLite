@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// DefaultreceiveFilterFactory

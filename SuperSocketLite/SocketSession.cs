@@ -5,12 +5,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Threading;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 static class SocketState
 {

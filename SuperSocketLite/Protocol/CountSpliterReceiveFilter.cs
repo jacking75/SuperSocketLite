@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// This Receive filter is designed for this kind protocol:

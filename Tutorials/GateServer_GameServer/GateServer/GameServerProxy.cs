@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
 
 using CommonLib;
 using MessagePack;
@@ -12,9 +12,9 @@ namespace GateServer;
 
 public class GameServerProxy : AppServer<GameServerSession, EFBinaryRequestInfo>
 {
-    SuperSocket.SocketBase.Config.IServerConfig _config;
+    SuperSocketLite.SocketBase.Config.IServerConfig _config;
 
-    public static SuperSocket.SocketBase.Logging.ILog s_MainLogger;
+    public static SuperSocketLite.SocketBase.Logging.ILog s_MainLogger;
 
     GameServerManager _gameServerMgr = new GameServerManager();
 
@@ -29,7 +29,7 @@ public class GameServerProxy : AppServer<GameServerSession, EFBinaryRequestInfo>
 
     public void InitConfig()
     {
-        _config = new SuperSocket.SocketBase.Config.ServerConfig
+        _config = new SuperSocketLite.SocketBase.Config.ServerConfig
         {
             Name = "GameServer",
             Ip = "Any",
@@ -51,7 +51,7 @@ public class GameServerProxy : AppServer<GameServerSession, EFBinaryRequestInfo>
     {
         try
         {
-            bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), _config, logFactory: new NLogLogFactory());
+            bool bResult = Setup(new SuperSocketLite.SocketBase.Config.RootConfig(), _config, logFactory: new NLogLogFactory());
 
             if (bResult == false)
             {
@@ -98,7 +98,7 @@ public class GameServerProxy : AppServer<GameServerSession, EFBinaryRequestInfo>
 
     public string ConnetcToServer(System.Net.IPEndPoint serverAddress)
     {
-        var activeConnector = this as SuperSocket.SocketBase.IActiveConnector;
+        var activeConnector = this as SuperSocketLite.SocketBase.IActiveConnector;
 
         try
         {

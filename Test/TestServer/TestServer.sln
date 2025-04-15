@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServer", "TestServer.csproj", "{191FCBF6-F42D-401C-9173-F8E096775177}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperSocketLite", "..\..\..\SuperSocketLite\SuperSocketLite.csproj", "{B022F01F-F00C-4D7C-985B-E11590BE0735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSocketLite", "..\..\SuperSocketLite\SuperSocketLite.csproj", "{83EE0A8B-59D0-36E0-3D8D-54BC771D2FCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{191FCBF6-F42D-401C-9173-F8E096775177}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B022F01F-F00C-4D7C-985B-E11590BE0735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83EE0A8B-59D0-36E0-3D8D-54BC771D2FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83EE0A8B-59D0-36E0-3D8D-54BC771D2FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83EE0A8B-59D0-36E0-3D8D-54BC771D2FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83EE0A8B-59D0-36E0-3D8D-54BC771D2FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
-using SuperSocket.SocketBase;
+using SuperSocketLite.SocketBase;
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 interface IAsyncSocketSessionBase : ILoggerProvider
 {

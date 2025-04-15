@@ -1,8 +1,8 @@
 ﻿using System.Security.Authentication;
-using SuperSocket.Common;
+using SuperSocketLite.Common;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// It is the basic interface of SocketServer,

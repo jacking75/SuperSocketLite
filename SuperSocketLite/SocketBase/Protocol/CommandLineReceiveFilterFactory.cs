@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// CommandLine RequestFilter Factory

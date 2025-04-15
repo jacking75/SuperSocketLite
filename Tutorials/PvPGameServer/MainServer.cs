@@ -6,10 +6,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
 
 
 namespace PvPGameServer;

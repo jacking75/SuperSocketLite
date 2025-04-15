@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine.Protocol;
+﻿using System.Text;
+
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketEngine.Protocol;
+
 
 namespace SwitchReceiveFilter;
 

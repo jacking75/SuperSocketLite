@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// Certificate configuration interface

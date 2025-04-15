@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// The root configuration interface

@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SuperSocketLite\SuperSocketLite.csproj" />
+    <ProjectReference Include="..\..\SuperSocketLite\SuperSocketLite.csproj" />
   </ItemGroup>
 
 </Project>

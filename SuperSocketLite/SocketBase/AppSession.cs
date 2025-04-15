@@ -4,12 +4,12 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// AppSession base class

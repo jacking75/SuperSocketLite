@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// Provide the initializing interface for ReceiveFilter

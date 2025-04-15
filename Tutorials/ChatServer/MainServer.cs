@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 using System.Runtime.CompilerServices;
 
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketEngine;
 
 using CSBaseLib;
 
@@ -21,9 +21,9 @@ namespace ChatServer;
 public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
 {
     public static ChatServerOption s_ServerOption;
-    public static SuperSocket.SocketBase.Logging.ILog s_MainLogger;
+    public static SuperSocketLite.SocketBase.Logging.ILog s_MainLogger;
 
-    SuperSocket.SocketBase.Config.IServerConfig _config;
+    SuperSocketLite.SocketBase.Config.IServerConfig _config;
 
     PacketProcessor _mainPacketProcessor = new ();
     RoomManager _roomMgr = new ();
@@ -41,7 +41,7 @@ public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
         s_ServerOption = option;
 
-        _config = new SuperSocket.SocketBase.Config.ServerConfig
+        _config = new SuperSocketLite.SocketBase.Config.ServerConfig
         {
             Name = option.Name,
             Ip = "Any",
@@ -58,7 +58,7 @@ public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
         try
         {
-            bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), 
+            bool bResult = Setup(new SuperSocketLite.SocketBase.Config.RootConfig(), 
                                 _config, 
                                 logFactory: new NLogLogFactory());
 

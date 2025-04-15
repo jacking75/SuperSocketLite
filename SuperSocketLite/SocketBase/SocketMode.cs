@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Socket server running mode

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.IO;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// MimeHeader Helper class

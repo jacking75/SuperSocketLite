@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Security.Authentication;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Logging;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Logging;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 abstract class SocketServerBase : ISocketServer, IDisposable
 {

@@ -8,7 +8,7 @@ namespace DB;
 
 public class DBProcessor
 {
-    public SuperSocket.SocketBase.Logging.ILog MainLogger;
+    public SuperSocketLite.SocketBase.Logging.ILog MainLogger;
     bool IsThreadRunning = false;
     List<System.Threading.Thread> ThreadList = new List<System.Threading.Thread>();
 

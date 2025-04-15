@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// Listener configuration model

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// The pool information class

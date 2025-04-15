@@ -51,7 +51,10 @@ class PacketProcessor
             }
             catch (Exception ex)
             {
-                _isThreadRunning.IfTrue(() => MainServer.s_MainLogger.Error(ex.ToString()));
+                if(_isThreadRunning)
+                {
+                    MainServer.s_MainLogger.Error(ex.ToString());
+                }
             }
         }
     }

@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Logging;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Logging;
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 class AsyncSocketSession : SocketSession, IAsyncSocketSession
 {

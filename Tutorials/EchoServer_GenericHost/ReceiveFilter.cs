@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine.Protocol;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketEngine.Protocol;
 
 namespace EchoServer_GenericHost;
 

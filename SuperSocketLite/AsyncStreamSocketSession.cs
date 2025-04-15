@@ -5,15 +5,15 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Logging;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Logging;
 
 #pragma warning disable SYSLIB0039
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 /// <summary>
 /// The interface for socket session which requires negotiation before communication

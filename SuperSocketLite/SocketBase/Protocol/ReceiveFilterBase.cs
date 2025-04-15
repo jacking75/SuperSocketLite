@@ -1,6 +1,6 @@
-﻿using SuperSocket.Common;
+﻿using SuperSocketLite.Common;
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// Receive filter base class

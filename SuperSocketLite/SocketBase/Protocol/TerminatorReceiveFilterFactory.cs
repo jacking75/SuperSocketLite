@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// Terminator ReceiveFilter Factory

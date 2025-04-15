@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SuperSocket.SocketBase;
+using SuperSocketLite.SocketBase;
 
 
 namespace ChatServer;

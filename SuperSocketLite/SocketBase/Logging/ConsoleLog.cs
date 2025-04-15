@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SuperSocket.SocketBase.Logging;
+namespace SuperSocketLite.SocketBase.Logging;
 
 /// <summary>
 /// Console Log

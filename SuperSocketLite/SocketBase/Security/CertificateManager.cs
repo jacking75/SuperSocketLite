@@ -2,12 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase.Config;
 
 #pragma warning disable SYSLIB0057 // The certificate was not found.
 
 
-namespace SuperSocket.SocketBase.Security;
+namespace SuperSocketLite.SocketBase.Security;
 
 static class CertificateManager
 {

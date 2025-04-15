@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The basic session interface

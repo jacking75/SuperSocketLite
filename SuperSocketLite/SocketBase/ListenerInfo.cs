@@ -3,7 +3,7 @@ using System.Net;
 using System.Security.Authentication;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Listener inforamtion

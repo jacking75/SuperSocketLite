@@ -1,6 +1,6 @@
-﻿using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Protocol;
+﻿using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +23,7 @@ class Program
         };
 
         var appServer = new UdpAppServer();
-        appServer.Setup(new RootConfig(), config, logFactory: new SuperSocket.SocketBase.Logging.ConsoleLogFactory());
+        appServer.Setup(new RootConfig(), config, logFactory: new SuperSocketLite.SocketBase.Logging.ConsoleLogFactory());
 
 
         appServer.Start();

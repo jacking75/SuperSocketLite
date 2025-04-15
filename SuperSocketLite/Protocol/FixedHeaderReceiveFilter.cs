@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// FixedHeaderReceiveFilter,

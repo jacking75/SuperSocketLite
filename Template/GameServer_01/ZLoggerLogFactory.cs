@@ -8,7 +8,7 @@ using ZLogger.Providers;
 
 namespace GameServer_01;
 
-public class ZLoggerLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
+public class ZLoggerLogFactory : SuperSocketLite.SocketBase.Logging.LogFactoryBase
 {
     private ILoggerFactory _loggerFactory;
     private string _startTime;
@@ -50,7 +50,7 @@ public class ZLoggerLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
 
     }
 
-    public override SuperSocket.SocketBase.Logging.ILog GetLog(string name)
+    public override SuperSocketLite.SocketBase.Logging.ILog GetLog(string name)
     {
         return new ZLoggerLog(_loggerFactory.CreateLogger(name));
     }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The basic interface for appSession

@@ -1,8 +1,8 @@
 ﻿using System;
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// ReceiveFilter for the protocol that each request has bengin and end mark

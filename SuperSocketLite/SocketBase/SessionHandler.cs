@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Used for session level event handler

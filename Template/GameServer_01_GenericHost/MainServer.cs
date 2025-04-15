@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Config;
-using System.Threading.Tasks;
-using System.Threading;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Config;
+
 
 
 namespace GameServer_01_GenericHost;
@@ -25,12 +26,12 @@ class MainServer : AppServer<NetworkSession, PacketRequestInfo>, IHostedService
 
     private readonly IHostApplicationLifetime AppLifetime;
     private readonly ILogger<MainServer> AppLogger;
-    private readonly SuperSocket.SocketBase.Logging.ILogFactory _logFactory;
+    private readonly SuperSocketLite.SocketBase.Logging.ILogFactory _logFactory;
 
     public MainServer(IHostApplicationLifetime appLifetime, 
                     IOptions<ServerOption> serverConfig, 
                     ILogger<MainServer> logger,
-                    SuperSocket.SocketBase.Logging.ILogFactory logFactory)
+                    SuperSocketLite.SocketBase.Logging.ILogFactory logFactory)
         : base(new DefaultReceiveFilterFactory<PacketReceiveFilter, PacketRequestInfo>())
     {
         ServerOpt = serverConfig.Value;

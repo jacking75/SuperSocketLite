@@ -1,7 +1,7 @@
-﻿using SuperSocket.SocketBase.Logging;
+﻿using SuperSocketLite.SocketBase.Logging;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The interface for who provides logger

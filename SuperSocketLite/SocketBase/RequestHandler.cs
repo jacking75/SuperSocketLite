@@ -1,7 +1,7 @@
-﻿using SuperSocket.SocketBase.Protocol;
+﻿using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Request handler

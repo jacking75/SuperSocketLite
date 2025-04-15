@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The interface for AppServer

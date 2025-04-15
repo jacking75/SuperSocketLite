@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// Server's state enum class

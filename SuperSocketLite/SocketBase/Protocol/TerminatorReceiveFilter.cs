@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using SuperSocket.Common;
+using SuperSocketLite.Common;
 
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// Terminator Receive filter

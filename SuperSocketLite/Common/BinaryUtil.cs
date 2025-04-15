@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// Binary util class

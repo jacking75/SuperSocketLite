@@ -3,7 +3,7 @@
 
 namespace GameServer;
 
-public class NLogLog : SuperSocket.SocketBase.Logging.ILog
+public class NLogLog : SuperSocketLite.SocketBase.Logging.ILog
 {
     private NLog.ILogger _log;
 

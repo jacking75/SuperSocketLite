@@ -5,7 +5,7 @@ using ZLogger;
 
 
 namespace GameServer_01;
-public class ZLoggerLog : SuperSocket.SocketBase.Logging.ILog
+public class ZLoggerLog : SuperSocketLite.SocketBase.Logging.ILog
 {
     private ILogger _logger;
 

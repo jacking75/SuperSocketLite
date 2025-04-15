@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 /// <summary>
 /// Socket extension class

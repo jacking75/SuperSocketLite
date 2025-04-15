@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-using SuperSocket.SocketBase;
+using SuperSocketLite.SocketBase;
 
 
 namespace GameServer;

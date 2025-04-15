@@ -1,6 +1,9 @@
-﻿using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
-using System;
+﻿using System;
+
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
+
+
 
 namespace SwitchReceiveFilter;
 
@@ -22,7 +25,7 @@ class Program
         var appServer = new MyAppServer();
         appServer.Setup(new RootConfig(), 
                         config, 
-                        logFactory: new SuperSocket.SocketBase.Logging.ConsoleLogFactory());
+                        logFactory: new SuperSocketLite.SocketBase.Logging.ConsoleLogFactory());
 
 
         appServer.Start();

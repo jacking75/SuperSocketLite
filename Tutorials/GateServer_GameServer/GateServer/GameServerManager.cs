@@ -1,4 +1,4 @@
-﻿using SuperSocket.SocketBase;
+﻿using SuperSocketLite.SocketBase;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -100,7 +100,7 @@ class GameServerManager
     {
         var sessionID = ConnectToFunc(server.EndPoint);
 
-        if (sessionID.IsNullOrEmpty())
+        if (string.IsNullOrEmpty(sessionID))
         {
             return false;
         }

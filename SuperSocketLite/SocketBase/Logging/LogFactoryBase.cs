@@ -2,7 +2,7 @@
 using System.IO;
 
 
-namespace SuperSocket.SocketBase.Logging;
+namespace SuperSocketLite.SocketBase.Logging;
 
 /// <summary>
 /// LogFactory Base class

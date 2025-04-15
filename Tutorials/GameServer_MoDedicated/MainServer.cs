@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 using System.Runtime.CompilerServices;
 
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketEngine;
 
 using CSBaseLib;
 
@@ -20,9 +20,9 @@ namespace GameServer
     public class MainServer : AppServer<ClientSession, EFBinaryRequestInfo>
     {
         public static GameServerOption ServerOption;
-        public static SuperSocket.SocketBase.Logging.ILog MainLogger;
+        public static SuperSocketLite.SocketBase.Logging.ILog MainLogger;
 
-        SuperSocket.SocketBase.Config.IServerConfig m_Config;
+        SuperSocketLite.SocketBase.Config.IServerConfig m_Config;
 
         PacketProcessor MainPacketProcessor = new PacketProcessor();
         RoomManager RoomMgr = new RoomManager();
@@ -40,7 +40,7 @@ namespace GameServer
         {
             ServerOption = option;
 
-            m_Config = new SuperSocket.SocketBase.Config.ServerConfig
+            m_Config = new SuperSocketLite.SocketBase.Config.ServerConfig
             {
                 Name = option.Name,
                 Ip = "Any",
@@ -57,7 +57,7 @@ namespace GameServer
         {
             try
             {
-                bool bResult = Setup(new SuperSocket.SocketBase.Config.RootConfig(), m_Config, logFactory: new NLogLogFactory());
+                bool bResult = Setup(new SuperSocketLite.SocketBase.Config.RootConfig(), m_Config, logFactory: new NLogLogFactory());
 
                 if (bResult == false)
                 {

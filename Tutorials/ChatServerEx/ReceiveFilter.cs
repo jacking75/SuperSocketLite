@@ -1,8 +1,8 @@
 ﻿using System;
 
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketEngine.Protocol;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketEngine.Protocol;
 
 
 namespace ChatServer;

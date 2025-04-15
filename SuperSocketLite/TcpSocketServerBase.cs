@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using SuperSocket.Common;
-using SuperSocket.SocketBase;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase;
 
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 abstract class TcpSocketServerBase : SocketServerBase
 {

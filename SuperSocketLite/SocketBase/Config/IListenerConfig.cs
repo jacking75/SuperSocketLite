@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase.Config;
+namespace SuperSocketLite.SocketBase.Config;
 
 /// <summary>
 /// The listener configuration interface

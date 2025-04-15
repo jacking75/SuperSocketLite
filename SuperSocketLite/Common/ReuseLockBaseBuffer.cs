@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace SuperSocket.Common;
+namespace SuperSocketLite.Common;
 
 //TODO 유닛테스트 필요
 public class ReuseLockBaseBuffer

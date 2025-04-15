@@ -9,14 +9,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SuperSocket.Common;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Logging;
-using SuperSocket.SocketBase.Protocol;
-using SuperSocket.SocketBase.Security;
+using SuperSocketLite.Common;
+using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Logging;
+using SuperSocketLite.SocketBase.Protocol;
+using SuperSocketLite.SocketBase.Security;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// AppServer base class

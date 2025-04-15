@@ -4,7 +4,7 @@
 namespace ChatServer;
 
 #if (__NOT_USE_NLOG__ != true)  //NLog를 사용하지 않는다면 __NOT_USE_NLOG__ 선언한다
-public class NLogLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
+public class NLogLogFactory : SuperSocketLite.SocketBase.Logging.LogFactoryBase
 {
     public NLogLogFactory()
         : this("NLog.config")
@@ -25,7 +25,7 @@ public class NLogLogFactory : SuperSocket.SocketBase.Logging.LogFactoryBase
         }
     }
 
-    public override SuperSocket.SocketBase.Logging.ILog GetLog(string name)
+    public override SuperSocketLite.SocketBase.Logging.ILog GetLog(string name)
     {
         return new NLogLog(NLog.LogManager.GetLogger(name));
     }

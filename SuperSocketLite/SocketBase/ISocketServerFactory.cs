@@ -1,8 +1,8 @@
-﻿using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketBase.Protocol;
+﻿using SuperSocketLite.SocketBase.Config;
+using SuperSocketLite.SocketBase.Protocol;
 
 
-namespace SuperSocket.SocketBase;
+namespace SuperSocketLite.SocketBase;
 
 /// <summary>
 /// The interface for socket server factory

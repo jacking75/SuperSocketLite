@@ -1,8 +1,8 @@
 ﻿using System;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Protocol;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Protocol;
 
-namespace SuperSocket.SocketEngine.Protocol;
+namespace SuperSocketLite.SocketEngine.Protocol;
 
 /// <summary>
 /// FixedSizeReceiveFilter

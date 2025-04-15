@@ -1,5 +1,5 @@
 ﻿
-namespace SuperSocket.SocketBase.Protocol;
+namespace SuperSocketLite.SocketBase.Protocol;
 
 /// <summary>
 /// The interface for request info parser 

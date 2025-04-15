@@ -1,10 +1,10 @@
 ﻿using System;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
+using SuperSocketLite.SocketBase;
+using SuperSocketLite.SocketBase.Config;
 using System.Net.Sockets;
 using System.Net;
 
-namespace SuperSocket.SocketEngine;
+namespace SuperSocketLite.SocketEngine;
 
 delegate void ErrorHandler(ISocketListener listener, Exception e);
 
