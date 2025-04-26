@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <PackageVersion>0.19</PackageVersion>
-    <Version>0.19</Version>	
+    <PackageVersion>0.20</PackageVersion>
+    <Version>0.20</Version>	
 	<PackageId>SuperSocketLite</PackageId>
 	<Authors>jacking75</Authors>
-	<Company>com2us</Company>	
+	<Company>Com2us</Company>	
     <Description>SuperSocket 1.16버전을 토대로 .NET Core로 포팅한 것. 불 필요한 기능은 제거</Description>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/jacking75/SuperSocketLite</PackageProjectUrl>
