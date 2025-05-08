@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v9.0": {
-      "SuperSocketLite/0.19": {
+      "SuperSocketLite/0.20": {
         "dependencies": {
           "Microsoft.SourceLink.GitHub": "8.0.0"
         },
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "SuperSocketLite/0.19": {
+    "SuperSocketLite/0.20": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

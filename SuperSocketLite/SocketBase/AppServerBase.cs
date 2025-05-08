@@ -216,8 +216,7 @@ public abstract partial class AppServerBase<TAppSession, TRequestInfo> : IAppSer
 
         if (socketServerFactory == null)
         {
-//                var socketServerFactoryType = Type.GetType("SuperSocket.SocketEngine.SocketServerFactory, SuperSocket.SocketEngine", true);
-            var socketServerFactoryType = Type.GetType("SuperSocket.SocketEngine.SocketServerFactory, SuperSocketLite", true);
+            var socketServerFactoryType = Type.GetType("SuperSocketLite.SocketEngine.SocketServerFactory, SuperSocketLite", true);
             socketServerFactory = (ISocketServerFactory)Activator.CreateInstance(socketServerFactoryType);
         }
 
