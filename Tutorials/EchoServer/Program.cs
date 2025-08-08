@@ -9,12 +9,13 @@ class Program
         Console.WriteLine("Hello SuperSocketLite");
 
         // 명령어 인수로 서버 옵셥을 받아서 처리한다.
-        var serverOption = ParseCommandLine(args);
-        if (serverOption == null)
+        var serverOption = new ServerOption
         {
-            return;
-        }
-
+            Port = 32452,
+            MaxConnectionNumber = 32,
+            Name = "EchoServer"
+        };
+        
         // 서버를 생성하고 초기화한다.
         var server = new MainServer();
         server.InitConfig(serverOption);
@@ -39,19 +40,7 @@ class Program
 
         server.Destory();
     }
-
-    static ServerOption ParseCommandLine(string[] args)
-    {
-        var option = new ServerOption
-        {
-            Port = 32452,
-            MaxConnectionNumber = 32,
-            Name = "EchoServer"
-        };
-
-        return option;
-    }               
-
+        
 }
 
 public class ServerOption
