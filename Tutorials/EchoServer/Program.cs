@@ -8,7 +8,6 @@ class Program
     {
         Console.WriteLine("Hello SuperSocketLite");
 
-        // 명령어 인수로 서버 옵셥을 받아서 처리한다.
         var serverOption = new ServerOption
         {
             Port = 32452,
