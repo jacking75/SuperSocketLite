@@ -1,1 +1,1 @@
-dotnet net8.0\EchoServerEx.dll --port 32452 --maxConnectionNumber 32 --name EchoServer
+dotnet net9.0\EchoServerEx.dll --port 32452 --maxConnectionNumber 32 --name EchoServer

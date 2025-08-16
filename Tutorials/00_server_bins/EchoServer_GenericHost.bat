@@ -1,1 +1,1 @@
-dotnet net8.0\EchoServer_GenericHost.dll
+dotnet net9.0\EchoServer_GenericHost.dll
