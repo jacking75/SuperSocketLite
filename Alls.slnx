@@ -1,0 +1,51 @@
+<Solution>
+  <Folder Name="/Template/">
+    <Project Path="Template/GameServer_01/GameServer_01.csproj" />
+    <Project Path="Template/GameServer_01_GenericHost/GameServer_01_GenericHost.csproj" />
+    <Project Path="Template/GameServer_MemoryPack/GameServer_MemoryPack.csproj" />
+  </Folder>
+  <Folder Name="/Template/TestClient_MemoryPack/">
+    <Project Path="Template/TestClient_MemoryPack/test_client.csproj" />
+  </Folder>
+  <Folder Name="/Test/">
+    <Project Path="Test/TestMemoryPack/TestMemoryPack.csproj" />
+    <Project Path="Test/TestProtocolBuffer/TestProtocolBuffer.csproj" />
+    <Project Path="Test/TestServer/TestServer.csproj" />
+  </Folder>
+  <Folder Name="/Test/TestClient/">
+    <Project Path="Test/TestClient/test_client.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/">
+    <Project Path="Tutorials/BinaryPacketServer/BinaryPacketServer.csproj" />
+    <Project Path="Tutorials/ChatServer/ChatServer.csproj" />
+    <Project Path="Tutorials/ChatServerEx/ChatServerEx.csproj" />
+    <Project Path="Tutorials/EchoServer/EchoServer.csproj" />
+    <Project Path="Tutorials/EchoServerEx/EchoServerEx.csproj" />
+    <Project Path="Tutorials/EchoServer_GenericHost/EchoServer_GenericHost.csproj" />
+    <Project Path="Tutorials/MultiPortServer/MultiPortServer.csproj" />
+    <Project Path="Tutorials/PvPGameServer/PvPGameServer.csproj" />
+    <Project Path="Tutorials/sendFailTestServer/sendFailTestServer.csproj" />
+    <Project Path="Tutorials/SimpleUDPServer/SimpleUDPServer.csproj" />
+    <Project Path="Tutorials/SwitchReceiveFilter/SwitchReceiveFilter.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/ChatClient/">
+    <Project Path="Tutorials/ChatClient/TestClient.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/EchoClient/">
+    <Project Path="Tutorials/EchoClient/csharp_test_client.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/GameServer_MoDedicated/">
+    <Project Path="Tutorials/GameServer_MoDedicated/GameServer.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/GameServer_MoDedicated2/">
+    <Project Path="Tutorials/GameServer_MoDedicated2/GameServer.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/GateServer_GameServer/">
+    <Project Path="Tutorials/GateServer_GameServer/CommonLib/CommonLib.csproj" />
+    <Project Path="Tutorials/GateServer_GameServer/GateServer/GateServer.csproj" />
+  </Folder>
+  <Folder Name="/Tutorials/PvPGameServer_Client/">
+    <Project Path="Tutorials/PvPGameServer_Client/csharp_test_client.csproj" />
+  </Folder>
+  <Project Path="SuperSocketLite/SuperSocketLite.csproj" />
+</Solution>
