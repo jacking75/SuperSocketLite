@@ -1,1 +1,1 @@
-dotnet net9.0\EchoServer.dll
+dotnet net10.0\EchoServer.dll
