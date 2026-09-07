@@ -3,6 +3,8 @@
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/jacking75/SuperSocketLite)  
     
 SuperSocket 1.6 버전을 기반으로 하고 있으며 .NET 플랫폼을 지원한다(.NET Framework는 지원하지 않음)  
+
+**버그 수정 이외에 더 이상 기능 업데이트는 없습니다.**    
   
     	  
 # 사용 사례
